@@ -1,0 +1,12 @@
+**/build/
+**/out/
+
+data/
+repos/
+
+**/.gradle/
+.idea/
+*.iml
+
+*~
+**/.DS_Store

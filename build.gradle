@@ -1,0 +1,5 @@
+group 'io.github.ksmirenko.kotlin'
+version '0.1-SNAPSHOT'
+
+// This Gradle project is just for convenient work with the project in IntelliJ IDEA.
+// This way data/, repos/ etc. are present in the project tree.
