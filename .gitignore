@@ -3,10 +3,13 @@
 
 data/
 repos/
+plots/
 
 **/.gradle/
 .idea/
 *.iml
+
+**/__pycache__/
 
 *~
 **/.DS_Store

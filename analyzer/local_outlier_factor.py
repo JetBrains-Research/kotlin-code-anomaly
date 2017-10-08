@@ -1,6 +1,6 @@
-import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.neighbors import LocalOutlierFactor
+
+from common_io import *
 
 is_analyzing_methods = False
 
@@ -15,13 +15,10 @@ else:
 
 n_neighbors = 5
 
-# Process input
-
-labels = np.genfromtxt(csv_path, delimiter=',', usecols=[0], dtype=None)
-raw_data = np.genfromtxt(csv_path, delimiter=',', comments=None)[:, 1:]
+# Load input data
+labels, raw_data = read_data(csv_path)
 
 # Fit the model and mark data
-
 lof = LocalOutlierFactor(n_neighbors=n_neighbors)
 marks = lof.fit_predict(raw_data)
 marked = np.column_stack((labels, raw_data, marks))
@@ -37,32 +34,4 @@ outlier_names, _ = np.hsplit(outliers, [1])
 print(f"Outliers: {len(outliers)}/{len(marked)}, {len(outliers) / len(marked) * 100}%")
 np.savetxt(out_path, outlier_names.astype('U'), fmt='%s')
 
-
-def draw_subplot(x_label, y_label):
-    plt.subplot(2, 2, draw_subplot.counter)
-    x_index = columns[x_label]
-    y_index = columns[y_label]
-    plt.scatter(inliers[:, x_index], inliers[:, y_index], c='blue', edgecolor='k')
-    plt.scatter(outliers[:, x_index], outliers[:, y_index], c='red', edgecolor='k')
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
-    draw_subplot.counter += 1
-
-
-draw_subplot.counter = 1
-if is_analyzing_methods:
-    columns = {'SLoC': 1, 'AST nodes': 2, 'AST height': 3, 'Loop nesting depth': 4, 'Cyclomatic complexity': 5}
-    plt.figure(num='Methods', figsize=(12, 8))
-    draw_subplot('SLoC', 'AST nodes')
-    draw_subplot('AST nodes', 'AST height')
-    draw_subplot('AST height', 'Cyclomatic complexity')
-    draw_subplot('SLoC', 'Loop nesting depth')
-else:
-    columns = {'LoC': 1, 'SLoC': 2, 'AST nodes': 3, 'AST height': 4}
-    plt.figure(num='Files', figsize=(12, 8))
-    draw_subplot('LoC', 'SLoC')
-    draw_subplot('SLoC', 'AST nodes')
-    draw_subplot('SLoC', 'AST height')
-
-plt.tight_layout()
-plt.savefig(img_out_path)
+print_plots(inliers, outliers, img_out_path, is_for_methods=is_analyzing_methods)
