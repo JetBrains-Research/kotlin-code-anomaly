@@ -9,7 +9,8 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.idea.KotlinLanguage
 
-val inDirectory = "repos"
+val inDirectory = "metrics-calc/src/main/kotlin/testSrc"
+//val inDirectory = "repos"
 val fileMetricsOutFile = "data/fileMetrics.csv"
 val methodMetricsOutFile = "data/methodMetrics.csv"
 
