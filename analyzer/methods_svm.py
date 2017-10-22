@@ -7,14 +7,14 @@ import time
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.decomposition import PCA
 from sklearn.model_selection import ParameterGrid
-from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import scale
+from sklearn.svm import OneClassSVM
 
 is_drawing = True
-csv_in_path = '../data/6proj_methodMetrics.csv'
-csv_out_path = '../out-data/6proj_methods_lof.csv'
-img_out_path = '../out-data/6proj_methods_lof'
-log_path = '../out-data/6proj_methods_lof.log'
+csv_path = '../data/6proj_methodMetrics.csv'
+out_path = '../out-data/6proj_methods_svm.csv'
+img_out_path = '../out-data/6proj_methods_svm'
+log_path = '../out-data/6proj_methods_svm.log'
 
 log_file = open(log_path, mode='w')
 
@@ -28,7 +28,7 @@ def log(s):
 start_time = time.time()
 
 # Load input
-methods = pandas.read_csv(csv_in_path, header=0)
+methods = pandas.read_csv(csv_path, header=0)
 n_methods = methods.shape[0]
 
 # Preprocessing
@@ -36,26 +36,33 @@ X = np.array(methods.values[:, 1:], dtype="float64")
 X = PCA(n_components=3).fit_transform(X)
 X = scale(X)
 
-param_grid = {
-    'n_neighbors': [10, 5, 2],
-    'algorithm': ['ball_tree', 'kd_tree'],
-    'contamination': [0.0005, 0.001]
-}
+param_grid = [
+    {
+        'kernel': ['linear'],
+        'nu': [0.0005]
+    },
+    {
+        'kernel': ['rbf', 'poly'],
+        'nu': [0.0005, 0.001],
+        'gamma': [0.1]
+    }
+]
 param_sets = list(ParameterGrid(param_grid))
 
 # For calculating 'intersection', i.e. methods marked as anomalous by all classifier configurations
 all_indices = np.arange(0, n_methods)
 intersect_outlier_indices = all_indices
 
-clf = LocalOutlierFactor(n_jobs=-1)
+clf = OneClassSVM(shrinking=True)
 
 for params in param_sets:
     config_desc = str(params)
     log(config_desc)
 
-    # Fit the model and mark data
+    # Fit model and mark data
     clf.set_params(**params)
-    marks = clf.fit_predict(X)
+    clf.fit(X)
+    marks = clf.predict(X)
 
     inlier_indices = np.asarray([mark > 0 for mark in marks])
     outlier_indices = np.asarray([mark < 0 for mark in marks])
@@ -78,7 +85,7 @@ for params in param_sets:
 
 # Save the 'intersection' to file
 intersect_outlier_names = methods.values[:, 0][intersect_outlier_indices]
-np.savetxt(csv_out_path, intersect_outlier_names.astype('U'), fmt='%s')
+np.savetxt(out_path, intersect_outlier_names.astype('U'), fmt='%s')
 
 end_time = time.time()
 log(f"Total elapsed time: {end_time - start_time}")
