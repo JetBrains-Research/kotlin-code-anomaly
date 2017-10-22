@@ -3,8 +3,10 @@
 
 data/
 out-data/
-repos/
 plots/
+
+repos/*
+!repos/fetch_all.py
 
 **/.gradle/
 .idea/
