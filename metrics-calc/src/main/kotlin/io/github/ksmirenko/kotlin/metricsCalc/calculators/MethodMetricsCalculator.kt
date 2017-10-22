@@ -4,6 +4,7 @@ import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import io.github.ksmirenko.kotlin.metricsCalc.metrics.*
+import io.gitlab.arturbosch.detekt.api.buildFullFunctionSignature
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileName) {
@@ -33,8 +34,9 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
 
         private fun visitKtFunction(function: KtNamedFunction) {
             val funName = function.fqName.toString()
-            val recordStringBuilder = StringBuilder(funName)
+            val signature = buildFullFunctionSignature(function)
 
+            val recordStringBuilder = StringBuilder("\"$signature\"")
             for (metric in metrics) {
                 function.accept(metric.visitor)
 

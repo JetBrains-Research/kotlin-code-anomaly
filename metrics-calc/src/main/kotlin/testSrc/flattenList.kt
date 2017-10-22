@@ -18,8 +18,9 @@ fun main(args: Array<String>) {
     measure("Reduce") { reduce(listOfLists) }
 }
 
-private fun measure(name: String, func: () -> Unit) {
+private fun measure(name: String, func: () -> Unit): Boolean {
     println("$name:\t${measureTimeMillis(func)} ms")
+    return true
 }
 
 @Suppress("LoopToCallChain")
