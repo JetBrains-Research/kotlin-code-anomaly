@@ -17,11 +17,13 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
             MethodCyclomaticComplexityMetric()
     )
 
+    private val csvDelimiter = "|"
     private val baseVisitor = KtFunctionSeekingVisitor()
 
     override fun writeCsvHeader() {
-        metrics.joinToString(separator = ",", prefix = "methodName,", postfix = "\n") { it.headerName }
-                .let { writer.write(it) }
+        metrics.joinToString(separator = csvDelimiter, prefix = "methodName$csvDelimiter", postfix = "\n") {
+            it.headerName
+        }.let { writer.write(it) }
     }
 
     override fun calculate(psiFile: PsiFile) {
@@ -45,7 +47,7 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
             for (metric in metrics) {
                 function.accept(metric.visitor)
 
-                recordStringBuilder.append(',')
+                recordStringBuilder.append(csvDelimiter)
                 val record = metric.lastRecord ?: continue
                 if (record.entityIdentifier != funName) {
                     throw IllegalStateException("Fun name from record (${record.entityIdentifier}) " +

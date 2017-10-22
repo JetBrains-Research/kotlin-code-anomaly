@@ -6,11 +6,14 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.sixrr.stockmetrics.utils.LineUtil
 
-class FileMetricsCalculator(outFileName: String): MetricsCalculator(outFileName) {
+class FileMetricsCalculator(outFileName: String) : MetricsCalculator(outFileName) {
+    private val csvDelimiter = "|"
     private val baseVisitor = FileMetricsVisitor()
 
     override fun writeCsvHeader() {
-        writer.write("fileName,loc,sloc,nodeCount,astMaxHeight\n")
+        listOf("fileName", "loc", "sloc", "nodeCount", "astMaxHeight")
+                .joinToString(separator = csvDelimiter, postfix = "\n")
+                .let { writer.write(it) }
     }
 
     override fun calculate(psiFile: PsiFile) {

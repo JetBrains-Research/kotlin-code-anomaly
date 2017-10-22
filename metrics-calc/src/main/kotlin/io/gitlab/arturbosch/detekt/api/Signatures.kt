@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 
 fun buildFullFunctionSignature(function: KtNamedFunction): String {
     val fqName = function.fqName
-    return if (fqName != null) {
+    val signature = if (fqName != null) {
         val packageAndName = function.fqName.toString()
         val paramsAndReturnType = buildFunctionSignature(function)
                 .replaceBefore("fun", "")
@@ -23,6 +23,7 @@ fun buildFullFunctionSignature(function: KtNamedFunction): String {
                 .replaceBefore("fun", "")
                 .replaceFirst(Regex("fun\\s*"), "")
     }
+    return signature.replace(Regex("\n\\s*"), " ")
 }
 
 internal fun PsiElement.searchName(): String {

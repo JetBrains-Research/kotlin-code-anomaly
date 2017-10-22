@@ -1,5 +1,7 @@
+import csv
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import pandas
 import time
 
@@ -10,13 +12,18 @@ from sklearn.model_selection import ParameterGrid
 from sklearn.preprocessing import scale
 from sklearn.svm import OneClassSVM
 
+dataset_name = "26proj"
 is_drawing = True
-csv_path = '../data/6proj_methodMetrics.csv'
-out_path = '../out-data/6proj_methods_svm'
-img_out_path = '../out-data/6proj_methods_svm'
-log_path = '../out-data/6proj_methods_svm.log'
 
-log_file = open(log_path, mode='w')
+out_dir = f"../out-data/"
+csv_in_path = f"../data/{dataset_name}_methods.csv"
+csv_out_path = f"{out_dir}methods_svm"
+img_out_path = f"{out_dir}methods_svm"
+log_path = f"{out_dir}methods_svm.log"
+
+if not os.path.exists(out_dir):
+    os.makedirs(out_dir)
+log_file = open(log_path, mode='w+')
 
 
 def log(s):
@@ -28,11 +35,16 @@ def log(s):
 start_time = time.time()
 
 # Load input
-methods = pandas.read_csv(csv_path, header=0)
+methods = pandas.read_csv(csv_in_path, header=0, delimiter='|', quoting=csv.QUOTE_NONNUMERIC, error_bad_lines=False)
+
+# Clear input
+X = np.array(methods.values[:, 1:], dtype="float64")
+ok_lines = np.array([~np.isnan(row).any() for row in X])
+methods = methods[ok_lines]
+X = X[ok_lines]
 n_methods = methods.shape[0]
 
 # Preprocessing
-X = np.array(methods.values[:, 1:], dtype="float64")
 X = PCA(n_components=3).fit_transform(X)
 X = scale(X)
 
@@ -85,11 +97,15 @@ for params in param_sets:
 
     # Save output of this configuration to file
     outlier_names = methods.values[:, 0][outlier_indices]
-    np.savetxt(f"{out_path} {config_desc}.csv", outlier_names.astype('U'), fmt='%s')
+    dataframe = pandas.DataFrame(outlier_names)
+    dataframe.to_csv(f"{csv_out_path} {config_desc}.csv")
+    # np.savetxt(f"{csv_out_path} {config_desc}.csv", outlier_names.astype('U'), fmt='%s')
 
 # Save the 'intersection' to file
 intersect_outlier_names = methods.values[:, 0][intersect_outlier_indices]
-np.savetxt(f"{out_path}.csv", intersect_outlier_names.astype('U'), fmt='%s')
+dataframe = pandas.DataFrame(intersect_outlier_names)
+dataframe.to_csv(f"{csv_out_path}.csv")
+# np.savetxt(f"{csv_out_path}.csv", intersect_outlier_names.astype('U'), fmt='%s')
 
 end_time = time.time()
 log(f"Total elapsed time: {end_time - start_time}")

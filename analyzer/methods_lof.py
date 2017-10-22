@@ -1,5 +1,7 @@
+import csv
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import pandas
 import time
 
@@ -10,13 +12,18 @@ from sklearn.model_selection import ParameterGrid
 from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import scale
 
+dataset_name = "26proj"
 is_drawing = True
-csv_in_path = '../data/6proj_methodMetrics.csv'
-csv_out_path = '../out-data/6proj_methods_lof.csv'
-img_out_path = '../out-data/6proj_methods_lof'
-log_path = '../out-data/6proj_methods_lof.log'
 
-log_file = open(log_path, mode='w')
+out_dir = f"../out-data/"
+csv_in_path = f"../data/{dataset_name}_methods.csv"
+csv_out_path = f"{out_dir}methods_lof.csv"
+img_out_path = f"{out_dir}methods_lof"
+log_path = f"{out_dir}methods_lof.log"
+
+if not os.path.exists(out_dir):
+    os.makedirs(out_dir)
+log_file = open(log_path, mode='w+')
 
 
 def log(s):
@@ -28,11 +35,16 @@ def log(s):
 start_time = time.time()
 
 # Load input
-methods = pandas.read_csv(csv_in_path, header=0)
+methods = pandas.read_csv(csv_in_path, header=0, delimiter='|', quoting=csv.QUOTE_NONNUMERIC, error_bad_lines=False)
+
+# Clear input
+X = np.array(methods.values[:, 1:], dtype="float64")
+ok_lines = np.array([~np.isnan(row).any() for row in X])
+methods = methods[ok_lines]
+X = X[ok_lines]
 n_methods = methods.shape[0]
 
 # Preprocessing
-X = np.array(methods.values[:, 1:], dtype="float64")
 X = PCA(n_components=3).fit_transform(X)
 X = scale(X)
 
@@ -78,7 +90,9 @@ for params in param_sets:
 
 # Save the 'intersection' to file
 intersect_outlier_names = methods.values[:, 0][intersect_outlier_indices]
-np.savetxt(csv_out_path, intersect_outlier_names.astype('U'), fmt='%s')
+dataframe = pandas.DataFrame(intersect_outlier_names)
+dataframe.to_csv(csv_out_path)
+# np.savetxt(csv_out_path, intersect_outlier_names.astype('U'), fmt='%s')
 
 end_time = time.time()
 log(f"Total elapsed time: {end_time - start_time}")
