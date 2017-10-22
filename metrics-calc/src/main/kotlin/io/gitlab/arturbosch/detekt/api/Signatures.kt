@@ -11,11 +11,18 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 
 fun buildFullFunctionSignature(function: KtNamedFunction): String {
-    val packageAndName = function.fqName.toString()
-    val paramsAndReturnType = buildFunctionSignature(function)
-            .replaceBefore("fun", "")
-            .replaceBefore('(', "")
-    return packageAndName + paramsAndReturnType
+    val fqName = function.fqName
+    return if (fqName != null) {
+        val packageAndName = function.fqName.toString()
+        val paramsAndReturnType = buildFunctionSignature(function)
+                .replaceBefore("fun", "")
+                .replaceBefore('(', "")
+        packageAndName + paramsAndReturnType
+    } else {
+        buildFunctionSignature(function)
+                .replaceBefore("fun", "")
+                .replaceFirst(Regex("fun\\s*"), "")
+    }
 }
 
 internal fun PsiElement.searchName(): String {

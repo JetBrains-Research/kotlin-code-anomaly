@@ -6,6 +6,7 @@ import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 abstract class Metric {
     private val _records = ArrayList<MetricRecord>()
 
+    abstract val headerName: String
     abstract val description: String
     abstract val visitor: PsiElementVisitor
 

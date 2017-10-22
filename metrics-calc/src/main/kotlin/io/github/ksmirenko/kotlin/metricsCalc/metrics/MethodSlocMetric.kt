@@ -8,6 +8,7 @@ import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodSlocMetric : Metric() {
+    override val headerName = "sloc"
     override val description = "Source lines of code"
 
     override val visitor: Visitor by lazy { Visitor() }

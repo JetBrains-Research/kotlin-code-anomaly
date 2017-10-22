@@ -21,6 +21,8 @@ fun main(args: Array<String>) {
     val calculators = listOf<MetricsCalculator>(MethodMetricsCalculator(methodMetricsOutFile))
     val kotlinFiles = KotlinFileFinder(inDirectory).search()
 
+    calculators.forEach(MetricsCalculator::writeCsvHeader)
+
     try {
         println("Calculating metrics for files:")
         kotlinFiles.forEach {

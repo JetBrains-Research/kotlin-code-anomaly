@@ -19,6 +19,11 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
 
     private val baseVisitor = KtFunctionSeekingVisitor()
 
+    override fun writeCsvHeader() {
+        metrics.joinToString(separator = ",", prefix = "methodName,", postfix = "\n") { it.headerName }
+                .let { writer.write(it) }
+    }
+
     override fun calculate(psiFile: PsiFile) {
         psiFile.accept(baseVisitor)
     }

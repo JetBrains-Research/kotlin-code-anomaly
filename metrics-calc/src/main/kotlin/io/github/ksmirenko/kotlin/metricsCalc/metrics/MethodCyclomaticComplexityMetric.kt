@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.psi.*
  * in the method."
  */
 class MethodCyclomaticComplexityMetric : Metric() {
+    override val headerName = "cyclomaticComplexity"
     override val description = "Cyclomatic complexity"
 
     override val visitor: Visitor by lazy { Visitor() }

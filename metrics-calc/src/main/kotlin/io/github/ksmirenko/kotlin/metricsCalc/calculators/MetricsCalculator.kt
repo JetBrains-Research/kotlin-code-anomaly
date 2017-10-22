@@ -6,6 +6,8 @@ import java.io.File
 abstract class MetricsCalculator(outFileName: String) {
     protected val writer = File(outFileName).writer()
 
+    abstract fun writeCsvHeader()
+
     abstract fun calculate(psiFile: PsiFile)
 
     fun dispose() {
