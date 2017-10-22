@@ -12,7 +12,7 @@ from sklearn.svm import OneClassSVM
 
 is_drawing = True
 csv_path = '../data/6proj_methodMetrics.csv'
-out_path = '../out-data/6proj_methods_svm.csv'
+out_path = '../out-data/6proj_methods_svm'
 img_out_path = '../out-data/6proj_methods_svm'
 log_path = '../out-data/6proj_methods_svm.log'
 
@@ -83,9 +83,13 @@ for params in param_sets:
         ax.scatter(X_outliers[:, 1], X_outliers[:, 0], X_outliers[:, 2], c='red', marker='^')
         plt.savefig(f"{img_out_path} {config_desc}.png")
 
+    # Save output of this configuration to file
+    outlier_names = methods.values[:, 0][outlier_indices]
+    np.savetxt(f"{out_path} {config_desc}.csv", outlier_names.astype('U'), fmt='%s')
+
 # Save the 'intersection' to file
 intersect_outlier_names = methods.values[:, 0][intersect_outlier_indices]
-np.savetxt(out_path, intersect_outlier_names.astype('U'), fmt='%s')
+np.savetxt(f"{out_path}.csv", intersect_outlier_names.astype('U'), fmt='%s')
 
 end_time = time.time()
 log(f"Total elapsed time: {end_time - start_time}")
