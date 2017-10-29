@@ -35,7 +35,8 @@ def log(s):
 start_time = time.time()
 
 # Load input
-methods = pandas.read_csv(csv_in_path, header=0, delimiter='|', quoting=csv.QUOTE_NONNUMERIC, error_bad_lines=False)
+methods = pandas.read_csv(csv_in_path, header=0, delimiter='\t', quoting=csv.QUOTE_NONE, error_bad_lines=True,
+                          engine='python')
 
 # Clear input
 X = np.array(methods.values[:, 1:], dtype="float64")
@@ -84,8 +85,8 @@ for params in param_sets:
     X_outliers = X[outlier_indices]
     n_inliers = X_inliers.shape[0]
     n_outliers = X_outliers.shape[0]
-    log(f"\tInliers:\t{n_inliers}/{n_methods}\t({n_inliers * 100 / n_methods}%)")
-    log(f"\tOutliers:\t{n_outliers}/{n_methods}\t({n_outliers * 100 / n_methods}%)")
+    log(f"\tInliers:\t{n_inliers:6}/{n_methods:6}\t{(n_inliers * 100 / n_methods):7.4}%")
+    log(f"\tOutliers:\t{n_outliers:6}/{n_methods:6}\t{(n_outliers * 100 / n_methods):7.4}%")
 
     if is_drawing:
         # Show the principal components on 3D plot
@@ -99,13 +100,11 @@ for params in param_sets:
     outlier_names = methods.values[:, 0][outlier_indices]
     dataframe = pandas.DataFrame(outlier_names)
     dataframe.to_csv(f"{csv_out_path} {config_desc}.csv")
-    # np.savetxt(f"{csv_out_path} {config_desc}.csv", outlier_names.astype('U'), fmt='%s')
 
 # Save the 'intersection' to file
 intersect_outlier_names = methods.values[:, 0][intersect_outlier_indices]
 dataframe = pandas.DataFrame(intersect_outlier_names)
 dataframe.to_csv(f"{csv_out_path}.csv")
-# np.savetxt(f"{csv_out_path}.csv", intersect_outlier_names.astype('U'), fmt='%s')
 
 end_time = time.time()
 log(f"Total elapsed time: {end_time - start_time}")

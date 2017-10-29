@@ -3,6 +3,9 @@ package testSrc
 import java.util.*
 import kotlin.system.measureTimeMillis
 
+// The line below doesn't compile, but I've met funcs without parentheses after name in Kotlin code
+//fun hello = "Oh, hello there!"
+
 fun main(args: Array<String>) {
     val random = Random()
     val size = 100000

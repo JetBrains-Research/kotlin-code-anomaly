@@ -17,7 +17,7 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
             MethodCyclomaticComplexityMetric()
     )
 
-    private val csvDelimiter = "|"
+    private val csvDelimiter = "\t"
     private val baseVisitor = KtFunctionSeekingVisitor()
 
     override fun writeCsvHeader() {
@@ -43,7 +43,7 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
             val funName = function.fqName.toString()
             val signature = buildFullFunctionSignature(function)
 
-            val recordStringBuilder = StringBuilder("\"$signature\"")
+            val recordStringBuilder = StringBuilder(signature)
             for (metric in metrics) {
                 function.accept(metric.visitor)
 

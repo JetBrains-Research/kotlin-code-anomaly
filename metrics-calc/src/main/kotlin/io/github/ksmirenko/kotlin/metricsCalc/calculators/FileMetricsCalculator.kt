@@ -7,7 +7,7 @@ import com.intellij.psi.PsiFile
 import com.sixrr.stockmetrics.utils.LineUtil
 
 class FileMetricsCalculator(outFileName: String) : MetricsCalculator(outFileName) {
-    private val csvDelimiter = "|"
+    private val csvDelimiter = "\t"
     private val baseVisitor = FileMetricsVisitor()
 
     override fun writeCsvHeader() {

@@ -14,10 +14,11 @@ fun buildFullFunctionSignature(function: KtNamedFunction): String {
     val fqName = function.fqName
     val signature = if (fqName != null) {
         val packageAndName = function.fqName.toString()
+        // TODO: fix for one-line functions without parentheses
         val paramsAndReturnType = buildFunctionSignature(function)
                 .replaceBefore("fun", "")
                 .replaceBefore('(', "")
-        packageAndName + paramsAndReturnType
+        packageAndName //+ paramsAndReturnType
     } else {
         buildFunctionSignature(function)
                 .replaceBefore("fun", "")
