@@ -8,13 +8,20 @@ import io.gitlab.arturbosch.detekt.api.buildFullFunctionSignature
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileName) {
-    // note: the order of metrics is important
     private val metrics = listOf(
             MethodSlocMetric(),
             MethodNodeCountMetric(),
             MethodAstHeightMetric(),
             MethodLoopNestingDepthMetric(),
-            MethodCyclomaticComplexityMetric()
+            MethodCyclomaticComplexityMetric(),
+            MethodRelativeLocMetric(),
+//            MethodDesignComplexityMetric(),
+            MethodNumTypeCastExpressionsMetric()
+//            MethodNumMethodCallsMetric(),
+//            MethodNumStatementsMetric(),
+//            MethodNumParametersMetric(),
+//            MethodNumReturnPointsMetric(),
+//            MethodNumLoopStatementsMetric()
     )
 
     private val csvDelimiter = "\t"

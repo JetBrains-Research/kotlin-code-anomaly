@@ -2,23 +2,24 @@ package io.github.ksmirenko.kotlin.metricsCalc
 
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.PsiFileFactory
-import io.github.ksmirenko.kotlin.metricsCalc.calculators.FileMetricsCalculator
-import io.github.ksmirenko.kotlin.metricsCalc.calculators.MethodMetricsCalculator
-import io.github.ksmirenko.kotlin.metricsCalc.calculators.MetricsCalculator
+import io.github.ksmirenko.kotlin.metricsCalc.calculators.*
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.idea.KotlinLanguage
 
-//val inDirectory = "metrics-calc/src/main/kotlin/testSrc"
-val inDirectory = "repos"
-val fileMetricsOutFile = "data/fileMetrics.csv"
-val methodMetricsOutFile = "data/26proj_methods.csv"
+val inDirectory = "metrics-calc/src/main/kotlin/testSrc"
+//val inDirectory = "repos"
+val fileMetricsOutFile = "data/files.csv"
+val methodMetricsOutFile = "data/methods.csv"
 
 fun main(args: Array<String>) {
     val env = prepareEnvironment()
 
-    val calculators = listOf<MetricsCalculator>(MethodMetricsCalculator(methodMetricsOutFile))
+    @Suppress("RemoveExplicitTypeArguments") // for convenience, as the list may be modified by user
+    val calculators = listOf<MetricsCalculator>(
+            MethodMetricsCalculator(methodMetricsOutFile)
+    )
     val kotlinFiles = KotlinFileFinder(inDirectory).search()
 
     calculators.forEach(MetricsCalculator::writeCsvHeader)
