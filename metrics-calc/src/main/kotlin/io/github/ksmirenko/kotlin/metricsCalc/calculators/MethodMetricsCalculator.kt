@@ -9,19 +9,21 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileName) {
     private val metrics = listOf(
-            MethodSlocMetric(),
-            MethodNodeCountMetric(),
-            MethodAstHeightMetric(),
-            MethodLoopNestingDepthMetric(),
-            MethodCyclomaticComplexityMetric(),
-            MethodRelativeLocMetric(),
-//            MethodDesignComplexityMetric(),
-            MethodNumTypeCastExpressionsMetric()
-//            MethodNumMethodCallsMetric(),
-//            MethodNumStatementsMetric(),
-//            MethodNumParametersMetric(),
-//            MethodNumReturnPointsMetric(),
-//            MethodNumLoopStatementsMetric()
+            MethodSlocMetric()
+            , MethodNodeCountMetric()
+            , MethodAstHeightMetric()
+            , MethodLoopNestingDepthMetric()
+            , MethodCyclomaticComplexityMetric()
+            , MethodRelativeLocMetric()
+            , MethodNumTypeCastExpressionsMetric()
+            , MethodNumMethodCallsMetric()
+//            , MethodNumStatementExpressionsMetric() // TODO: fix
+//            , MethodNumExpressionsMetric() // TODO: fix
+//            , MethodNumReturnPointsMetric() // TODO: fix, exclude returns from lambdas
+
+//            , MethodDesignComplexityMetric() // TODO: implement
+            , MethodNumValueParametersMetric()
+            , MethodNumLoopsMetric()
     )
 
     private val csvDelimiter = "\t"

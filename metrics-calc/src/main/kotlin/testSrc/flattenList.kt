@@ -11,6 +11,8 @@ abstract class RandomAbstractClass {
     abstract fun abstractFun()
 
     fun funWithAs(): Int {
+        @Suppress("UNUSED_VARIABLE")
+        val x = ArrayList<Int>()
         @Suppress("CAST_NEVER_SUCCEEDS") // intentional
         return 42.0 as Int
     }

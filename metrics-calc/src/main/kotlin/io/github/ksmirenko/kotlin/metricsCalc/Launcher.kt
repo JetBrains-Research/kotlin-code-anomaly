@@ -18,6 +18,7 @@ fun main(args: Array<String>) {
 
     @Suppress("RemoveExplicitTypeArguments") // for convenience, as the list may be modified by user
     val calculators = listOf<MetricsCalculator>(
+//            PrettyPrinter(),
             MethodMetricsCalculator(methodMetricsOutFile)
     )
     val kotlinFiles = KotlinFileFinder(inDirectory).search()

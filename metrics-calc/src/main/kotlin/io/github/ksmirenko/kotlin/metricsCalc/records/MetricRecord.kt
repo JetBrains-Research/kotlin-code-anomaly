@@ -29,6 +29,6 @@ data class MetricRecord(
         MethodLoC, MethodSLoC, MethodASTHeight, MethodASTNodeCount,
         MethodLoopNestingDepth, MethodCyclomaticComplexity,
         MethodRelativeLoc, MethodDesignComplexity, MethodNumTypeCastExpr, MethodNumMethodCalls,
-        MethodNumStatements, MethodNumParameters, MethodNumReturns, MethodNumLoops
+        MethodNumStatementExpressions, MethodNumExpressions, MethodNumValueParameters, MethodNumReturns, MethodNumLoops
     }
 }

@@ -4,7 +4,8 @@ import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 
-class PrettyPrinter() : MetricsCalculator(null) {
+@Suppress("unused") // kept for testing purposes
+class PrettyPrinter : MetricsCalculator(null) {
     private val baseVisitor = PrettyPrintingVisitor()
 
     override fun writeCsvHeader() {

@@ -4,26 +4,23 @@ import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
+import org.jetbrains.kotlin.psi.KtReturnExpression
 
-class MethodNumTypeCastExpressionsMetric : Metric() {
-    override val headerName = "numTypecastExpr"
-    override val description = "Number of typecast expressions"
+class MethodNumReturnPointsMetric : Metric() {
+    override val headerName = "numReturns"
+    override val description = "Number of return points"
 
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
-        private var typecastExprCount = 0
+        private var returnsCount = 0
         private var methodNestingDepth = 0
 
         override fun visitElement(element: PsiElement?) {
             when (element) {
                 is KtNamedFunction -> visitKtFunction(element)
-                is KtOperationReferenceExpression -> {
-                    if (element.text == "as" || element.text == "is") {
-                        typecastExprCount += 1
-                    }
-                    super.visitElement(element)
+                is KtReturnExpression -> {
+                    returnsCount += 1 // TODO: check whether it is a return from the function
                 }
                 else -> super.visitElement(element)
             }
@@ -31,7 +28,7 @@ class MethodNumTypeCastExpressionsMetric : Metric() {
 
         private fun visitKtFunction(function: KtNamedFunction) {
             if (methodNestingDepth == 0) {
-                typecastExprCount = 0
+                returnsCount = 0
             }
 
             methodNestingDepth++
@@ -40,7 +37,7 @@ class MethodNumTypeCastExpressionsMetric : Metric() {
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodNumTypeCastExpr, funName, typecastExprCount))
+                appendRecord(MetricRecord(MetricRecord.Type.MethodNumReturns, funName, returnsCount))
             }
         }
     }
