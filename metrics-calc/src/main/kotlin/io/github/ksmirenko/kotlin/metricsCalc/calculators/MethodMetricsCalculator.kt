@@ -17,7 +17,7 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
             , MethodRelativeLocMetric()
             , MethodNumTypeCastExpressionsMetric()
             , MethodNumMethodCallsMetric()
-//            , MethodNumStatementExpressionsMetric() // TODO: fix
+            , MethodNumStatementExpressionsMetric()
 //            , MethodNumExpressionsMetric() // TODO: fix
             , MethodNumReturnPointsMetric()
 

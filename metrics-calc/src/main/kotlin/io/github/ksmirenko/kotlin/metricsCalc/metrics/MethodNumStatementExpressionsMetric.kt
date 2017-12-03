@@ -3,6 +3,7 @@ package io.github.ksmirenko.kotlin.metricsCalc.metrics
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtStatementExpression
 
@@ -20,7 +21,9 @@ class MethodNumStatementExpressionsMetric : Metric() {
             when (element) {
                 is KtNamedFunction -> visitKtFunction(element)
                 is KtStatementExpression -> {
-                    stmtCount += 1
+                    if (element !is KtBlockExpression) {
+                        stmtCount += 1
+                    }
                     super.visitElement(element)
                 }
                 else -> super.visitElement(element)
