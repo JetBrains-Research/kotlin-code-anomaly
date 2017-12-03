@@ -19,7 +19,7 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
             , MethodNumMethodCallsMetric()
 //            , MethodNumStatementExpressionsMetric() // TODO: fix
 //            , MethodNumExpressionsMetric() // TODO: fix
-//            , MethodNumReturnPointsMetric() // TODO: fix, exclude returns from lambdas
+            , MethodNumReturnPointsMetric()
 
 //            , MethodDesignComplexityMetric() // TODO: implement
             , MethodNumValueParametersMetric()

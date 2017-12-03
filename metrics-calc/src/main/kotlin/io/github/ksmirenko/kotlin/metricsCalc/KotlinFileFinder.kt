@@ -13,17 +13,26 @@ class KotlinFileFinder(
         return ktFilesList
     }
 
-    private fun search(dir: File) {
-        if (!dir.isDirectory || !dir.canRead()) {
+    private fun search(file: File) {
+        if (!file.canRead()) {
             return
         }
 
-        for (file in dir.listFiles()) {
-            if (file.isDirectory) {
-                search(file)
+        if (!file.isDirectory) {
+            // Single file
+            if (file.extension == "kt") {
+                ktFilesList.add(file)
+            }
+            return
+        }
+
+        // Traverse the directory
+        for (childFile in file.listFiles()) {
+            if (childFile.isDirectory) {
+                search(childFile)
             } else {
-                if (file.extension == "kt") {
-                    ktFilesList.add(file)
+                if (childFile.extension == "kt") {
+                    ktFilesList.add(childFile)
                 }
             }
         }
