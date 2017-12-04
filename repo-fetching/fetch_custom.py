@@ -1,5 +1,7 @@
+import os
 import subprocess
 
+out_dir = '../repos/'
 repos = [
     "git@github.com:Raizlabs/DBFlow.git",
     "https://github.com/dbacinski/Design-Patterns-In-Kotlin.git",
@@ -34,7 +36,8 @@ def git(*args):
     return subprocess.check_call(['git'] + list(args))
 
 
-subprocess.run("ls")
-git("status")
+os.chdir(out_dir)
+subprocess.run('ls')
+
 for repo in repos:
     git("clone", repo)

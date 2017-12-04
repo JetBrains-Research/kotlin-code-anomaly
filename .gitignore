@@ -5,8 +5,8 @@ data/
 out-data/
 plots/
 
-repos/*
-!repos/fetch_all.py
+repos/
+repo-fetching/repos.json
 
 **/.gradle/
 .idea/
