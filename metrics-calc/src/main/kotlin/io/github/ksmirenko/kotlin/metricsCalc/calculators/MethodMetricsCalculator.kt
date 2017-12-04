@@ -10,18 +10,20 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileName) {
     private val metrics = listOf(
             MethodSlocMetric()
+            , MethodRelativeLocMetric()
+
             , MethodNodeCountMetric()
             , MethodAstHeightMetric()
+
             , MethodLoopNestingDepthMetric()
             , MethodCyclomaticComplexityMetric()
-            , MethodRelativeLocMetric()
+            , MethodDesignComplexityMetric()
+
             , MethodNumTypeCastExpressionsMetric()
             , MethodNumMethodCallsMetric()
             , MethodNumStatementExpressionsMetric()
 //            , MethodNumExpressionsMetric() // TODO: fix
             , MethodNumReturnPointsMetric()
-
-//            , MethodDesignComplexityMetric() // TODO: implement
             , MethodNumValueParametersMetric()
             , MethodNumLoopsMetric()
     )
