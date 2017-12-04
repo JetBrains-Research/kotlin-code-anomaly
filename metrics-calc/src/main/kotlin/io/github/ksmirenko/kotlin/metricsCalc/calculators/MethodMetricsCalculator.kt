@@ -22,7 +22,7 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
             , MethodNumTypeCastExpressionsMetric()
             , MethodNumMethodCallsMetric()
             , MethodNumStatementExpressionsMetric()
-//            , MethodNumExpressionsMetric() // TODO: fix
+            , MethodNumExpressionsMetric()
             , MethodNumReturnPointsMetric()
             , MethodNumValueParametersMetric()
             , MethodNumLoopsMetric()
