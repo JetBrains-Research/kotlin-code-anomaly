@@ -3,6 +3,7 @@
 # Loads info about top 100 Kotlin repositories
 curl -G https://api.github.com/search/repositories \
 	--data-urlencode "q=language:kotlin" \
+	--data-urlencode "page=1" \
 	--data-urlencode "per_page=100" \
 	--data-urlencode "sort=stars" \
 	--data-urlencode "order=desc" \

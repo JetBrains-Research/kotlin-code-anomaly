@@ -13,8 +13,8 @@ from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import scale
 from sklearn.svm import OneClassSVM
 
-dataset_name = "26proj"
-is_drawing = True
+dataset_name = "top1k"
+is_drawing = False
 
 out_dir = f"../out-data/"
 csv_in_path = f"../data/{dataset_name}_methods.csv"
@@ -46,8 +46,8 @@ X = X[ok_lines]
 n_methods = methods.shape[0]
 
 # Preprocessing
-X = PCA(n_components=3).fit_transform(X)
 X = scale(X)
+# X = PCA(n_components=3).fit_transform(X)
 
 # All configs
 all_clf_configs = [
@@ -57,7 +57,7 @@ all_clf_configs = [
         'param_grid': {
             'n_neighbors': [10, 5, 2],
             'algorithm': ['ball_tree', 'kd_tree'],
-            'contamination': [0.0005, 0.001]
+            'contamination': [0.00005, 0.0001]
         }
     },
     {
@@ -66,11 +66,11 @@ all_clf_configs = [
         'param_grid': [
             {
                 'kernel': ['linear'],
-                'nu': [0.0005]
+                'nu': [0.00005]
             },
             {
                 'kernel': ['rbf', 'poly'],
-                'nu': [0.0005, 0.001],
+                'nu': [0.00005, 0.0001],
                 'gamma': [0.1]
             }
         ]
