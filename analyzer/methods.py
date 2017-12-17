@@ -107,6 +107,8 @@ for clf_config in clf_configs:
             log(f"Error: unknown classifier name {clf_name}!")
             exit(1)
 
+        # Suppressed warning below: either `marks` is assigned, or the whole program exits with an error
+        # noinspection PyUnboundLocalVariable
         inlier_indices = np.asarray([mark > 0 for mark in marks])
         outlier_indices = np.asarray([mark < 0 for mark in marks])
         intersect_outlier_indices = np.intersect1d(intersect_outlier_indices, all_indices[outlier_indices])
@@ -115,8 +117,14 @@ for clf_config in clf_configs:
         X_outliers = X[outlier_indices]
         n_inliers = X_inliers.shape[0]
         n_outliers = X_outliers.shape[0]
-        log(f"\t\tInliers:\t{n_inliers:6}/{n_methods:6}\t{(n_inliers * 100 / n_methods):7.4}%")
-        log(f"\t\tOutliers:\t{n_outliers:6}/{n_methods:6}\t{(n_outliers * 100 / n_methods):7.4}%")
+        log(f"\t\tInliers:\t{n_inliers:6}/{n_methods:6}\t{(n_inliers * 100 / n_methods):10.7}%")
+        log(f"\t\tOutliers:\t{n_outliers:6}/{n_methods:6}\t{(n_outliers * 100 / n_methods):10.7}%")
+
+        if n_outliers > n_inliers:
+            X_temp = X_inliers
+            X_inliers = X_outliers
+            X_outliers = X_temp
+            log("\t\tSwapped 'inliers' and 'outliers', because there were more outliers than inliers!")
 
         if is_drawing:
             # Show the principal components on 3D plot
@@ -127,7 +135,7 @@ for clf_config in clf_configs:
             plt.savefig(f"{out_path} {clf_name} {param_set_desc}.png")
 
         # Save output of this configuration to file
-        outlier_names = methods.values[:, 0][outlier_indices]
+        outlier_names = methods.values[:][outlier_indices]
         dataframe = pandas.DataFrame(outlier_names)
         dataframe.to_csv(f"{out_path} {clf_name} {param_set_desc}.csv")
 
