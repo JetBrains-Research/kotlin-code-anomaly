@@ -4,17 +4,34 @@ import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.metricsCalc.PsiGenerator
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.junit.Assert
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 
-class SignaturesTest {
+class SimpleSignatureTest {
     private val testFile = "metrics-calc/src/main/kotlin/testSrc/FunSignatures.kt"
-    private val expectedSimpleSignatures = arrayOf(
+    private val expectedSignatures = arrayOf(
             "testSrc.FunSignatures.normal",
             "testSrc.FunSignatures.oneLiner",
-            "FunSignatures.kt:companion",
-            "FunSignatures.kt:anotherCompanion"
+            "testSrc.FunSignatures.normal",
+            "FunSignatures.kt:namedCompanion",
+            "FunSignatures.kt:anotherNamedCompanion",
+            "testSrc.FunSignatures.Companion.unnamedCompanion",
+            "testSrc.FunSignaturesGeneric.outT",
+            "testSrc.FunSignaturesGeneric.inT",
+            "testSrc.FunSignaturesGeneric.inTV",
+            "testSrc.FunSignaturesSneaky.withSpaces",
+            "testSrc.FunSignaturesSneaky.withLineFeed",
+            "testSrc.FunSignaturesSneaky.withDefaultValue",
+            "testSrc.FunSignaturesSneaky.withModifiers",
+            "testSrc.FunSignaturesSneaky.withModifiers",
+            "testSrc.FunSignaturesSneaky.withModifiers",
+            "testSrc.FunSignaturesSneaky.infixFun",
+            "testSrc.FunSignaturesSneaky.extensionInClass",
+            "testSrc.FunSignaturesSneaky.Companion.extensionInCompanion",
+            "testSrc.topLevel",
+            "testSrc.extensionAtTopLevel"
     )
 
     private val visitor = Visitor()
@@ -24,9 +41,12 @@ class SignaturesTest {
     fun testSimpleSignatures() {
         val psiFile = PsiGenerator.generate(File(testFile))
         psiFile.accept(visitor)
-
         val actualSignatures = actualSignaturesList.toArray()
-        assertTrue(expectedSimpleSignatures contentEquals actualSignatures)
+
+        assertTrue(expectedSignatures.size == actualSignatures.size)
+        for ((expected, actual) in expectedSignatures.zip(actualSignatures)) {
+            Assert.assertEquals(expected, actual)
+        }
     }
 
     private inner class Visitor : JavaRecursiveElementVisitor() {
