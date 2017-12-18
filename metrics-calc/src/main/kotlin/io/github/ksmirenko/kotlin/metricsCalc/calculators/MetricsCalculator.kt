@@ -17,7 +17,7 @@ abstract class MetricsCalculator(outFileName: String?) {
 
     abstract fun writeCsvHeader()
 
-    abstract fun calculate(psiFile: PsiFile)
+    abstract fun calculate(psiFile: PsiFile, path: String? = null)
 
     fun dispose() {
         writer.close()

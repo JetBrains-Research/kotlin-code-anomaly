@@ -15,17 +15,17 @@ class FunSignatures {
         return foo.length + bar.toInt()
     }
 
-    companion object {
-        val NAMED_COMPANION = object {
-            fun namedCompanion(`in`: String): String {
-                return `in`
-            }
-
-            fun anotherNamedCompanion(size: Int): Array<Int?> {
-                return arrayOfNulls(size)
-            }
+    val anonymousObject = object {
+        fun funInAnonObject(`in`: String): String {
+            return `in`
         }
 
+        fun anotherFunInAnonObject(size: Int): Array<Int?> {
+            return arrayOfNulls(size)
+        }
+    }
+
+    companion object {
         fun unnamedCompanion() {
         }
     }

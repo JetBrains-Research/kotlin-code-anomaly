@@ -12,7 +12,7 @@ class PrettyPrinter : MetricsCalculator(null) {
         // do nothing
     }
 
-    override fun calculate(psiFile: PsiFile) {
+    override fun calculate(psiFile: PsiFile, path: String?) {
         psiFile.accept(baseVisitor)
     }
 

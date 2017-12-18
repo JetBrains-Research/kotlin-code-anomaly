@@ -19,10 +19,11 @@ fun main(args: Array<String>) {
 
     println("Calculating metrics for files:")
     kotlinFiles.forEach {
-        println(it.path)
+        val path = it.path
+        println(path)
         try {
             val psiFile = PsiGenerator.generate(it)
-            calculators.forEach { it.calculate(psiFile) }
+            calculators.forEach { it.calculate(psiFile, path) }
         } catch (e: Exception) {
             println("\tSkipped, could not compile!")
         }

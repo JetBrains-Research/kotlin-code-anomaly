@@ -16,7 +16,7 @@ class FileMetricsCalculator(outFileName: String) : MetricsCalculator(outFileName
                 .let { writer.write(it) }
     }
 
-    override fun calculate(psiFile: PsiFile) {
+    override fun calculate(psiFile: PsiFile, path: String?) {
         psiFile.accept(baseVisitor)
     }
 
