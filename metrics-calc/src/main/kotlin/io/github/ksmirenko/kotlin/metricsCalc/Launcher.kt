@@ -5,7 +5,7 @@ import io.github.ksmirenko.kotlin.metricsCalc.calculators.*
 //val inDirectory = "metrics-calc/src/main/kotlin/testSrc"
 val inDirectory = "repos"
 val fileMetricsOutFile = "data/files.csv"
-val methodMetricsOutFile = "data/top1k_methods.csv"
+val methodMetricsOutFile = "data/top1k_methods_file-signature.csv"
 
 fun main(args: Array<String>) {
     @Suppress("RemoveExplicitTypeArguments") // for convenience, as the list may be modified by user
