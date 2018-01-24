@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodLoopNestingDepthMetric : Metric() {
+    override val headerName = "loopNestingDepth"
     override val description = "Loop nesting depth"
 
     override val visitor: Visitor by lazy { Visitor() }

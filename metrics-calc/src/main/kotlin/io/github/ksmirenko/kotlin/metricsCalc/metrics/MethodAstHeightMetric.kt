@@ -6,6 +6,7 @@ import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodAstHeightMetric : Metric() {
+    override val headerName = "astHeight"
     override val description = "AST maximum height"
 
     override val visitor: Visitor by lazy { Visitor() }

@@ -3,8 +3,10 @@ package io.github.ksmirenko.kotlin.metricsCalc.records
 data class MetricRecord(
         val type: Type,
         val entityIdentifier: String,
-        val value: Int
+        val value: Double
 ) {
+    constructor(type: Type, entityIdentifier: String, value: Int) : this(type, entityIdentifier, value.toDouble())
+
     fun serialize(breakLine: Boolean = false): String {
         return "${type.ordinal},$entityIdentifier,$value${if (breakLine) "\n" else ""}"
     }
@@ -17,7 +19,7 @@ data class MetricRecord(
             }
             val metricType = splitString[0].toIntOrNull()?.let { Type.values()[it] } ?: return null
             val entityId = splitString[1]
-            val value = splitString[2].toIntOrNull() ?: return null
+            val value = splitString[2].toDoubleOrNull() ?: return null
             return MetricRecord(metricType, entityId, value)
         }
     }
@@ -25,6 +27,8 @@ data class MetricRecord(
     enum class Type {
         FileLoC, FileSLoC, FileASTHeight, FileASTNodeCount,
         MethodLoC, MethodSLoC, MethodASTHeight, MethodASTNodeCount,
-        MethodLoopNestingDepth, MethodCyclomaticComplexity
+        MethodLoopNestingDepth, MethodCyclomaticComplexity,
+        MethodRelativeLoc, MethodDesignComplexity, MethodNumTypeCastExpr, MethodNumMethodCalls,
+        MethodNumStatementExpressions, MethodNumExpressions, MethodNumValueParameters, MethodNumReturns, MethodNumLoops
     }
 }

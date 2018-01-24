@@ -1,45 +1,33 @@
 package io.github.ksmirenko.kotlin.metricsCalc
 
-import com.intellij.openapi.util.Disposer
-import com.intellij.psi.PsiFileFactory
-import io.github.ksmirenko.kotlin.metricsCalc.calculators.FileMetricsCalculator
-import io.github.ksmirenko.kotlin.metricsCalc.calculators.MethodMetricsCalculator
-import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.idea.KotlinLanguage
+import io.github.ksmirenko.kotlin.metricsCalc.calculators.*
 
+//val inDirectory = "metrics-calc/src/main/kotlin/testSrc"
 val inDirectory = "repos"
-val fileMetricsOutFile = "data/fileMetrics.csv"
-val methodMetricsOutFile = "data/methodMetrics.csv"
+val fileMetricsOutFile = "data/files.csv"
+val methodMetricsOutFile = "data/top1k_methods_file-signature.csv"
 
 fun main(args: Array<String>) {
-    val env = prepareEnvironment()
-
-    val fileMetricsCalculator = FileMetricsCalculator(fileMetricsOutFile)
-    val methodMetricsCalculator = MethodMetricsCalculator(methodMetricsOutFile)
-
+    @Suppress("RemoveExplicitTypeArguments") // for convenience, as the list may be modified by user
+    val calculators = listOf<MetricsCalculator>(
+//            PrettyPrinter(),
+            MethodMetricsCalculator(methodMetricsOutFile)
+    )
     val kotlinFiles = KotlinFileFinder(inDirectory).search()
 
-    try {
-        println("Calculating metrics for files:")
-        kotlinFiles.forEach {
-            println(it.path)
-            val psiFile = PsiFileFactory.getInstance(env.project)
-                    .createFileFromText(it.name, KotlinLanguage.INSTANCE, it.readText())
-            fileMetricsCalculator.calculate(psiFile)
-            methodMetricsCalculator.calculate(psiFile)
-        }
-        println("Done.")
-    } finally {
-        fileMetricsCalculator.dispose()
-        methodMetricsCalculator.dispose()
-    }
-}
+    calculators.forEach(MetricsCalculator::writeCsvHeader)
 
-private fun prepareEnvironment(): KotlinCoreEnvironment {
-    val rootDisposable = Disposer.newDisposable()
-    val configuration = CompilerConfiguration()
-    return KotlinCoreEnvironment
-            .createForProduction(rootDisposable, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES)
+    println("Calculating metrics for files:")
+    kotlinFiles.forEach {
+        val path = it.path
+        println(path)
+        try {
+            val psiFile = PsiGenerator.generate(it)
+            calculators.forEach { it.calculate(psiFile, path) }
+        } catch (e: Exception) {
+            println("\tSkipped, could not compile!")
+        }
+    }
+    println("Done.")
+    calculators.forEach(MetricsCalculator::dispose)
 }

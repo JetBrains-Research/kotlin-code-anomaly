@@ -5,6 +5,10 @@ import java.io.File
 class KotlinFileFinder(
         private val rootDirectory: String
 ) {
+    private val ignoredFiles = hashMapOf(
+            "amc.kt" to "amobconf__awesome-mobile-conferences/.github/amc.kt"
+    )
+
     private val ktFilesList = ArrayList<File>()
 
     fun search(): List<File> {
@@ -13,19 +17,27 @@ class KotlinFileFinder(
         return ktFilesList
     }
 
-    private fun search(dir: File) {
-        if (!dir.isDirectory || !dir.canRead()) {
+    private fun search(file: File) {
+        if (!file.canRead()) {
             return
         }
 
-        for (file in dir.listFiles()) {
-            if (file.isDirectory) {
-                search(file)
-            } else {
-                if (file.extension == "kt") {
-                    ktFilesList.add(file)
-                }
+        if (!file.isDirectory) {
+            // Single file
+            if (file.extension == "kt" && !shouldIgnore(file)) {
+                ktFilesList.add(file)
             }
+            return
         }
+
+        // Traverse the directory
+        for (childFile in file.listFiles()) {
+            search(childFile)
+        }
+    }
+
+    private fun shouldIgnore(file: File): Boolean {
+        val pathSuffix = ignoredFiles[file.name] ?: return false
+        return file.absolutePath.endsWith(pathSuffix)
     }
 }

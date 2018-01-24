@@ -1,5 +1,8 @@
 buildscript {
-    ext.kotlin_version = '1.1.51'
+    ext {
+        kotlin_version = '1.2.10'
+        old_kotlin_version = '1.1.0'
+    }
 
     repositories {
         jcenter()
@@ -27,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-compiler:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-compiler:$old_kotlin_version"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 

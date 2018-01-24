@@ -6,6 +6,7 @@ import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodNodeCountMetric : Metric() {
+    override val headerName = "nodeCount"
     override val description = "AST node count"
 
     override val visitor: Visitor by lazy { Visitor() }

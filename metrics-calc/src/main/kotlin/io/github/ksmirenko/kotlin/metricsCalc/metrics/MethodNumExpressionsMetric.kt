@@ -1,41 +1,35 @@
 package io.github.ksmirenko.kotlin.metricsCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
-import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
-import com.sixrr.stockmetrics.utils.LineUtil
 import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodSlocMetric : Metric() {
-    override val headerName = "sloc"
-    override val description = "Source lines of code"
+class MethodNumExpressionsMetric : Metric() {
+    override val headerName = "numExpressions"
+    override val description = "Number of expressions"
 
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
+        private var exprCount = 0
         private var methodNestingDepth = 0
-        private var commentLines = 0
 
         override fun visitElement(element: PsiElement?) {
             when (element) {
                 is KtNamedFunction -> visitKtFunction(element)
+                is KtExpression -> {
+                    exprCount += 1
+                    super.visitElement(element)
+                }
                 else -> super.visitElement(element)
             }
         }
 
-        override fun visitComment(comment: PsiComment?) {
-            if (comment == null) {
-                return
-            }
-
-            super.visitComment(comment)
-            commentLines += LineUtil.countCommentOnlyLines(comment)
-        }
-
         private fun visitKtFunction(function: KtNamedFunction) {
             if (methodNestingDepth == 0) {
-                commentLines = 0
+                exprCount = 0
             }
 
             methodNestingDepth++
@@ -43,9 +37,8 @@ class MethodSlocMetric : Metric() {
             methodNestingDepth--
 
             if (methodNestingDepth == 0) {
-                val lines = LineUtil.countLines(function)
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodSLoC, funName, lines - commentLines))
+                appendRecord(MetricRecord(MetricRecord.Type.MethodNumExpressions, funName, exprCount))
             }
         }
     }

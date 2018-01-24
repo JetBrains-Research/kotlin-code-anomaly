@@ -2,11 +2,17 @@
 **/out/
 
 data/
+out-data/
+plots/
+
 repos/
+repo-fetching/repos.json
 
 **/.gradle/
 .idea/
 *.iml
+
+**/__pycache__/
 
 *~
 **/.DS_Store
