@@ -1,11 +1,11 @@
+import datetime as dt
 import json
 import os
 import subprocess
+import time
 
-import datetime as dt
 import pyjq
 import requests
-import time
 
 # region Configuration
 search_path_dir = 'search-results/'
@@ -20,6 +20,11 @@ global_end_date = "2018-02-19"
 # region Utils
 fmt = "%Y-%m-%d"
 
+if not os.path.exists(search_path_dir):
+    os.makedirs(search_path_dir)
+if not os.path.exists(clone_dir):
+    os.makedirs(clone_dir)
+
 
 def git(*args):
     return subprocess.check_call(['git'] + list(args))
@@ -28,22 +33,29 @@ def git(*args):
 # endregion
 
 # region Searching & fetching repo data
-def search(date_from, date_until, page_number, per_page, filtered_file_name=None, should_save=True):
+def search(date_from, date_until, page_number, per_page,
+           filtered_file_name=None, should_save=True, sleep=True, auth=None):
     date_to = (dt.datetime.strptime(date_until, fmt) - dt.timedelta(1)).__format__(fmt)
-    date_range = f"{date_from}..{date_to}"
-    print(date_range)
+    print(f"Query: {date_from}..{date_to}, page={page_number}")
 
     url = "https://api.github.com/search/repositories"
     headers = {"Accept": "application/vnd.github.preview"}
     params = dict(
-        q=f"language:{repo_language} created:{date_range}",
+        q=f"language:{repo_language} created:{date_from}..{date_to}",
         page=page_number,
         per_page=per_page,
         archived="true",
         sort="updated",
         order="asc"
     )
-    resp_content = requests.get(url=url, headers=headers, params=params).json()
+    if auth is None:
+        resp_content = requests.get(url=url, headers=headers, params=params).json()
+        if sleep:
+            time.sleep(6)  # Unauthenticated GitHub API requests are limited to 10 per minute
+    else:
+        resp_content = requests.get(url=url, headers=headers, params=params, auth=auth).json()
+        if sleep:
+            time.sleep(2)  # Authenticated GitHub API requests are limited to 30 per minute
     jq_filter = "{total_count: .total_count, items: [.items[] | {full_name, clone_url}]}"
     filtered_content = pyjq.first(jq_filter, value=resp_content)
     count = filtered_content['total_count']
@@ -52,20 +64,21 @@ def search(date_from, date_until, page_number, per_page, filtered_file_name=None
     if should_save:
         with open(filtered_file_name, mode="w+") as f:
             json.dump(filtered_content, fp=f, ensure_ascii=False, indent='\t')
-            print(f"Saved {filtered_file_name}")
+            print(f"\tSaved to {filtered_file_name}")
 
     return count
 
 
 def search_repos(key_points):
-    for i in range(len(key_points) - 1):
-        _from = key_points[i]
-        _until = key_points[i + 1]
-        # TODO fetch all pages (up to 10) for each chunk between key points
-        search(date_from=_from, date_until=_until,
-               page_number=1, per_page=1,
-               filtered_file_name=f"repos_{_from}_until_{_until}.json",
-               should_save=False)
+    for point in range(len(key_points) - 1):
+        _from = key_points[point]
+        _until = key_points[point + 1]
+        for page in range(1, 11):
+            search(date_from=_from, date_until=_until,
+                   page_number=page, per_page=100,
+                   filtered_file_name=f"{search_path_dir}repos_{_from}_until_{_until}_{page}.json", should_save=True,
+                   # auth=('your_username', 'your_password')
+                   )
 
 
 def seek_key_points(start, end, start_delta):
@@ -81,7 +94,6 @@ def seek_key_points(start, end, start_delta):
             try:
                 count = search(date_from=_from, date_until=_until,
                                page_number=1, per_page=1, should_save=False)
-                time.sleep(6)  # Unauthenticated GitHub API requests are limited to 10 per minute
             except TypeError:
                 print("Error! Exiting...")
                 print(f"Intermediate results: {key_points}")
