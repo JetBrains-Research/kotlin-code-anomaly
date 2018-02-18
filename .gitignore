@@ -6,7 +6,6 @@ out-data/
 plots/
 
 repos/
-repo-fetching/repos.json
 
 **/.gradle/
 .idea/
