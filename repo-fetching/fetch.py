@@ -10,7 +10,6 @@ import requests
 # region Configuration
 search_path_dir = 'search-results/'
 clone_dir = '../repos/'
-repos = json.load(open('repos.json'))
 
 repo_language = "kotlin"
 global_start_date = "2009-01-01"
@@ -110,17 +109,19 @@ def seek_key_points(start, end, start_delta):
 # endregion
 
 # region Cloning repos
-# TODO rewrite
 def clone_all():
-    os.chdir(clone_dir)
-    subprocess.run('ls')
-
-    for repo in repos:
-        dir_name = repo['full_name'].replace('/', '__')
-        try:
-            git('clone', '--depth=1', repo['html_url'], dir_name)
-        except subprocess.CalledProcessError:
-            print(f'Skipping {dir_name} (could not fetch).')
+    for filename in os.listdir(search_path_dir):
+        with open(search_path_dir + filename) as f:
+            repos = json.load(f)
+        for repo in repos['items']:
+            dir_name = repo['full_name'].replace('/', '__')
+            if os.path.exists(dir_name):
+                print(f"Skipped {dir_name} (already exists).")
+                continue
+            try:
+                git('clone', '--depth=1', repo['clone_url'], clone_dir + dir_name)
+            except subprocess.CalledProcessError:
+                print(f'Skipping {dir_name} (could not fetch).')
 
 
 # endregion
@@ -140,3 +141,4 @@ key_points = ["2009-01-01", "2015-06-02", "2015-12-02", "2016-02-27", "2016-05-0
               "2018-02-09", "2018-02-13", "2018-02-18", "2018-02-19"]
 
 search_repos(key_points)
+clone_all()
