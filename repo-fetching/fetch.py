@@ -109,17 +109,29 @@ def seek_key_points(start, end, start_delta):
 # endregion
 
 # region Cloning repos
-def clone_all():
+def clone_all(start_from=None):
+    if start_from is not None:
+        min_start_date = dt.datetime.strptime(start_from, fmt)
+    else:
+        min_start_date = None
     for filename in os.listdir(search_path_dir):
+        if min_start_date is not None:
+            cur_start_date = dt.datetime.strptime(filename[6:16], fmt)
+            if cur_start_date < min_start_date:
+                print(f"Skipped JSON file {filename} (the requested start is later).")
+                continue
+        if not filename.endswith(".json"):
+            continue
         with open(search_path_dir + filename) as f:
             repos = json.load(f)
         for repo in repos['items']:
             dir_name = repo['full_name'].replace('/', '__')
-            if os.path.exists(dir_name):
+            clone_path = clone_dir + dir_name
+            if os.path.exists(clone_path):
                 print(f"Skipped {dir_name} (already exists).")
                 continue
             try:
-                git('clone', '--depth=1', repo['clone_url'], clone_dir + dir_name)
+                git('clone', '--depth=1', repo['clone_url'], clone_path)
             except subprocess.CalledProcessError:
                 print(f'Skipping {dir_name} (could not fetch).')
 
@@ -140,5 +152,5 @@ key_points = ["2009-01-01", "2015-06-02", "2015-12-02", "2016-02-27", "2016-05-0
               "2018-01-04", "2018-01-10", "2018-01-16", "2018-01-21", "2018-01-26", "2018-01-31", "2018-02-05",
               "2018-02-09", "2018-02-13", "2018-02-18", "2018-02-19"]
 
-search_repos(key_points)
+# search_repos(key_points)
 clone_all()
