@@ -1,0 +1,3 @@
+#!/bin/bash
+
+java -Xms512m -Xmx10240m -jar metrics-calc.jar "$@"
