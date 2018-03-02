@@ -9,7 +9,7 @@ import org.junit.Test
 import java.io.File
 
 class FileBasedSignatureTest {
-    private val testFile = "metrics-calc/src/main/kotlin/testSrc/FunSignatures.kt"
+    private val testFile = "src/main/kotlin/testSrc/FunSignatures.kt"
     private val expectedSignatures = arrayOf(
             "$testFile:FunSignatures.normal(foo: String)",
             "$testFile:FunSignatures.oneLiner()",

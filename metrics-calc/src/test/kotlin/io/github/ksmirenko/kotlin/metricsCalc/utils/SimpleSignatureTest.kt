@@ -8,9 +8,10 @@ import org.junit.Assert
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
+import java.nio.file.Paths
 
 class SimpleSignatureTest {
-    private val testFile = "metrics-calc/src/main/kotlin/testSrc/FunSignatures.kt"
+    private val testFile = "src/main/kotlin/testSrc/FunSignatures.kt"
     private val expectedSignatures = arrayOf(
             "testSrc.FunSignatures.normal",
             "testSrc.FunSignatures.oneLiner",
@@ -40,6 +41,9 @@ class SimpleSignatureTest {
 
     @Test
     fun testSimpleSignatures() {
+        val path = Paths.get("").toAbsolutePath().toString()
+        println("Working directory: $path")
+
         val psiFile = PsiGenerator.generate(File(testFile))
         psiFile.accept(visitor)
         val actualSignatures = actualSignaturesList.toArray()

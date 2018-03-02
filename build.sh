@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-cd metrics-calc/
-./gradlew jar || exit 1
-cd ..
+./gradlew :metrics-calc:jar || exit 1
 mv metrics-calc/build/libs/metrics-calc.jar metrics-calc.jar || exit 1
 
 echo "Done."

@@ -1,1 +1,2 @@
-
+include ':metrics-calc'
+rootProject.name = "kotlin-code-anomaly"
