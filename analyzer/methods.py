@@ -13,7 +13,7 @@ from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import scale
 from sklearn.svm import OneClassSVM
 
-dataset_name = "top1k"
+dataset_name = "feb18"
 is_drawing = False
 
 out_dir = f"../out-data/"
@@ -56,7 +56,7 @@ all_clf_configs = [
         'clf': LocalOutlierFactor(n_jobs=-1),
         'param_grid': {
             'n_neighbors': [10, 5, 2],
-            'algorithm': ['ball_tree', 'kd_tree'],
+            'algorithm': ['ball_tree'],
             'contamination': [0.00005, 0.0001]
         }
     },
