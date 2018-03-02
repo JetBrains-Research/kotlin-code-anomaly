@@ -15,3 +15,6 @@ repos/
 
 *~
 **/.DS_Store
+
+*.jar
+!**/gradle/wrapper/gradle-wrapper.jar

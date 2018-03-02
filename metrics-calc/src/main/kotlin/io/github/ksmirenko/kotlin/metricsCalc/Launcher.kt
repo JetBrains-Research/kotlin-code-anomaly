@@ -1,11 +1,11 @@
 package io.github.ksmirenko.kotlin.metricsCalc
 
 import io.github.ksmirenko.kotlin.metricsCalc.calculators.*
+import io.github.ksmirenko.kotlin.metricsCalc.utils.KotlinFileUtils
+import java.io.File
 
-//val inDirectory = "metrics-calc/src/main/kotlin/testSrc"
 val inDirectory = "repos"
-val fileMetricsOutFile = "data/files.csv"
-val methodMetricsOutFile = "data/top1k_methods_file-signature.csv"
+val methodMetricsOutFile = "data/feb18_methods.csv"
 
 fun main(args: Array<String>) {
     @Suppress("RemoveExplicitTypeArguments") // for convenience, as the list may be modified by user
@@ -13,21 +13,26 @@ fun main(args: Array<String>) {
 //            PrettyPrinter(),
             MethodMetricsCalculator(methodMetricsOutFile)
     )
-    val kotlinFiles = KotlinFileFinder(inDirectory).search()
 
     calculators.forEach(MetricsCalculator::writeCsvHeader)
 
+    var fileCount = 0L
     println("Calculating metrics for files:")
-    kotlinFiles.forEach {
-        val path = it.path
-        println(path)
-        try {
-            val psiFile = PsiGenerator.generate(it)
-            calculators.forEach { it.calculate(psiFile, path) }
-        } catch (e: Exception) {
-            println("\tSkipped, could not compile!")
+    File(inDirectory).walkTopDown().forEach {
+        if (KotlinFileUtils.isAcceptableKtFile(it)) {
+            val path = it.path
+            println(path)
+            fileCount += 1
+            try {
+                val psiFile = PsiGenerator.generate(it)
+                calculators.forEach { it.calculate(psiFile, path) }
+            } catch (e: Exception) {
+                println("\tSkipped, could not compile!")
+            }
         }
     }
     println("Done.")
+    println("Total $fileCount files.")
+
     calculators.forEach(MetricsCalculator::dispose)
 }

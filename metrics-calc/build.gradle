@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        kotlin_version = '1.2.10'
+        kotlin_version = '1.2.30'
         old_kotlin_version = '1.1.0'
     }
 
@@ -26,11 +26,12 @@ defaultTasks 'build'
 sourceCompatibility = 1.8
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-compiler:$old_kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-compiler:$kotlin_version"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
@@ -39,4 +40,14 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "io.github.ksmirenko.kotlin.metricsCalc.LauncherKt"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
