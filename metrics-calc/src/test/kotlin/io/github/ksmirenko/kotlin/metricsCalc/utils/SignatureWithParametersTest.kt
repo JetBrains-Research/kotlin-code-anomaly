@@ -27,6 +27,9 @@ class SignatureWithParametersTest {
             "testSrc.FunSignaturesSneaky.withModifiers(foo: String, bar: Boolean)",
             "testSrc.FunSignaturesSneaky.withModifiers(vararg foo: String, bar: Boolean)",
             "testSrc.FunSignaturesSneaky.withModifiers(foo: String, vararg bar: Boolean)",
+            """testSrc.FunSignaturesSneaky.withArgAnnotationsAndTabs(@SomeAnnotation(param1 = arrayOf("", "path")"""
+                + """) path: String?, @SomeAnnotation(param1 = ["invert"], param2 = "false", param3 = "true") """
+                + """invert: Boolean)""",
             "testSrc.FunSignaturesSneaky.infixFun(x: Int)",
             "testSrc.FunSignaturesSneaky.extensionInClass(foo: String)",
             "testSrc.FunSignaturesSneaky.Companion.extensionInCompanion(foo: String)",

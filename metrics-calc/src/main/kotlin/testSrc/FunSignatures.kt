@@ -1,4 +1,4 @@
-@file:Suppress("unused", "UNUSED_PARAMETER")
+@file:Suppress("unused", "UNUSED_PARAMETER", "ReplaceArrayOfWithLiteral")
 
 package testSrc
 
@@ -63,6 +63,12 @@ class FunSignaturesSneaky {
     fun withModifiers(foo: String, vararg bar: Boolean) {
     }
 
+    fun withArgAnnotationsAndTabs(	@SomeAnnotation(param1 = arrayOf("",     "path")) path: String?,
+						   @SomeAnnotation(param1 = ["invert"], param2 = "false",
+							   param3 = "true") invert: Boolean): String {
+        return ""
+    }
+
     infix fun Int.infixFun(x: Int): Int {
         return this + x
     }
@@ -75,6 +81,8 @@ class FunSignaturesSneaky {
         fun Int.extensionInCompanion(foo: String) {
         }
     }
+
+    annotation class SomeAnnotation(val param1: Array<String>, val param2: String = "", val param3: String = "")
 }
 
 fun topLevel(foo: Int) {

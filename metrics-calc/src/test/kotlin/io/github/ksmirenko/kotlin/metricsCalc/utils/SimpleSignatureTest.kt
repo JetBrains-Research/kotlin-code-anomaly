@@ -27,6 +27,7 @@ class SimpleSignatureTest {
             "testSrc.FunSignaturesSneaky.withModifiers",
             "testSrc.FunSignaturesSneaky.withModifiers",
             "testSrc.FunSignaturesSneaky.withModifiers",
+            "testSrc.FunSignaturesSneaky.withArgAnnotationsAndTabs",
             "testSrc.FunSignaturesSneaky.infixFun",
             "testSrc.FunSignaturesSneaky.extensionInClass",
             "testSrc.FunSignaturesSneaky.Companion.extensionInCompanion",

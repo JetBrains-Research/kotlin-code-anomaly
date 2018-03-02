@@ -26,6 +26,9 @@ class FileBasedSignatureTest {
             "$testFile:FunSignaturesSneaky.withModifiers(foo: String, bar: Boolean)",
             "$testFile:FunSignaturesSneaky.withModifiers(vararg foo: String, bar: Boolean)",
             "$testFile:FunSignaturesSneaky.withModifiers(foo: String, vararg bar: Boolean)",
+            """$testFile:FunSignaturesSneaky.withArgAnnotationsAndTabs(@SomeAnnotation(param1 = arrayOf("", "path")) """
+                    + """path: String?, @SomeAnnotation(param1 = ["invert"], param2 = "false", param3 = "true") """
+                    + """invert: Boolean)""",
             "$testFile:FunSignaturesSneaky.infixFun(x: Int)",
             "$testFile:FunSignaturesSneaky.extensionInClass(foo: String)",
             "$testFile:Companion.extensionInCompanion(foo: String)",
