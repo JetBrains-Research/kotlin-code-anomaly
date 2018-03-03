@@ -70,6 +70,7 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
             }
 
             writer.write(recordStringBuilder.append('\n').toString())
+            writer.flush()
         }
     }
 }

@@ -23,21 +23,36 @@ fun main(args: Array<String>) = mainBody {
     }
     calculators.forEach(MetricsCalculator::writeCsvHeader)
 
-    var fileCount = 0L
-    File(parsedArgs.input).walkTopDown().forEach {
-        if (KotlinFileUtils.isAcceptableKtFile(it)) {
-            val path = it.path
-            println(path)
-            fileCount += 1
-            try {
-                val psiFile = PsiGenerator.generate(it)
-                calculators.forEach { it.calculate(psiFile, path) }
-            } catch (e: Exception) {
-                println("\tSkipped, could not compile!")
-            }
+    var processedFilesCount = 0
+    var skippedFilesCount = 0
+    for (file in File(parsedArgs.input).walkTopDown()) {
+        if (!KotlinFileUtils.isAcceptableKtFile(file)) {
+            continue
         }
+
+        // skip files if needed
+        if (skippedFilesCount < parsedArgs.skipFiles) {
+            skippedFilesCount += 1
+            continue
+        }
+        // stop after Nth file if needed
+        @Suppress("ConvertTwoComparisonsToRangeCheck") // for readability
+        if (parsedArgs.ktFileLimit > 0 && processedFilesCount >= parsedArgs.ktFileLimit) {
+            break
+        }
+
+        // process the file
+        val path = file.path
+        println(path)
+        try {
+            val psiFile = PsiGenerator.generate(file)
+            calculators.forEach { it.calculate(psiFile, path) }
+        } catch (e: Exception) {
+            println("\tSkipped, could not compile!")
+        }
+        processedFilesCount += 1
     }
-    println("Done. Processed $fileCount files.")
+    println("Done. Processed $processedFilesCount files.")
 
     calculators.forEach(MetricsCalculator::dispose)
 }
@@ -49,4 +64,10 @@ private class CommandLineArgs(parser: ArgParser) {
             help = "path to input file or folder")
     val methodOutputFile by parser.storing("-m", help = "path to output CSV file with method metrics")
             .default<String?>(null)
+    val ktFileLimit by parser.storing("--file-limit",
+            help = "stop after N Kotlin files (no limit by default)") { toInt() }
+            .default(-1)
+    val skipFiles by parser.storing("--skip-files",
+            help = "skip first M Kotlin files (no limit by default)") { toInt() }
+            .default(0)
 }
