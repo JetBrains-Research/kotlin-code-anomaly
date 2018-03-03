@@ -42,7 +42,7 @@ fun main(args: Array<String>) = mainBody {
     calculators.forEach(MetricsCalculator::dispose)
 }
 
-class CommandLineArgs(parser: ArgParser) {
+private class CommandLineArgs(parser: ArgParser) {
     val shouldPrettyPrint by parser.flagging("-p", "--pretty-print",
             help = "pretty-print PSI of every Kotlin file")
     val input by parser.storing("-i",

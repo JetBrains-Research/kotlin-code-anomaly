@@ -137,12 +137,12 @@ for clf_config in clf_configs:
         # Save output of this configuration to file
         outlier_names = methods.values[:][outlier_indices]
         dataframe = pandas.DataFrame(outlier_names)
-        dataframe.to_csv(f"{out_path} {clf_name} {param_set_desc}.csv")
+        dataframe.to_csv(f"{out_path} {clf_name} {param_set_desc}.csv", header=False, index=False)
 
     # Save the 'intersection' to file
     intersect_outlier_names = methods.values[:, 0][intersect_outlier_indices]
     dataframe = pandas.DataFrame(intersect_outlier_names)
-    dataframe.to_csv(f"{out_path} {clf_name} intersection.csv")
+    dataframe.to_csv(f"{out_path} {clf_name} intersection.csv", header=False, index=False)
 
 end_time = time.time()
 log(f"Total elapsed time: {end_time - start_time}")
