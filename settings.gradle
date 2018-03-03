@@ -1,2 +1,4 @@
 include ':metrics-calc'
+include ':visualizer'
+
 rootProject.name = "kotlin-code-anomaly"

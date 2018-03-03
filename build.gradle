@@ -10,7 +10,16 @@ buildscript {
     }
 }
 
+group 'io.github.ksmirenko.kotlin'
+
 apply plugin: 'kotlin'
+
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.1'
