@@ -28,3 +28,14 @@ compileKotlin {
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
+
+jar {
+    archiveName = "visualizer.jar"
+    manifest {
+        attributes "Main-Class": "io.github.ksmirenko.kotlin.visualizer.VisualizerKt"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

@@ -13,12 +13,12 @@ from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import scale
 from sklearn.svm import OneClassSVM
 
-dataset_name = "feb18"
+dataset_name = "feb18-part2"
 is_drawing = False
 
 out_dir = f"../out-data/"
 csv_in_path = f"../data/{dataset_name}_methods.csv"
-out_path = f"{out_dir}methods"
+out_path = f"{out_dir}{dataset_name}"
 log_path = f"{out_dir}methods.log"
 
 if not os.path.exists(out_dir):
@@ -56,8 +56,8 @@ all_clf_configs = [
         'clf': LocalOutlierFactor(n_jobs=-1),
         'param_grid': {
             'n_neighbors': [10, 5, 2],
-            'algorithm': ['ball_tree'],
-            'contamination': [0.00005, 0.0001]
+            'algorithm': ['kd_tree'],
+            'contamination': [0.0001]
         }
     },
     {
