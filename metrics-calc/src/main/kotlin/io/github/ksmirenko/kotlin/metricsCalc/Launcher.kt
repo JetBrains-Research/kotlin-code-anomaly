@@ -61,13 +61,14 @@ private class CommandLineArgs(parser: ArgParser) {
     val shouldPrettyPrint by parser.flagging("-p", "--pretty-print",
             help = "pretty-print PSI of every Kotlin file")
     val input by parser.storing("-i",
-            help = "path to input file or folder")
-    val methodOutputFile by parser.storing("-m", help = "path to output CSV file with method metrics")
+            help = "path to input file or folder", argName = "INPUT")
+    val methodOutputFile by parser.storing("-m",
+            help = "path to output CSV file with method metrics", argName = "METHOD-OUTPUT")
             .default<String?>(null)
     val ktFileLimit by parser.storing("--file-limit",
-            help = "stop after N Kotlin files (no limit by default)") { toInt() }
+            help = "stop after N Kotlin files (no limit by default)", argName = "LIMIT") { toInt() }
             .default(-1)
     val skipFiles by parser.storing("--skip-files",
-            help = "skip first M Kotlin files (no limit by default)") { toInt() }
+            help = "skip first M Kotlin files (no limit by default)", argName = "SKIP") { toInt() }
             .default(0)
 }
