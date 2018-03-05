@@ -4,7 +4,6 @@ import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.metricsCalc.utils.buildFileBasedSignature
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import java.io.File
 
 class FunctionFinder(
         private val shouldPrintToConsole: Boolean = false
@@ -22,7 +21,13 @@ class FunctionFinder(
 
     override fun visitElement(element: PsiElement?) {
         when (element) {
-            is KtNamedFunction -> visitKtFunction(element)
+            is KtNamedFunction -> {
+                visitKtFunction(element)
+                if (foundFunction != null) {
+                    // return after first match
+                    return
+                }
+            }
             else -> super.visitElement(element)
         }
     }
@@ -32,6 +37,7 @@ class FunctionFinder(
         if (expectedSignature == actualSignature) {
             foundFunction = function.text
             if (shouldPrintToConsole) {
+                println()
                 println(foundFunction)
             }
         }

@@ -1,6 +1,7 @@
 package io.github.ksmirenko.kotlin.visualizer
 
 import com.xenomachina.argparser.ArgParser
+import com.xenomachina.argparser.default
 import com.xenomachina.argparser.mainBody
 import io.github.ksmirenko.kotlin.metricsCalc.PsiGenerator
 import org.apache.commons.csv.CSVFormat
@@ -13,7 +14,12 @@ fun main(args: Array<String>) = mainBody {
     argParser.force()
 
     val functionFinder = FunctionFinder(shouldPrintToConsole = parsedArgs.isInteractive)
+    val outCsv = when (parsedArgs.outCsvPath) {
+        null -> null
+        else -> CSVFormat.EXCEL.print(File(parsedArgs.outCsvPath), Charsets.UTF_8)
+    }
     var counter = 0
+    var confirmedCounter = 0
 
     parsedArgs.csvPaths.forEach {
         for (csvFile in File(it).walkTopDown()) {
@@ -35,6 +41,7 @@ fun main(args: Array<String>) = mainBody {
                 }
 
                 try {
+                    // search the function source code
                     val psiFile = PsiGenerator.generate(File(parsedArgs.repoRoot, filepath))
                     functionFinder.reset(signature, filepath)
                     psiFile.accept(functionFinder)
@@ -45,17 +52,26 @@ fun main(args: Array<String>) = mainBody {
                         continue
                     }
 
+                    // write function source code to file
                     val outFileName = if (parsedArgs.isInteractive) {
-                        print("Type (a)nomaly/(n)on-anomaly: ")
+                        // ask user whether it is a true anomaly
+                        print("Type 'a' for true anomaly or 'f' for false anomaly: ")
                         val userAnswer = readLine()
                         when (userAnswer) {
-                            "a" -> String.format("confirmed_%03d.kt", counter)
-                            "n" -> String.format("false_%03d.kt", counter)
+                            "a" -> {
+                                // additionally write a CSV entry
+                                outCsv?.printRecord(record)
+                                outCsv?.flush()
+                                confirmedCounter += 1
+                                String.format("confirmed_%03d.kt", counter)
+                            }
+                            "f" -> String.format("false_%03d.kt", counter)
                             else -> String.format("%03d.kt", counter)
                         }
                     } else {
                         String.format("%03d.kt", counter)
                     }
+                    println()
                     File(parsedArgs.outFolder, outFileName).writeText("// $signature\n\n$foundFunction")
 
                     counter += 1
@@ -67,9 +83,12 @@ fun main(args: Array<String>) = mainBody {
             reader.close()
         }
     }
+    outCsv?.close()
     println("Done. Successfully processed $counter files.")
+    if (parsedArgs.isInteractive) {
+        println("$confirmedCounter/$counter marked as true anomalies.")
+    }
 }
-
 
 private class CommandLineArgs(parser: ArgParser) {
     val isInteractive by parser.flagging("--interactive", "-i",
@@ -77,6 +96,9 @@ private class CommandLineArgs(parser: ArgParser) {
     val repoRoot by parser.storing("--repo", "-r",
             help = "path to the 'repository' where Kotlin code is located", argName = "REPO-ROOT")
     val outFolder by parser.storing("-o", help = "path to output folder", argName = "OUT-FOLDER")
+    val outCsvPath by parser.storing("--out-csv", argName = "OUT-PATH",
+            help = "path to output CSV file for entries associated with true anomalies")
+            .default<String?>(null)
     val csvPaths by parser.positionalList("CSV", sizeRange = 1..Int.MAX_VALUE,
             help = "CSV files or folders with anomaly reports")
 }
