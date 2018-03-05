@@ -18,6 +18,8 @@ fun main(args: Array<String>) = mainBody {
         null -> null
         else -> CSVFormat.EXCEL.print(File(parsedArgs.outCsvPath), Charsets.UTF_8)
     }
+    File(parsedArgs.outFolder).mkdirs()
+
     var counter = 0
     var confirmedCounter = 0
 
