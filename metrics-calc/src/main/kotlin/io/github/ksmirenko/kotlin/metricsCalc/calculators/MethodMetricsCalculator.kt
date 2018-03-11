@@ -8,6 +8,7 @@ import io.github.ksmirenko.kotlin.metricsCalc.utils.buildFileBasedSignature
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileName) {
+    // TODO: build metric list with a config
     private val metrics = listOf(
             MethodSlocMetric()
             , MethodRelativeLocMetric()
@@ -26,6 +27,13 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
             , MethodNumReturnPointsMetric()
             , MethodNumValueParametersMetric()
             , MethodNumLoopsMetric()
+
+            , MethodNumTypeParametersMetric()
+            , MethodMaxNumWhenEntriesMetric()
+            , MethodNumIfExpressionsMetric()
+//            , MethodNumAssignStatementsMetric()
+//            , MethodNumNestedFunctionsMetric()
+//            , MethodNumNestedClassesMetric()
     )
 
     private val csvDelimiter = "\t"

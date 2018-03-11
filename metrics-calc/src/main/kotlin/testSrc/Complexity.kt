@@ -1,5 +1,5 @@
 @file:Suppress("unused", "SENSELESS_COMPARISON", "MemberVisibilityCanPrivate", "LiftReturnOrAssignment",
-        "SimplifyBooleanWithConstants", "ConstantConditionIf")
+        "SimplifyBooleanWithConstants", "ConstantConditionIf", "MemberVisibilityCanBePrivate")
 
 package testSrc
 

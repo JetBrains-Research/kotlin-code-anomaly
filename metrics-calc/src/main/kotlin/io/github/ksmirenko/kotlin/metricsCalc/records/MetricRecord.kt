@@ -30,6 +30,6 @@ data class MetricRecord(
         MethodLoopNestingDepth, MethodCyclomaticComplexity,
         MethodRelativeLoc, MethodDesignComplexity, MethodNumTypeCastExpr, MethodNumMethodCalls,
         MethodNumStatementExpressions, MethodNumExpressions, MethodNumValueParameters, MethodNumReturns, MethodNumLoops,
-        MethodMaxNumWhenEntries
+        MethodNumTypeParameters, MethodMaxNumWhenEntries, MethodNumIfExpressions
     }
 }
