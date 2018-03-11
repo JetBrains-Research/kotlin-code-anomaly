@@ -3,26 +3,34 @@ package io.github.ksmirenko.kotlin.metricsCalc.metrics
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
-import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtIfExpression
-import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.lexer.KtSingleValueToken
+import org.jetbrains.kotlin.psi.*
 
-class MethodNumIfExpressionsMetric : Metric(
-        id = MetricRecord.Type.MethodNumIfExpressions,
-        csvName = "numIfExprs",
-        description = "Number of if expressions"
+class MethodNumAssignStatementsMetric : Metric(
+        id = MetricRecord.Type.MethodNumAssignStatements,
+        csvName = "numAssigns",
+        description = "Number of assign statements, including assignments in property declarations"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
         private var isInsideFunction = false
-        private var ifExprCount = 0
+        private var numAssigns = 0
 
         override fun visitElement(element: PsiElement?) {
             when (element) {
-                is KtIfExpression -> {
-                    ifExprCount += 1
-                    super.visitElement(element)
+                is KtProperty -> {
+                    if (element.hasInitializer()) {
+                        numAssigns += 1
+                        super.visitElement(element)
+                    }
+                }
+                is KtBinaryExpression -> {
+                    val operation = (element.operationToken as? KtSingleValueToken)?.value
+                    if (operation == "=") {
+                        numAssigns += 1
+                        super.visitElement(element)
+                    }
                 }
 
                 is KtNamedFunction -> visitOuterFunction(element)
@@ -39,11 +47,11 @@ class MethodNumIfExpressionsMetric : Metric(
             }
             isInsideFunction = true
 
-            ifExprCount = 0
+            numAssigns = 0
             super.visitElement(function)
 
             val funName = function.fqName.toString()
-            appendRecord(funName, ifExprCount)
+            appendRecord(funName, numAssigns)
             isInsideFunction = false
         }
     }

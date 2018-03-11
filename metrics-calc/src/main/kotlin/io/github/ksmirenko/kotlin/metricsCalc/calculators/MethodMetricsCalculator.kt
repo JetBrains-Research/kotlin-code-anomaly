@@ -31,9 +31,9 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
             , MethodNumTypeParametersMetric()
             , MethodMaxNumWhenEntriesMetric()
             , MethodNumIfExpressionsMetric()
-//            , MethodNumAssignStatementsMetric()
-//            , MethodNumNestedFunctionsMetric()
-//            , MethodNumNestedClassesMetric()
+            , MethodNumAssignStatementsMetric()
+            , MethodNumNestedFunctionsMetric()
+            , MethodNumNestedClassesMetric()
     )
 
     private val csvDelimiter = "\t"
