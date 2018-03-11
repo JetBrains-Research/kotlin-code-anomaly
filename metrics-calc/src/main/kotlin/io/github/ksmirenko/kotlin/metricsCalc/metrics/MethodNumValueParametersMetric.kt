@@ -5,10 +5,11 @@ import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodNumValueParametersMetric : Metric() {
-    override val headerName = "numValueParameters"
-    override val description = "Number of value parameters"
-
+class MethodNumValueParametersMetric : Metric(
+        id = MetricRecord.Type.MethodNumValueParameters,
+        csvName = "numValueParameters",
+        description = "Number of value parameters"
+) {
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
@@ -29,7 +30,7 @@ class MethodNumValueParametersMetric : Metric() {
             if (methodNestingDepth == 0) {
                 val valueParameterCount = function.valueParameters.size
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodNumValueParameters, funName, valueParameterCount))
+                appendRecord(funName, valueParameterCount)
             }
         }
     }

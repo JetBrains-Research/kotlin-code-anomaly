@@ -5,9 +5,11 @@ import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodNodeCountMetric : Metric() {
-    override val headerName = "nodeCount"
-    override val description = "AST node count"
+class MethodNodeCountMetric : Metric(
+        id = MetricRecord.Type.MethodASTNodeCount,
+        csvName = "nodeCount",
+        description = "AST node count"
+) {
 
     override val visitor: Visitor by lazy { Visitor() }
 
@@ -34,7 +36,7 @@ class MethodNodeCountMetric : Metric() {
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodASTNodeCount, funName, nodeCount))
+                appendRecord(funName, nodeCount)
             }
         }
     }

@@ -7,10 +7,11 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtStatementExpression
 
-class MethodNumStatementExpressionsMetric : Metric() {
-    override val headerName = "numStatementExpressions"
-    override val description = "Number of Kotlin StatementExpressions"
-
+class MethodNumStatementExpressionsMetric : Metric(
+        id = MetricRecord.Type.MethodNumStatementExpressions,
+        csvName = "numStatementExpressions",
+        description = "Number of Kotlin StatementExpressions"
+) {
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
@@ -41,7 +42,7 @@ class MethodNumStatementExpressionsMetric : Metric() {
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodNumStatementExpressions, funName, stmtCount))
+                appendRecord(funName, stmtCount)
             }
         }
     }

@@ -7,10 +7,11 @@ import com.sixrr.stockmetrics.utils.LineUtil
 import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodSlocMetric : Metric() {
-    override val headerName = "sloc"
-    override val description = "Source lines of code"
-
+class MethodSlocMetric : Metric(
+        id = MetricRecord.Type.MethodSLoC,
+        csvName = "sloc",
+        description = "Source lines of code"
+) {
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
@@ -45,7 +46,7 @@ class MethodSlocMetric : Metric() {
             if (methodNestingDepth == 0) {
                 val lines = LineUtil.countLines(function)
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodSLoC, funName, lines - commentLines))
+                appendRecord(funName, lines - commentLines)
             }
         }
     }

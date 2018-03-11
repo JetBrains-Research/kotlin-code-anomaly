@@ -6,9 +6,11 @@ import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 
-class MethodNumTypeCastExpressionsMetric : Metric() {
-    override val headerName = "numTypecastExpr"
-    override val description = "Number of typecast expressions"
+class MethodNumTypeCastExpressionsMetric : Metric(
+        id = MetricRecord.Type.MethodNumTypeCastExpr,
+        csvName = "numTypecastExpr",
+        description = "Number of typecast expressions"
+) {
 
     override val visitor: Visitor by lazy { Visitor() }
 
@@ -40,7 +42,7 @@ class MethodNumTypeCastExpressionsMetric : Metric() {
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodNumTypeCastExpr, funName, typecastExprCount))
+                appendRecord(funName, typecastExprCount)
             }
         }
     }

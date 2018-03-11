@@ -6,9 +6,11 @@ import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodNumMethodCallsMetric : Metric() {
-    override val headerName = "numMethodCalls"
-    override val description = "Number of method call expressions"
+class MethodNumMethodCallsMetric : Metric(
+        id = MetricRecord.Type.MethodNumMethodCalls,
+        csvName = "numMethodCalls",
+        description = "Number of method call expressions"
+) {
 
     override val visitor: Visitor by lazy { Visitor() }
 
@@ -38,7 +40,7 @@ class MethodNumMethodCallsMetric : Metric() {
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodNumMethodCalls, funName, callExprCount))
+                appendRecord(funName, callExprCount)
             }
         }
     }

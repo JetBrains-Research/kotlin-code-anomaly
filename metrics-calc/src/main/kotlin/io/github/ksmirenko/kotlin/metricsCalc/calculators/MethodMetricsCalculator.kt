@@ -33,7 +33,7 @@ class MethodMetricsCalculator(outFileName: String) : MetricsCalculator(outFileNa
 
     override fun writeCsvHeader() {
         metrics.joinToString(separator = csvDelimiter, prefix = "methodName$csvDelimiter", postfix = "\n") {
-            it.headerName
+            it.csvName
         }.let { writer.write(it) }
     }
 

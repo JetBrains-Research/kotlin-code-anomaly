@@ -5,10 +5,11 @@ import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.*
 
-class MethodNumLoopsMetric : Metric() {
-    override val headerName = "numLoopStatements"
-    override val description = "Number of loop statements"
-
+class MethodNumLoopsMetric : Metric(
+        id = MetricRecord.Type.MethodNumLoops,
+        csvName = "numLoopStatements",
+        description = "Number of loop statements"
+) {
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
@@ -45,7 +46,7 @@ class MethodNumLoopsMetric : Metric() {
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodNumLoops, funName, loopCount))
+                appendRecord(funName, loopCount)
             }
         }
     }

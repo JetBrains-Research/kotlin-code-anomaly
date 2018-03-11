@@ -6,10 +6,11 @@ import com.sixrr.stockmetrics.utils.LineUtil
 import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodRelativeLocMetric : Metric() {
-    override val headerName = "relativeLoc"
-    override val description = "Relative lines of code"
-
+class MethodRelativeLocMetric : Metric(
+        id = MetricRecord.Type.MethodRelativeLoc,
+        csvName = "relativeLoc",
+        description = "Relative lines of code"
+) {
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
@@ -28,8 +29,7 @@ class MethodRelativeLocMetric : Metric() {
                 val funName = function.fqName.toString()
                 // parent is assumed to be class, object or file
                 val parentLinesCount = LineUtil.countLines(function.parent)
-                appendRecord(MetricRecord(MetricRecord.Type.MethodRelativeLoc, funName,
-                        1.0 * funLinesCount / parentLinesCount))
+                appendRecord(funName, 1.0 * funLinesCount / parentLinesCount)
             }
             methodNestingDepth++
             super.visitElement(function)

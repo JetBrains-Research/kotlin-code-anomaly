@@ -2,6 +2,7 @@ package io.github.ksmirenko.kotlin.metricsCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
+import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 
@@ -13,10 +14,11 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  * The design complexity is related to how interlinked a methods control flow is with calls to other methods.
  * Design complexity ranges from 1 to the cyclomatic complexity of the method.
  */
-class MethodDesignComplexityMetric : MethodComplexityMetric() {
-    override val headerName = "designComplexity"
-    override val description = "Design complexity"
-
+class MethodDesignComplexityMetric : MethodComplexityMetric(
+        id = MetricRecord.Type.MethodDesignComplexity,
+        csvName = "designComplexity",
+        description = "Design complexity"
+) {
     private val callVisitor = CallVisitor()
 
     override fun isAccepted(element: PsiElement): Boolean {

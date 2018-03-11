@@ -7,10 +7,11 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 
-class MethodNumReturnPointsMetric : Metric() {
-    override val headerName = "numReturns"
-    override val description = "Number of return points"
-
+class MethodNumReturnPointsMetric : Metric(
+        id = MetricRecord.Type.MethodNumReturns,
+        csvName = "numReturns",
+        description = "Number of return points"
+) {
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
@@ -43,7 +44,7 @@ class MethodNumReturnPointsMetric : Metric() {
 
             if (scopeNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodNumReturns, funName, returnsCount))
+                appendRecord(funName, returnsCount)
             }
         }
 

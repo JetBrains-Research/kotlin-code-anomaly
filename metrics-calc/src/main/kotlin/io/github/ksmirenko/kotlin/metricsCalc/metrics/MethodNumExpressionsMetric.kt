@@ -6,10 +6,11 @@ import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodNumExpressionsMetric : Metric() {
-    override val headerName = "numExpressions"
-    override val description = "Number of expressions"
-
+class MethodNumExpressionsMetric : Metric(
+        id = MetricRecord.Type.MethodNumExpressions,
+        csvName = "numExpressions",
+        description = "Number of expressions"
+) {
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
@@ -38,7 +39,7 @@ class MethodNumExpressionsMetric : Metric() {
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodNumExpressions, funName, exprCount))
+                appendRecord(funName, exprCount)
             }
         }
     }

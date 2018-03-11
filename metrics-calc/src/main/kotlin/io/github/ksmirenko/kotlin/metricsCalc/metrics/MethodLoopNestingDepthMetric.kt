@@ -6,9 +6,11 @@ import io.github.ksmirenko.kotlin.metricsCalc.records.MetricRecord
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodLoopNestingDepthMetric : Metric() {
-    override val headerName = "loopNestingDepth"
-    override val description = "Loop nesting depth"
+class MethodLoopNestingDepthMetric : Metric(
+        id = MetricRecord.Type.MethodLoopNestingDepth,
+        csvName = "loopNestingDepth",
+        description = "Loop nesting depth"
+) {
 
     override val visitor: Visitor by lazy { Visitor() }
 
@@ -37,7 +39,7 @@ class MethodLoopNestingDepthMetric : Metric() {
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodLoopNestingDepth, funName, maxLoopDepth))
+                appendRecord(funName, maxLoopDepth)
             }
         }
 

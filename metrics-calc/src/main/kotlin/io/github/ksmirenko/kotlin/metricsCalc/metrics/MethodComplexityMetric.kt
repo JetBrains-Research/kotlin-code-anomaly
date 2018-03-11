@@ -19,10 +19,12 @@ import org.jetbrains.kotlin.psi.*
  * - &&'s and ||'s
  * and applies the implementation-defined filter to decide whether to count each element.
  */
-abstract class MethodComplexityMetric : Metric() {
+abstract class MethodComplexityMetric(id: MetricRecord.Type, csvName: String, description: String)
+    : Metric(id, csvName, description) {
+
     override val visitor: Visitor by lazy { Visitor() }
 
-    abstract protected fun isAccepted(element: PsiElement): Boolean
+    protected abstract fun isAccepted(element: PsiElement): Boolean
 
     inner class Visitor : JavaRecursiveElementVisitor() {
         private var methodNestingDepth = 0
@@ -51,7 +53,7 @@ abstract class MethodComplexityMetric : Metric() {
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(MetricRecord(MetricRecord.Type.MethodCyclomaticComplexity, funName, complexity))
+                appendRecord(funName, complexity)
             }
         }
 
