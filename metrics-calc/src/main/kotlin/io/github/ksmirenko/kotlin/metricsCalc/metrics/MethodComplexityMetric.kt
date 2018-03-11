@@ -27,34 +27,37 @@ abstract class MethodComplexityMetric(id: MetricRecord.Type, csvName: String, de
     protected abstract fun isAccepted(element: PsiElement): Boolean
 
     inner class Visitor : JavaRecursiveElementVisitor() {
-        private var methodNestingDepth = 0
+        private var isInsideFunction = false
         private var complexity = 1
 
         override fun visitElement(element: PsiElement?) {
             when (element) {
-                is KtNamedFunction -> visitKtFunction(element)
                 is KtLoopExpression -> visitKtLoopExpression(element)
                 is KtIfExpression -> visitKtIfExpression(element)
                 is KtWhenCondition -> visitKtWhenCondition(element)
                 is KtCatchClause -> visitKtCatchClause(element)
                 is KtBinaryExpression -> visitKtBinaryExpression(element)
+
+                is KtNamedFunction -> visitOuterFunction(element)
+                is KtClassOrObject -> {
+                }  // skip nested classes
                 else -> super.visitElement(element)
             }
         }
 
-        private fun visitKtFunction(function: KtNamedFunction) {
-            if (methodNestingDepth == 0) {
-                complexity = 1
+        private fun visitOuterFunction(function: KtNamedFunction) {
+            if (isInsideFunction) {
+                // skip nested functions
+                return
             }
+            isInsideFunction = true
 
-            methodNestingDepth++
+            complexity = 1
             super.visitElement(function)
-            methodNestingDepth--
 
-            if (methodNestingDepth == 0) {
-                val funName = function.fqName.toString()
-                appendRecord(funName, complexity)
-            }
+            val funName = function.fqName.toString()
+            appendRecord(funName, complexity)
+            isInsideFunction = false
         }
 
         private fun visitKtLoopExpression(loopExpression: KtLoopExpression) {

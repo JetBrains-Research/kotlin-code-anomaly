@@ -13,25 +13,14 @@ class MethodNumValueParametersMetric : Metric(
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
-        private var methodNestingDepth = 0
-
         override fun visitElement(element: PsiElement?) {
-            when (element) {
-                is KtNamedFunction -> visitKtFunction(element)
-                else -> super.visitElement(element)
+            if (element !is KtNamedFunction) {
+                return
             }
-        }
 
-        private fun visitKtFunction(function: KtNamedFunction) {
-            methodNestingDepth++
-            super.visitElement(function)
-            methodNestingDepth--
-
-            if (methodNestingDepth == 0) {
-                val valueParameterCount = function.valueParameters.size
-                val funName = function.fqName.toString()
-                appendRecord(funName, valueParameterCount)
-            }
+            val valueParameterCount = element.valueParameters.size
+            val funName = element.fqName.toString()
+            appendRecord(funName, valueParameterCount)
         }
     }
 }

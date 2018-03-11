@@ -22,7 +22,6 @@ class MethodDesignComplexityMetric : MethodComplexityMetric(
     private val callVisitor = CallVisitor()
 
     override fun isAccepted(element: PsiElement): Boolean {
-        // return !containsMethodCall(ifStatement.getThenBranch()) && !containsMethodCall(ifStatement.getElseBranch());
         return when (element) {
             is KtIfExpression -> {
                 containsMethodCall(element.then) || containsMethodCall(element.`else`)
