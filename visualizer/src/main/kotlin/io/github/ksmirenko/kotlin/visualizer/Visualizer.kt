@@ -3,7 +3,7 @@ package io.github.ksmirenko.kotlin.visualizer
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.default
 import com.xenomachina.argparser.mainBody
-import io.github.ksmirenko.kotlin.metricsCalc.PsiGenerator
+import io.github.ksmirenko.kotlin.featureCalc.PsiGenerator
 import org.apache.commons.csv.CSVFormat
 import java.io.File
 import java.io.FileReader

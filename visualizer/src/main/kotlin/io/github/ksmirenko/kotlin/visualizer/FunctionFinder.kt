@@ -2,7 +2,7 @@ package io.github.ksmirenko.kotlin.visualizer
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.metricsCalc.utils.buildFileBasedSignature
+import io.github.ksmirenko.kotlin.featureCalc.utils.buildFileBasedSignature
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class FunctionFinder(

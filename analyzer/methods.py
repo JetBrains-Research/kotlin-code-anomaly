@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas
+import sys
 import time
 
 # noinspection PyUnresolvedReferences
@@ -13,16 +14,15 @@ from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import scale
 from sklearn.svm import OneClassSVM
 
-dataset_name = "feb18-part2"
+dataset_name = sys.argv[1]
 is_drawing = False
 
-out_dir = f"../out-data/"
-csv_in_path = f"../data/{dataset_name}_methods.csv"
-out_path = f"{out_dir}{dataset_name}"
-log_path = f"{out_dir}methods.log"
+csv_in_path = f"../data/{dataset_name}.csv"
+out_path = f"../out-data/{dataset_name}/"
+log_path = f"{out_path}methods.log"
 
-if not os.path.exists(out_dir):
-    os.makedirs(out_dir)
+if not os.path.exists(out_path):
+    os.makedirs(out_path)
 log_file = open(log_path, mode='w+')
 
 
@@ -37,6 +37,11 @@ start_time = time.time()
 # Load input
 methods = pandas.read_csv(csv_in_path, header=0, delimiter='\t', quoting=csv.QUOTE_NONE, error_bad_lines=True,
                           engine='python')
+# print(methods.info())
+# print()
+# print(methods.describe())
+# print()
+# key = input("Press Enter to continue")
 
 # Fix potential problems in input
 X = np.array(methods.values[:, 1:], dtype="float64")
@@ -52,29 +57,30 @@ X = scale(X)
 # All configs
 all_clf_configs = [
     {
+
         'clf_name': 'lof',
         'clf': LocalOutlierFactor(n_jobs=-1),
         'param_grid': {
-            'n_neighbors': [10, 5, 2],
-            'algorithm': ['kd_tree'],
-            'contamination': [0.0001]
+            'n_neighbors': [10],
+            'algorithm': ['auto'],
+            'contamination': [0.001, 0.0005]
         }
     },
-    {
-        'clf_name': 'svm',
-        'clf': OneClassSVM(shrinking=True),
-        'param_grid': [
-            {
-                'kernel': ['linear'],
-                'nu': [0.00005]
-            },
-            {
-                'kernel': ['rbf', 'poly'],
-                'nu': [0.00005, 0.0001],
-                'gamma': [0.1]
-            }
-        ]
-    }
+    # {
+    #     'clf_name': 'svm',
+    #     'clf': OneClassSVM(shrinking=True),
+    #     'param_grid': [
+    #         {
+    #             'kernel': ['linear'],
+    #             'nu': [0.00005]
+    #         },
+    #         {
+    #             'kernel': ['rbf', 'poly'],
+    #             'nu': [0.00005, 0.0001],
+    #             'gamma': [0.1]
+    #         }
+    #     ]
+    # }
 ]
 # Configs for the current run
 clf_configs = [clf_config for clf_config in all_clf_configs if clf_config['clf_name'] in ('lof', 'svm')]
@@ -132,17 +138,17 @@ for clf_config in clf_configs:
             ax = fig.add_subplot(111, projection='3d')
             ax.scatter(X_inliers[:, 1], X_inliers[:, 0], X_inliers[:, 2], c='None', edgecolor='blue', marker='o')
             ax.scatter(X_outliers[:, 1], X_outliers[:, 0], X_outliers[:, 2], c='red', marker='^')
-            plt.savefig(f"{out_path} {clf_name} {param_set_desc}.png")
+            plt.savefig(f"{out_path}{clf_name} {param_set_desc}.png")
 
         # Save output of this configuration to file
         outlier_names = methods.values[:][outlier_indices]
         dataframe = pandas.DataFrame(outlier_names)
-        dataframe.to_csv(f"{out_path} {clf_name} {param_set_desc}.csv", header=False, index=False)
+        dataframe.to_csv(f"{out_path}{clf_name} {param_set_desc}.csv", header=False, index=False)
 
     # Save the 'intersection' to file
-    intersect_outlier_names = methods.values[:, 0][intersect_outlier_indices]
+    intersect_outlier_names = methods.values[:][intersect_outlier_indices]
     dataframe = pandas.DataFrame(intersect_outlier_names)
-    dataframe.to_csv(f"{out_path} {clf_name} intersection.csv", header=False, index=False)
+    dataframe.to_csv(f"{out_path}{clf_name} intersection.csv", header=False, index=False)
 
 end_time = time.time()
 log(f"Total elapsed time: {end_time - start_time}")

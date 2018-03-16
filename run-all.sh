@@ -13,13 +13,13 @@ for i in `seq 1 10`; do
 	let skip=$(( (${i} - 1) * ${part_size} ))
 	echo "Part $i"
 	echo "Skipping $skip..."
-	./calc-metrics \
+	calc-features \
 	    -i repos/ \
 	    -m data/${dataset}_part${i}.csv \
 	    --file-limit ${part_size} \
 	    --skip-files ${skip} || exit 1
 	echo "Done with part ${i}."
-	# metrics-calc/src/main/kotlin/testSrc/ \
+	# features-calc/src/main/kotlin/testSrc/ \
 done
 
 echo "========== CONCATENATING CSV ==========="
