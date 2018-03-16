@@ -19,3 +19,6 @@ repos/
 
 *.jar
 !**/gradle/wrapper/gradle-wrapper.jar
+
+**/.ipynb_checkpoints/
+analyzer/sandbox.ipynb

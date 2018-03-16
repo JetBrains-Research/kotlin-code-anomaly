@@ -20,14 +20,14 @@ class MethodNumExpressionsMetric : Metric(
 
         override fun visitElement(element: PsiElement?) {
             when (element) {
+                is KtNamedFunction -> visitKtFunction(element)
+                is KtClassOrObject -> {
+                }  // skip nested classes
+
                 is KtExpression -> {
                     exprCount += 1
                     super.visitElement(element)
                 }
-
-                is KtNamedFunction -> visitKtFunction(element)
-                is KtClassOrObject -> {
-                }  // skip nested classes
                 else -> super.visitElement(element)
             }
         }

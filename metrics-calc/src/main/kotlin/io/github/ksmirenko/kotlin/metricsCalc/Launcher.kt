@@ -21,7 +21,9 @@ fun main(args: Array<String>) = mainBody {
     if (methodOutputFile != null) {
         calculators.add(MethodMetricsCalculator(methodOutputFile))
     }
-    calculators.forEach(MetricsCalculator::writeCsvHeader)
+    if (parsedArgs.shouldWriteCsvHeader) {
+        calculators.forEach(MetricsCalculator::writeCsvHeader)
+    }
 
     var processedFilesCount = 0
     var skippedFilesCount = 0
@@ -65,6 +67,8 @@ private class CommandLineArgs(parser: ArgParser) {
     val methodOutputFile by parser.storing("-m",
             help = "path to output CSV file with method metrics", argName = "METHOD-OUTPUT")
             .default<String?>(null)
+    val shouldWriteCsvHeader by parser.flagging("-h", "--header",
+            help = "write CSV headers")
     val ktFileLimit by parser.storing("--file-limit",
             help = "stop after N Kotlin files (no limit by default)", argName = "LIMIT") { toInt() }
             .default(-1)
