@@ -31,6 +31,8 @@ data class FeatureRecord(
         MethodRelativeLoc, MethodDesignComplexity, MethodNumTypeCastExpr, MethodNumMethodCalls,
         MethodNumStatementExpressions, MethodNumExpressions, MethodNumValueParameters, MethodNumReturns, MethodNumLoops,
         MethodNumTypeParameters, MethodMaxNumWhenEntries, MethodNumIfExpressions,
-        MethodNumAssignStatements, MethodNumNestedFunctions, MethodNumNestedClasses
+        MethodNumAssignStatements, MethodNumNestedFunctions, MethodNumNestedClasses,
+        MethodNumDeclarations, MethodNumBlocks, MethodNumTryExpressions, MethodNumCatchClauses,
+        MethodNumFinallySections, MethodIsVoid, MethodNumForceUnwraps
     }
 }

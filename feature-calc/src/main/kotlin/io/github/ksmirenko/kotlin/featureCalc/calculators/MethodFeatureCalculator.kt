@@ -33,6 +33,14 @@ class MethodFeatureCalculator(outFileName: String) : FeatureCalculator(outFileNa
             , MethodNumAssignStatementsFeature()
             , MethodNumNestedFunctionsFeature()
             , MethodNumNestedClassesFeature()
+
+            , MethodNumDeclarationsFeature()
+            , MethodNumBlocksFeature()
+            , MethodNumTryExpressionsFeature()
+            , MethodNumCatchClausesFeature()
+            , MethodNumFinallySectionsFeature()
+            , MethodIsVoidFeature()
+            , MethodNumForceUnwrapsFeature()
     )
 
     private val csvDelimiter = "\t"
