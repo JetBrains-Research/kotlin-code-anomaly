@@ -32,3 +32,10 @@ class MethodNumFinallySectionsFeature : MethodSpecificNodeCountFeature<KtFinally
         csvName = "numFinally", description = "Number of finally sections",
         desiredNodeType = KtFinallySection::class.java
 )
+
+class MethodNumLambdasFeature : MethodSpecificNodeCountFeature<KtLambdaExpression>(
+        id = FeatureRecord.Type.MethodNumLambdas,
+        csvName = "numLambdas",
+        description = "Number of lambda expressions",
+        desiredNodeType = KtLambdaExpression::class.java
+)

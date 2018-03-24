@@ -18,6 +18,7 @@ class MethodFeatureCalculator(outFileName: String) : FeatureCalculator(outFileNa
             , MethodLoopNestingDepthFeature()
             , MethodCyclomaticComplexityFeature()
             , MethodDesignComplexityFeature()
+            // 7
 
             , MethodNumTypeCastExpressionsFeature()
             , MethodNumMethodCallsFeature()
@@ -26,6 +27,7 @@ class MethodFeatureCalculator(outFileName: String) : FeatureCalculator(outFileNa
             , MethodNumReturnPointsFeature()
             , MethodNumValueParametersFeature()
             , MethodNumLoopsFeature()
+            // 14
 
             , MethodNumTypeParametersFeature()
             , MethodMaxNumWhenEntriesFeature()
@@ -33,6 +35,7 @@ class MethodFeatureCalculator(outFileName: String) : FeatureCalculator(outFileNa
             , MethodNumAssignStatementsFeature()
             , MethodNumNestedFunctionsFeature()
             , MethodNumNestedClassesFeature()
+            // 20
 
             , MethodNumDeclarationsFeature()
             , MethodNumBlocksFeature()
@@ -41,6 +44,11 @@ class MethodFeatureCalculator(outFileName: String) : FeatureCalculator(outFileNa
             , MethodNumFinallySectionsFeature()
             , MethodIsVoidFeature()
             , MethodNumForceUnwrapsFeature()
+            // 27
+
+            , MethodIsSuspendFeature()
+            , MethodNumLambdasFeature()
+            , MethodNumAnnotationsFeature()
     )
 
     private val csvDelimiter = "\t"

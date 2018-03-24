@@ -33,6 +33,7 @@ data class FeatureRecord(
         MethodNumTypeParameters, MethodMaxNumWhenEntries, MethodNumIfExpressions,
         MethodNumAssignStatements, MethodNumNestedFunctions, MethodNumNestedClasses,
         MethodNumDeclarations, MethodNumBlocks, MethodNumTryExpressions, MethodNumCatchClauses,
-        MethodNumFinallySections, MethodIsVoid, MethodNumForceUnwraps
+        MethodNumFinallySections, MethodIsVoid, MethodNumForceUnwraps,
+        MethodIsSuspend, MethodNumLambdas, MethodNumAnnotations
     }
 }
