@@ -32,16 +32,16 @@ def log(s):
     log_file.write('\n')
 
 
-start_time = time.time()
+def parse_timediff(timediff):
+    h = timediff // 3600
+    m = timediff % 3600 // 60
+    s = timediff % 60
+    return h, m, s
+
 
 # Load input
 methods = pandas.read_csv(csv_in_path, header=0, delimiter='\t', quoting=csv.QUOTE_NONE, error_bad_lines=True,
                           engine='python')
-# print(methods.info())
-# print()
-# print(methods.describe())
-# print()
-# key = input("Press Enter to continue")
 
 # Fix potential problems in input
 X = np.array(methods.values[:, 1:], dtype="float64")
@@ -52,35 +52,33 @@ n_methods = methods.shape[0]
 
 # Preprocessing
 X = scale(X)
-# X = PCA(n_components=3).fit_transform(X)
+X = PCA(n_components=5).fit_transform(X)
 
 # All configs
 all_clf_configs = [
-    {
-
-        'clf_name': 'lof',
-        'clf': LocalOutlierFactor(n_jobs=-1),
-        'param_grid': {
-            'n_neighbors': [10],
-            'algorithm': ['auto'],
-            'contamination': [0.001, 0.0005]
-        }
-    },
     # {
-    #     'clf_name': 'svm',
-    #     'clf': OneClassSVM(shrinking=True),
-    #     'param_grid': [
-    #         {
-    #             'kernel': ['linear'],
-    #             'nu': [0.00005]
-    #         },
-    #         {
-    #             'kernel': ['rbf', 'poly'],
-    #             'nu': [0.00005, 0.0001],
-    #             'gamma': [0.1]
-    #         }
-    #     ]
-    # }
+    #     'clf_name': 'lof',
+    #     'clf': LocalOutlierFactor(n_jobs=-1),
+    #     'param_grid': {
+    #         'n_neighbors': [10, 15],
+    #         'contamination': [0.0001, 0.00001, 0.000001]
+    #     }
+    # },
+    {
+        'clf_name': 'svm',
+        'clf': OneClassSVM(shrinking=True),
+        'param_grid': [
+            # {
+            #     'kernel': ['linear'],
+            #     'nu': [0.00005]
+            # },
+            {
+                'kernel': ['rbf'],
+                'nu': [0.0001, 0.00001],
+                'gamma': [0.1]
+            }
+        ]
+    }
 ]
 # Configs for the current run
 clf_configs = [clf_config for clf_config in all_clf_configs if clf_config['clf_name'] in ('lof', 'svm')]
@@ -89,16 +87,17 @@ for clf_config in clf_configs:
     clf_name = clf_config['clf_name']
     clf = clf_config['clf']
     param_sets = list(ParameterGrid(clf_config['param_grid']))
-    log(clf_name)
 
     # For calculating 'intersection', i.e. methods marked as anomalous
     # by the current classifier with all param sets
     all_indices = np.arange(0, n_methods)
     intersect_outlier_indices = all_indices
+    union_outlier_indices = set()
 
     for params in param_sets:
-        param_set_desc = str(params)
-        log(f"\t{param_set_desc}")
+        local_start = time.time()
+        clf_desc = f"{clf_name}_{str(params).replace(' ', '_')}"
+        log(f"{clf_desc}")
 
         # Fit the model and mark data
         clf.set_params(**params)
@@ -118,19 +117,23 @@ for clf_config in clf_configs:
         inlier_indices = np.asarray([mark > 0 for mark in marks])
         outlier_indices = np.asarray([mark < 0 for mark in marks])
         intersect_outlier_indices = np.intersect1d(intersect_outlier_indices, all_indices[outlier_indices])
+        union_outlier_indices = union_outlier_indices.union(all_indices[outlier_indices])
 
         X_inliers = X[inlier_indices]
         X_outliers = X[outlier_indices]
         n_inliers = X_inliers.shape[0]
         n_outliers = X_outliers.shape[0]
-        log(f"\t\tInliers:\t{n_inliers:6}/{n_methods:6}\t{(n_inliers * 100 / n_methods):10.7}%")
-        log(f"\t\tOutliers:\t{n_outliers:6}/{n_methods:6}\t{(n_outliers * 100 / n_methods):10.7}%")
+        log(f"\tInliers:\t{n_inliers:10}/{n_methods:10}\t{(n_inliers * 100 / n_methods):11.7}%")
+        log(f"\tOutliers:\t{n_outliers:10}/{n_methods:10}\t{(n_outliers * 100 / n_methods):11.7}%")
 
         if n_outliers > n_inliers:
             X_temp = X_inliers
             X_inliers = X_outliers
             X_outliers = X_temp
-            log("\t\tSwapped 'inliers' and 'outliers', because there were more outliers than inliers!")
+            log("\tSwapped 'inliers' and 'outliers', because there were more outliers than inliers!")
+
+        hours, minutes, seconds = parse_timediff(time.time() - local_start)
+        log(f"Elapsed time: {hours} h. {minutes} min. {seconds} sec.\n")
 
         if is_drawing:
             # Show the principal components on 3D plot
@@ -138,18 +141,21 @@ for clf_config in clf_configs:
             ax = fig.add_subplot(111, projection='3d')
             ax.scatter(X_inliers[:, 1], X_inliers[:, 0], X_inliers[:, 2], c='None', edgecolor='blue', marker='o')
             ax.scatter(X_outliers[:, 1], X_outliers[:, 0], X_outliers[:, 2], c='red', marker='^')
-            plt.savefig(f"{out_path}{clf_name} {param_set_desc}.png")
+            plt.savefig(f"{out_path}{clf_desc}.png")
 
         # Save output of this configuration to file
         outlier_names = methods.values[:][outlier_indices]
         dataframe = pandas.DataFrame(outlier_names)
-        dataframe.to_csv(f"{out_path}{clf_name} {param_set_desc}.csv", header=False, index=False)
+        dataframe.to_csv(f"{out_path}{clf_desc}.csv", header=False, index=False)
 
     # Save the 'intersection' to file
-    intersect_outlier_names = methods.values[:][intersect_outlier_indices]
+    intersect_outlier_names = methods.values[intersect_outlier_indices]
     dataframe = pandas.DataFrame(intersect_outlier_names)
-    dataframe.to_csv(f"{out_path}{clf_name} intersection.csv", header=False, index=False)
+    dataframe.to_csv(f"{out_path}{clf_name}_intersection.csv", header=False, index=False)
+    # Save the 'union' to file
+    union_outlier_indices = list(union_outlier_indices)
+    union_outlier_names = methods.values[union_outlier_indices]
+    dataframe = pandas.DataFrame(union_outlier_names)
+    dataframe.to_csv(f"{out_path}{clf_name}_union.csv", header=False, index=False)
 
-end_time = time.time()
-log(f"Total elapsed time: {end_time - start_time}")
 log_file.close()
