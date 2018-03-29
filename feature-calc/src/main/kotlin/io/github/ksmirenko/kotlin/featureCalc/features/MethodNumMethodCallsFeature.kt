@@ -4,7 +4,6 @@ import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodNumMethodCallsFeature : Feature(
@@ -16,7 +15,7 @@ class MethodNumMethodCallsFeature : Feature(
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
-        private var isInsideFunction = false
+        private var methodNestingDepth = 0
         private var callExprCount = 0
 
         override fun visitElement(element: PsiElement?) {
@@ -27,25 +26,23 @@ class MethodNumMethodCallsFeature : Feature(
                 }
 
                 is KtNamedFunction -> visitOuterFunction(element)
-                is KtClassOrObject -> {
-                }  // skip nested classes
                 else -> super.visitElement(element)
             }
         }
 
         private fun visitOuterFunction(function: KtNamedFunction) {
-            if (isInsideFunction) {
-                // skip nested functions
-                return
+            if (methodNestingDepth == 0) {
+                callExprCount = 0
             }
-            isInsideFunction = true
 
-            callExprCount = 0
+            methodNestingDepth++
             super.visitElement(function)
+            methodNestingDepth--
 
-            val funName = function.fqName.toString()
-            appendRecord(funName, callExprCount)
-            isInsideFunction = false
+            if (methodNestingDepth == 0) {
+                val funName = function.fqName.toString()
+                appendRecord(funName, callExprCount)
+            }
         }
     }
 }

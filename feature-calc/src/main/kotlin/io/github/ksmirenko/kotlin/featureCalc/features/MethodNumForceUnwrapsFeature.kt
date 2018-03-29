@@ -14,7 +14,7 @@ class MethodNumForceUnwrapsFeature : Feature(
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
-        private var isInsideFunction = false
+        private var methodNestingDepth = 0
         private var numForceUnwraps = 0
 
         override fun visitElement(element: PsiElement?) {
@@ -27,25 +27,23 @@ class MethodNumForceUnwrapsFeature : Feature(
                 }
 
                 is KtNamedFunction -> visitOuterFunction(element)
-                is KtClassOrObject -> {
-                }  // skip nested classes
                 else -> super.visitElement(element)
             }
         }
 
         private fun visitOuterFunction(function: KtNamedFunction) {
-            if (isInsideFunction) {
-                // skip nested functions
-                return
+            if (methodNestingDepth == 0) {
+                numForceUnwraps = 0
             }
-            isInsideFunction = true
 
-            numForceUnwraps = 0
+            methodNestingDepth++
             super.visitElement(function)
+            methodNestingDepth--
 
-            val funName = function.fqName.toString()
-            appendRecord(funName, numForceUnwraps)
-            isInsideFunction = false
+            if (methodNestingDepth == 0) {
+                val funName = function.fqName.toString()
+                appendRecord(funName, numForceUnwraps)
+            }
         }
     }
 }

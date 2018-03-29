@@ -41,9 +41,9 @@ class MethodNumLambdasFeature : MethodSpecificNodeCountFeature<KtLambdaExpressio
         desiredNodeType = KtLambdaExpression::class.java
 )
 
-class MethodTotalNumKeywordsFeature : MethodSpecificNodeCountFeature<KtKeywordToken>(
-        id = FeatureRecord.Type.MethodTotalNumKeywords,
-        csvName = "numKeywords",
-        description = "Total number of keywords",
-        desiredNodeType = KtKeywordToken::class.java
+class MethodNumNestedClassesFeature : MethodSpecificNodeCountFeature<KtClassOrObject>(
+        id = FeatureRecord.Type.MethodNumNestedClasses,
+        csvName = "numNestedClasses",
+        description = "Number of nested classes, including indirectly nested (through a function too)",
+        desiredNodeType = KtClassOrObject::class.java
 )

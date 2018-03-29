@@ -14,26 +14,16 @@ class MethodRelativeLocFeature : Feature(
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
-        private var methodNestingDepth = 0
-
         override fun visitElement(element: PsiElement?) {
-            when (element) {
-                is KtNamedFunction -> visitKtFunction(element)
-                else -> super.visitElement(element)
+            if (element !is KtNamedFunction) {
+                return
             }
-        }
 
-        private fun visitKtFunction(function: KtNamedFunction) {
-            if (methodNestingDepth == 0) {
-                val funLinesCount = LineUtil.countLines(function)
-                val funName = function.fqName.toString()
-                // parent is assumed to be class, object or file
-                val parentLinesCount = LineUtil.countLines(function.parent)
-                appendRecord(funName, 1.0 * funLinesCount / parentLinesCount)
-            }
-            methodNestingDepth++
-            super.visitElement(function)
-            methodNestingDepth--
+            val funLinesCount = LineUtil.countLines(element)
+            // parent is assumed to be class, object or file
+            val parentLinesCount = LineUtil.countLines(element.parent)
+            val funName = element.fqName.toString()
+            appendRecord(funName, 1.0 * funLinesCount / parentLinesCount)
         }
     }
 }

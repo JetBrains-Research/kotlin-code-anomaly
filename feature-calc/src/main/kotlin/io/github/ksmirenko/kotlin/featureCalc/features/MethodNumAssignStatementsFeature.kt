@@ -14,7 +14,7 @@ class MethodNumAssignStatementsFeature : Feature(
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
-        private var isInsideFunction = false
+        private var methodNestingDepth = 0
         private var numAssigns = 0
 
         override fun visitElement(element: PsiElement?) {
@@ -34,25 +34,23 @@ class MethodNumAssignStatementsFeature : Feature(
                 }
 
                 is KtNamedFunction -> visitOuterFunction(element)
-                is KtClassOrObject -> {
-                }  // skip nested classes
                 else -> super.visitElement(element)
             }
         }
 
         private fun visitOuterFunction(function: KtNamedFunction) {
-            if (isInsideFunction) {
-                // FIXME: do not skip nested functions
-                return
+            if (methodNestingDepth == 0) {
+                numAssigns = 0
             }
-            isInsideFunction = true
 
-            numAssigns = 0
+            methodNestingDepth++
             super.visitElement(function)
+            methodNestingDepth--
 
-            val funName = function.fqName.toString()
-            appendRecord(funName, numAssigns)
-            isInsideFunction = false
+            if (methodNestingDepth == 0) {
+                val funName = function.fqName.toString()
+                appendRecord(funName, numAssigns)
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package io.github.ksmirenko.kotlin.featureCalc.features
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
+import com.intellij.psi.impl.source.tree.LeafPsiElement
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.lexer.KtKeywordToken
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -14,13 +15,16 @@ class MethodNumDistinctKeywordsFeature : Feature(
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
-        private var isInsideFunction = false
+        private var methodNestingDepth = 0
         private val keywords = mutableSetOf<String>()
 
         override fun visitElement(element: PsiElement?) {
             when (element) {
-                is KtKeywordToken -> {
-                    keywords.add(element.text)
+                is LeafPsiElement -> {
+                    if (element.elementType is KtKeywordToken) {
+                        keywords.add(element.text)
+                    }
+                    super.visitElement(element)
                 }
                 is KtNamedFunction -> visitOuterFunction(element)
 
@@ -29,18 +33,18 @@ class MethodNumDistinctKeywordsFeature : Feature(
         }
 
         private fun visitOuterFunction(function: KtNamedFunction) {
-            if (isInsideFunction) {
-                // skip nested functions
-                return
+            if (methodNestingDepth == 0) {
+                keywords.clear()
             }
-            isInsideFunction = true
 
-            keywords.clear()
+            methodNestingDepth++
             super.visitElement(function)
+            methodNestingDepth--
 
-            val funName = function.fqName.toString()
-            appendRecord(funName, keywords.size)
-            isInsideFunction = false
+            if (methodNestingDepth == 0) {
+                val funName = function.fqName.toString()
+                appendRecord(funName, keywords.size)
+            }
         }
     }
 }

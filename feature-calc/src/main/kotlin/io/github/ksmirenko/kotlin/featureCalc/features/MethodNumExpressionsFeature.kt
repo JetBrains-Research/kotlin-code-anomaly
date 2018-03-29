@@ -15,14 +15,12 @@ class MethodNumExpressionsFeature : Feature(
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
-        private var isInsideFunction = false
+        private var methodNestingDepth = 0
         private var exprCount = 0
 
         override fun visitElement(element: PsiElement?) {
             when (element) {
                 is KtNamedFunction -> visitKtFunction(element)
-                is KtClassOrObject -> {
-                }  // skip nested classes
 
                 is KtExpression -> {
                     exprCount += 1
@@ -33,18 +31,18 @@ class MethodNumExpressionsFeature : Feature(
         }
 
         private fun visitKtFunction(function: KtNamedFunction) {
-            if (isInsideFunction) {
-                // skip nested functions
-                return
+            if (methodNestingDepth == 0) {
+                exprCount = 0
             }
-            isInsideFunction = true
 
-            exprCount = 0
+            methodNestingDepth++
             super.visitElement(function)
+            methodNestingDepth--
 
-            val funName = function.fqName.toString()
-            appendRecord(funName, exprCount)
-            isInsideFunction = false
+            if (methodNestingDepth == 0) {
+                val funName = function.fqName.toString()
+                appendRecord(funName, exprCount)
+            }
         }
     }
 }

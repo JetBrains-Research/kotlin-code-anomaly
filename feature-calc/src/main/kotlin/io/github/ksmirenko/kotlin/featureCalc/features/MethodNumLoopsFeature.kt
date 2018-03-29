@@ -13,7 +13,7 @@ class MethodNumLoopsFeature : Feature(
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
-        private var isInsideFunction = false
+        private var methodNestingDepth = 0
         private var loopCount = 0
 
         override fun visitElement(element: PsiElement?) {
@@ -32,25 +32,23 @@ class MethodNumLoopsFeature : Feature(
                 }
 
                 is KtNamedFunction -> visitOuterFunction(element)
-                is KtClassOrObject -> {
-                }  // skip nested classes
                 else -> super.visitElement(element)
             }
         }
 
         private fun visitOuterFunction(function: KtNamedFunction) {
-            if (isInsideFunction) {
-                // skip nested functions
-                return
+            if (methodNestingDepth == 0) {
+                loopCount = 0
             }
-            isInsideFunction = true
 
-            loopCount = 0
+            methodNestingDepth++
             super.visitElement(function)
+            methodNestingDepth--
 
-            val funName = function.fqName.toString()
-            appendRecord(funName, loopCount)
-            isInsideFunction = false
+            if (methodNestingDepth == 0) {
+                val funName = function.fqName.toString()
+                appendRecord(funName, loopCount)
+            }
         }
     }
 }

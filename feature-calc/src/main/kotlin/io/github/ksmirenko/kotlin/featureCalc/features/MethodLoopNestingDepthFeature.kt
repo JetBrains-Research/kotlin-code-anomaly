@@ -3,7 +3,6 @@ package io.github.ksmirenko.kotlin.featureCalc.features
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -16,7 +15,7 @@ class MethodLoopNestingDepthFeature : Feature(
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
-        private var isInsideFunction = false
+        private var methodNestingDepth = 0
         private var curLoopDepth = 0
         private var maxLoopDepth = 0
 
@@ -25,26 +24,24 @@ class MethodLoopNestingDepthFeature : Feature(
                 is KtLoopExpression -> visitKtLoopExpression(element)
 
                 is KtNamedFunction -> visitOuterFunction(element)
-                is KtClassOrObject -> {
-                }  // skip nested classes
                 else -> super.visitElement(element)
             }
         }
 
         private fun visitOuterFunction(function: KtNamedFunction) {
-            if (isInsideFunction) {
-                // skip nested functions
-                return
+            if (methodNestingDepth == 0) {
+                curLoopDepth = 0
+                maxLoopDepth = 0
             }
-            isInsideFunction = true
 
-            curLoopDepth = 0
-            maxLoopDepth = 0
+            methodNestingDepth++
             super.visitElement(function)
+            methodNestingDepth--
 
-            val funName = function.fqName.toString()
-            appendRecord(funName, maxLoopDepth)
-            isInsideFunction = false
+            if (methodNestingDepth == 0) {
+                val funName = function.fqName.toString()
+                appendRecord(funName, maxLoopDepth)
+            }
         }
 
         private fun visitKtLoopExpression(loopExpression: KtLoopExpression) {
