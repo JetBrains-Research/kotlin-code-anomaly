@@ -1,6 +1,7 @@
 package io.github.ksmirenko.kotlin.featureCalc.features
 
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
+import org.jetbrains.kotlin.lexer.KtKeywordToken
 import org.jetbrains.kotlin.psi.*
 
 class MethodNumDeclarationsFeature : MethodSpecificNodeCountFeature<KtDeclaration>(
@@ -38,4 +39,11 @@ class MethodNumLambdasFeature : MethodSpecificNodeCountFeature<KtLambdaExpressio
         csvName = "numLambdas",
         description = "Number of lambda expressions",
         desiredNodeType = KtLambdaExpression::class.java
+)
+
+class MethodTotalNumKeywordsFeature : MethodSpecificNodeCountFeature<KtKeywordToken>(
+        id = FeatureRecord.Type.MethodTotalNumKeywords,
+        csvName = "numKeywords",
+        description = "Total number of keywords",
+        desiredNodeType = KtKeywordToken::class.java
 )

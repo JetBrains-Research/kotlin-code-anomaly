@@ -49,13 +49,16 @@ class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileN
             , MethodIsSuspendFeature()
             , MethodNumLambdasFeature()
             , MethodNumAnnotationsFeature()
+            , MethodTotalNumKeywordsFeature()
+            , MethodNumDistinctKeywordsFeature()
     )
 
     private val csvDelimiter = "\t"
     private val baseVisitor = KtFunctionSeekingVisitor()
 
     override fun writeCsvHeader() {
-        features.joinToString(separator = csvDelimiter, prefix = "methodName$csvDelimiter", postfix = "\n") {
+        features.joinToString(separator = csvDelimiter, prefix = "id${csvDelimiter}methodName$csvDelimiter",
+                postfix = "\n") {
             it.csvName
         }.let { writer.write(it) }
     }
@@ -71,6 +74,7 @@ class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileN
 
     private inner class KtFunctionSeekingVisitor : JavaRecursiveElementVisitor() {
         var currentFilePath: String? = null
+        private var funId = 1L
 
         override fun visitElement(element: PsiElement?) {
             when (element) {
@@ -82,7 +86,7 @@ class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileN
         private fun visitKtFunction(function: KtNamedFunction) {
             val funName = function.fqName.toString()
             val signature = function.buildFileBasedSignature(currentFilePath)
-            val recordStringBuilder = StringBuilder(signature)
+            val recordStringBuilder = StringBuilder(funId.toString() + csvDelimiter + signature)
             for (feature in features) {
                 function.accept(feature.visitor)
 
@@ -97,6 +101,7 @@ class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileN
 
             writer.write(recordStringBuilder.append('\n').toString())
             writer.flush()
+            funId++
         }
     }
 }

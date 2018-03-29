@@ -42,7 +42,7 @@ class MethodNumAssignStatementsFeature : Feature(
 
         private fun visitOuterFunction(function: KtNamedFunction) {
             if (isInsideFunction) {
-                // skip nested functions
+                // FIXME: do not skip nested functions
                 return
             }
             isInsideFunction = true
