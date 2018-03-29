@@ -6,7 +6,7 @@ import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 abstract class Feature(
         protected val id: FeatureRecord.Type,
         val csvName: String,
-        protected val description: String
+        val description: String
 ) {
     abstract val visitor: PsiElementVisitor
 

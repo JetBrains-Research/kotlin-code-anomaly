@@ -12,6 +12,11 @@ import java.io.File
 fun main(args: Array<String>) = mainBody {
     val parsedArgs = ArgParser(args).parseInto(::CommandLineArgs)
 
+    if (parsedArgs.descriptionOnly) {
+        MethodFeatureCalculator(null).printFeatureDescriptions()
+        return@mainBody
+    }
+
     // Configure calculators based on command line arguments
     val calculators = arrayListOf<FeatureCalculator>()
     if (parsedArgs.shouldPrettyPrint) {
@@ -60,6 +65,8 @@ fun main(args: Array<String>) = mainBody {
 }
 
 private class CommandLineArgs(parser: ArgParser) {
+    val descriptionOnly by parser.flagging("--description", "-d",
+            help = "print method feature descriptions into console and exit")
     val shouldPrettyPrint by parser.flagging("-p", "--pretty-print",
             help = "pretty-print PSI of every Kotlin file")
     val input by parser.storing("-i",

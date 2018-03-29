@@ -3,9 +3,7 @@ package io.github.ksmirenko.kotlin.featureCalc.features
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
-import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.psiUtil.getAnnotationEntries
 
 class MethodNumAnnotationsFeature : Feature(
         id = FeatureRecord.Type.MethodNumAnnotations,

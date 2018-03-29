@@ -7,7 +7,7 @@ import io.github.ksmirenko.kotlin.featureCalc.features.*
 import io.github.ksmirenko.kotlin.featureCalc.utils.buildFileBasedSignature
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodFeatureCalculator(outFileName: String) : FeatureCalculator(outFileName) {
+class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileName) {
     private val features = listOf(
             MethodSlocFeature()
             , MethodRelativeLocFeature()
@@ -65,6 +65,9 @@ class MethodFeatureCalculator(outFileName: String) : FeatureCalculator(outFileNa
         psiFile.accept(baseVisitor)
     }
 
+    fun printFeatureDescriptions() {
+        features.forEach { println(it.description) }
+    }
 
     private inner class KtFunctionSeekingVisitor : JavaRecursiveElementVisitor() {
         var currentFilePath: String? = null
