@@ -3,8 +3,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas
+import re
 import sys
 import time
+from functools import reduce
 
 # noinspection PyUnresolvedReferences
 from mpl_toolkits.mplot3d import Axes3D
@@ -42,28 +44,29 @@ def parse_timediff(timediff):
 # Load input
 methods = pandas.read_csv(csv_in_path, header=0, delimiter='\t', quoting=csv.QUOTE_NONE, error_bad_lines=True,
                           engine='python')
+print("Done reading CSV.")
 
-# Fix potential problems in input
-X = np.array(methods.values[:, 1:], dtype="float64")
-ok_lines = np.array([~np.isnan(row).any() for row in X])
-methods = methods[ok_lines]
-X = X[ok_lines]
+# Ensure validity of the input
+X = np.array(methods.values[:, 2:], dtype="float64")
 n_methods = methods.shape[0]
+has_bad_lines = reduce(lambda a, x: a | x, [np.isnan(row).any() for row in X])
+assert not has_bad_lines
 
 # Preprocessing
 X = scale(X)
 X = PCA(n_components=5).fit_transform(X)
+print("Done transforming data.")
 
 # All configs
 all_clf_configs = [
-    # {
-    #     'clf_name': 'lof',
-    #     'clf': LocalOutlierFactor(n_jobs=-1),
-    #     'param_grid': {
-    #         'n_neighbors': [10, 15],
-    #         'contamination': [0.0001, 0.00001, 0.000001]
-    #     }
-    # },
+    {
+        'clf_name': 'lof',
+        'clf': LocalOutlierFactor(n_jobs=-1),
+        'param_grid': {
+            'n_neighbors': [10, 15],
+            'contamination': [0.0001, 0.00001, 0.000001]
+        }
+    },
     {
         'clf_name': 'svm',
         'clf': OneClassSVM(shrinking=True),
@@ -96,7 +99,9 @@ for clf_config in clf_configs:
 
     for params in param_sets:
         local_start = time.time()
-        clf_desc = f"{clf_name}_{str(params).replace(' ', '_')}"
+
+        params_desc = re.sub("[{'}:]", "", str(params).replace(' ', '_'))
+        clf_desc = f"{clf_name}_{params_desc}"
         log(f"{clf_desc}")
 
         # Fit the model and mark data
@@ -144,7 +149,7 @@ for clf_config in clf_configs:
             plt.savefig(f"{out_path}{clf_desc}.png")
 
         # Save output of this configuration to file
-        outlier_names = methods.values[:][outlier_indices]
+        outlier_names = methods.values[outlier_indices]
         dataframe = pandas.DataFrame(outlier_names)
         dataframe.to_csv(f"{out_path}{clf_desc}.csv", header=False, index=False)
 
