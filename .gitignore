@@ -22,3 +22,6 @@ repos/
 
 **/.ipynb_checkpoints/
 analyzer/sandbox.ipynb
+
+# Local helper scripts
+mark.sh
