@@ -15,7 +15,8 @@ fun main(args: Array<String>) = mainBody {
     File(parsedArgs.outFolder).mkdirs()
 
     val strategy: RecordProcessingStrategy = when (parsedArgs.mode) {
-        CommandLineArgs.Mode.Seek -> SeekingStrategy(parsedArgs.inFolder, parsedArgs.outFolder)
+        CommandLineArgs.Mode.Seek -> SeekingStrategy(parsedArgs.inFolder, parsedArgs.outFolder,
+                parsedArgs.importantFeaturesPath)
         CommandLineArgs.Mode.BinaryMark -> BinaryMarkStrategy(parsedArgs.inFolder, parsedArgs.outFolder)
         CommandLineArgs.Mode.TernaryMark -> TODO()
     }
@@ -73,6 +74,11 @@ private class CommandLineArgs(parser: ArgParser) {
     val inFolder by parser.storing("--in", "-i",
             help = "path to input folder or repo root (for 'seek' mode)", argName = "IN-FOLDER")
     val outFolder by parser.storing("--out", "-o", help = "path to output folder", argName = "OUT-FOLDER")
+
+    val importantFeaturesPath by parser.storing("--important-only",
+            help = "path to CSV with 'important' features to filter the anomaly report",
+            argName = "IMPORTANT-FEATURES-CSV")
+            .default<String?>(null)
 
     val inputCsvPaths by parser.positionalList("CSV", sizeRange = 1..Int.MAX_VALUE,
             help = "CSV files or folders with anomaly reports")

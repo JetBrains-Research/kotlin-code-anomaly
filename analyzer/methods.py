@@ -63,8 +63,8 @@ all_clf_configs = [
         'clf_name': 'lof',
         'clf': LocalOutlierFactor(n_jobs=-1),
         'param_grid': {
-            'n_neighbors': [10, 15],
-            'contamination': [0.0001, 0.00001, 0.000001]
+            'n_neighbors': [10, 20],
+            'contamination': [0.001, 0.0001, 0.00001]
         }
     },
     {
@@ -73,12 +73,12 @@ all_clf_configs = [
         'param_grid': [
             # {
             #     'kernel': ['linear'],
-            #     'nu': [0.00005]
+            #     'nu': [0.005]
             # },
             {
                 'kernel': ['rbf'],
-                'nu': [0.0001, 0.00001],
-                'gamma': [0.1]
+                'nu': [0.001, 0.0001, 0.00001],
+                'gamma': ['auto']
             }
         ]
     }
