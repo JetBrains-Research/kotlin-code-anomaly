@@ -1,40 +1,40 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
+import com.intellij.psi.impl.source.tree.LeafPsiElement
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
+import org.jetbrains.kotlin.lexer.KtKeywordToken
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 
-class MethodNumTypeCastExpressionsFeature : Feature(
-        id = FeatureRecord.Type.MethodNumTypeCastExpr,
-        csvName = "numTypecastExpr",
-        description = "Number of typecast expressions"
+class MethodTotalNumKeywordsMetric : Metric(
+        id = FeatureRecord.Type.MethodTotalNumKeywords,
+        csvName = "numKeywords",
+        description = "Total number of keywords"
 ) {
-
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
         private var methodNestingDepth = 0
-        private var typecastExprCount = 0
+        private var keywordCount = 0
 
         override fun visitElement(element: PsiElement?) {
             when (element) {
-                is KtOperationReferenceExpression -> {
-                    if (element.text == "as" || element.text == "is") {
-                        typecastExprCount += 1
+                is LeafPsiElement -> {
+                    if (element.elementType is KtKeywordToken) {
+                        keywordCount++
                     }
                     super.visitElement(element)
                 }
+                is KtNamedFunction -> visitOuterFunction(element)
 
-                is KtNamedFunction -> visitKtFunction(element)
                 else -> super.visitElement(element)
             }
         }
 
-        private fun visitKtFunction(function: KtNamedFunction) {
+        private fun visitOuterFunction(function: KtNamedFunction) {
             if (methodNestingDepth == 0) {
-                typecastExprCount = 0
+                keywordCount = 0
             }
 
             methodNestingDepth++
@@ -43,7 +43,7 @@ class MethodNumTypeCastExpressionsFeature : Feature(
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(funName, typecastExprCount)
+                appendRecord(funName, keywordCount)
             }
         }
     }

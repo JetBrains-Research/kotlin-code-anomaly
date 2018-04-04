@@ -1,28 +1,27 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
-import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodNumIfExpressionsFeature : Feature(
-        id = FeatureRecord.Type.MethodNumIfExpressions,
-        csvName = "numIfExprs",
-        description = "Number of if expressions"
+class MethodLoopNestingDepthMetric : Metric(
+        id = FeatureRecord.Type.MethodLoopNestingDepth,
+        csvName = "loopNestingDepth",
+        description = "Loop nesting depth"
 ) {
+
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
         private var methodNestingDepth = 0
-        private var ifExprCount = 0
+        private var curLoopDepth = 0
+        private var maxLoopDepth = 0
 
         override fun visitElement(element: PsiElement?) {
             when (element) {
-                is KtIfExpression -> {
-                    ifExprCount += 1
-                    super.visitElement(element)
-                }
+                is KtLoopExpression -> visitKtLoopExpression(element)
 
                 is KtNamedFunction -> visitOuterFunction(element)
                 else -> super.visitElement(element)
@@ -31,7 +30,8 @@ class MethodNumIfExpressionsFeature : Feature(
 
         private fun visitOuterFunction(function: KtNamedFunction) {
             if (methodNestingDepth == 0) {
-                ifExprCount = 0
+                curLoopDepth = 0
+                maxLoopDepth = 0
             }
 
             methodNestingDepth++
@@ -40,8 +40,17 @@ class MethodNumIfExpressionsFeature : Feature(
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(funName, ifExprCount)
+                appendRecord(funName, maxLoopDepth)
             }
+        }
+
+        private fun visitKtLoopExpression(loopExpression: KtLoopExpression) {
+            curLoopDepth += 1
+            if (curLoopDepth > maxLoopDepth) {
+                maxLoopDepth = curLoopDepth
+            }
+            super.visitElement(loopExpression)
+            curLoopDepth -= 1
         }
     }
 }

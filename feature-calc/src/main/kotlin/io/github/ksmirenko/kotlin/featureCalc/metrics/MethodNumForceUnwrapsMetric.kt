@@ -1,34 +1,27 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
+import com.intellij.psi.impl.source.tree.LeafPsiElement
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
-import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.psi.*
 
-class MethodNumAssignStatementsFeature : Feature(
-        id = FeatureRecord.Type.MethodNumAssignStatements,
-        csvName = "numAssigns",
-        description = "Number of assign statements, including assignments in property declarations"
+class MethodNumForceUnwrapsMetric : Metric(
+        id = FeatureRecord.Type.MethodNumForceUnwraps,
+        csvName = "numForceUnwraps",
+        description = "Number of force unwraps via the non-null assertion operator"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
         private var methodNestingDepth = 0
-        private var numAssigns = 0
+        private var numForceUnwraps = 0
 
         override fun visitElement(element: PsiElement?) {
             when (element) {
-                is KtProperty -> {
-                    if (element.hasInitializer()) {
-                        numAssigns += 1
-                        super.visitElement(element)
-                    }
-                }
-                is KtBinaryExpression -> {
-                    val operation = (element.operationToken as? KtSingleValueToken)?.value
-                    if (operation == "=") {
-                        numAssigns += 1
+                is LeafPsiElement -> {
+                    if (element.text == "!!") {
+                        numForceUnwraps += 1
                         super.visitElement(element)
                     }
                 }
@@ -40,7 +33,7 @@ class MethodNumAssignStatementsFeature : Feature(
 
         private fun visitOuterFunction(function: KtNamedFunction) {
             if (methodNestingDepth == 0) {
-                numAssigns = 0
+                numForceUnwraps = 0
             }
 
             methodNestingDepth++
@@ -49,7 +42,7 @@ class MethodNumAssignStatementsFeature : Feature(
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(funName, numAssigns)
+                appendRecord(funName, numForceUnwraps)
             }
         }
     }

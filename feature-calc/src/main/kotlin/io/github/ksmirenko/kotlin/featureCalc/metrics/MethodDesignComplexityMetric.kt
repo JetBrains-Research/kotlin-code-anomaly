@@ -1,4 +1,4 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  * The design complexity is related to how interlinked a methods control flow is with calls to other methods.
  * Design complexity ranges from 1 to the cyclomatic complexity of the method.
  */
-class MethodDesignComplexityFeature : MethodComplexityFeature(
+class MethodDesignComplexityMetric : MethodComplexityMetric(
         id = FeatureRecord.Type.MethodDesignComplexity,
         csvName = "designComplexity",
         description = "Design complexity"

@@ -1,15 +1,14 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
-import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodIsSuspendFeature : Feature(
-        id = FeatureRecord.Type.MethodIsSuspend,
-        csvName = "isSuspend",
-        description = "Whether the function has suspend modifier"
+class MethodNumAnnotationsMetric : Metric(
+        id = FeatureRecord.Type.MethodNumAnnotations,
+        csvName = "numAnnotations",
+        description = "Number of annotations"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 
@@ -19,7 +18,7 @@ class MethodIsSuspendFeature : Feature(
                 return
             }
 
-            val featureValue = if (element.hasModifier(KtTokens.SUSPEND_KEYWORD)) 1 else 0
+            val featureValue = element.annotationEntries.size
             val funName = element.fqName.toString()
             appendRecord(funName, featureValue)
         }

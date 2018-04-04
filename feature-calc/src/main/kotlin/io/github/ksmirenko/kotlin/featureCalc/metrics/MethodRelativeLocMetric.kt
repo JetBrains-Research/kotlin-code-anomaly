@@ -1,4 +1,4 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
@@ -6,7 +6,7 @@ import com.sixrr.stockmetrics.utils.LineUtil
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodRelativeLocFeature : Feature(
+class MethodRelativeLocMetric : Metric(
         id = FeatureRecord.Type.MethodRelativeLoc,
         csvName = "relativeLoc",
         description = "Relative lines of code"

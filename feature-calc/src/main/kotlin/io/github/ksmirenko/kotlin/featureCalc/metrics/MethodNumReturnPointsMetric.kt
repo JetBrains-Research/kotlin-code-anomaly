@@ -1,4 +1,4 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 
-class MethodNumReturnPointsFeature : Feature(
+class MethodNumReturnPointsMetric : Metric(
         id = FeatureRecord.Type.MethodNumReturns,
         csvName = "numReturns",
         description = "Number of return points"

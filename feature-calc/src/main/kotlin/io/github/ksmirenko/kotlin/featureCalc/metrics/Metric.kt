@@ -1,9 +1,9 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.PsiElementVisitor
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 
-abstract class Feature(
+abstract class Metric(
         protected val id: FeatureRecord.Type,
         val csvName: String,
         val description: String

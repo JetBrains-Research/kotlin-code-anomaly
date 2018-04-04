@@ -1,27 +1,35 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
-import org.jetbrains.kotlin.psi.KtLoopExpression
-import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.*
 
-class MethodLoopNestingDepthFeature : Feature(
-        id = FeatureRecord.Type.MethodLoopNestingDepth,
-        csvName = "loopNestingDepth",
-        description = "Loop nesting depth"
+class MethodNumLoopsMetric : Metric(
+        id = FeatureRecord.Type.MethodNumLoops,
+        csvName = "numLoopStatements",
+        description = "Number of loop statements"
 ) {
-
     override val visitor: Visitor by lazy { Visitor() }
 
     inner class Visitor : JavaRecursiveElementVisitor() {
         private var methodNestingDepth = 0
-        private var curLoopDepth = 0
-        private var maxLoopDepth = 0
+        private var loopCount = 0
 
         override fun visitElement(element: PsiElement?) {
             when (element) {
-                is KtLoopExpression -> visitKtLoopExpression(element)
+                is KtDoWhileExpression -> {
+                    loopCount += 1
+                    super.visitElement(element)
+                }
+                is KtForExpression -> {
+                    loopCount += 1
+                    super.visitElement(element)
+                }
+                is KtWhileExpression -> {
+                    loopCount += 1
+                    super.visitElement(element)
+                }
 
                 is KtNamedFunction -> visitOuterFunction(element)
                 else -> super.visitElement(element)
@@ -30,8 +38,7 @@ class MethodLoopNestingDepthFeature : Feature(
 
         private fun visitOuterFunction(function: KtNamedFunction) {
             if (methodNestingDepth == 0) {
-                curLoopDepth = 0
-                maxLoopDepth = 0
+                loopCount = 0
             }
 
             methodNestingDepth++
@@ -40,17 +47,8 @@ class MethodLoopNestingDepthFeature : Feature(
 
             if (methodNestingDepth == 0) {
                 val funName = function.fqName.toString()
-                appendRecord(funName, maxLoopDepth)
+                appendRecord(funName, loopCount)
             }
-        }
-
-        private fun visitKtLoopExpression(loopExpression: KtLoopExpression) {
-            curLoopDepth += 1
-            if (curLoopDepth > maxLoopDepth) {
-                maxLoopDepth = curLoopDepth
-            }
-            super.visitElement(loopExpression)
-            curLoopDepth -= 1
         }
     }
 }

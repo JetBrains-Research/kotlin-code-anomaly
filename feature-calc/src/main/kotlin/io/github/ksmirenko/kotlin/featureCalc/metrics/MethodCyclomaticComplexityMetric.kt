@@ -1,4 +1,4 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
@@ -16,7 +16,7 @@ import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
  * - &&'s and ||'s
  * in the method.
  */
-class MethodCyclomaticComplexityFeature : MethodComplexityFeature(
+class MethodCyclomaticComplexityMetric : MethodComplexityMetric(
         id = FeatureRecord.Type.MethodCyclomaticComplexity,
         csvName = "cyclomaticComplexity",
         description = "Cyclomatic complexity"

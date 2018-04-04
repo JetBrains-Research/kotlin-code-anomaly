@@ -1,14 +1,14 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodNumAnnotationsFeature : Feature(
-        id = FeatureRecord.Type.MethodNumAnnotations,
-        csvName = "numAnnotations",
-        description = "Number of annotations"
+class MethodNumTypeParametersMetric : Metric(
+        id = FeatureRecord.Type.MethodNumTypeParameters,
+        csvName = "numTypeParameters",
+        description = "Number of type parameters"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 
@@ -18,9 +18,9 @@ class MethodNumAnnotationsFeature : Feature(
                 return
             }
 
-            val featureValue = element.annotationEntries.size
+            val valueParameterCount = element.typeParameters.size
             val funName = element.fqName.toString()
-            appendRecord(funName, featureValue)
+            appendRecord(funName, valueParameterCount)
         }
     }
 }

@@ -1,11 +1,11 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.*
 
-class MethodNumNestedFunctionsFeature : Feature(
+class MethodNumNestedFunctionsMetric : Metric(
         id = FeatureRecord.Type.MethodNumNestedFunctions,
         csvName = "numNestedFuns",
         description = "Number of nested functions, including not indirectly nested, but excluding local classes"

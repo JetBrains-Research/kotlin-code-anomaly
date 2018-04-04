@@ -1,4 +1,4 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodNumExpressionsFeature : Feature(
+class MethodNumExpressionsMetric : Metric(
         id = FeatureRecord.Type.MethodNumExpressions,
         csvName = "numExpressions",
         description = "Number of expressions"

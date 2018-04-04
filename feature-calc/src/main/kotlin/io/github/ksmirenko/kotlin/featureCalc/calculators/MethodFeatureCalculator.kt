@@ -3,54 +3,54 @@ package io.github.ksmirenko.kotlin.featureCalc.calculators
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import io.github.ksmirenko.kotlin.featureCalc.features.*
+import io.github.ksmirenko.kotlin.featureCalc.metrics.*
 import io.github.ksmirenko.kotlin.featureCalc.utils.buildFileBasedSignature
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileName) {
     private val features = listOf(
-            MethodSlocFeature()
-            , MethodRelativeLocFeature()
+            MethodSlocMetric()
+            , MethodRelativeLocMetric()
 
-            , MethodNodeCountFeature()
-            , MethodAstHeightFeature()
+            , MethodNodeCountMetric()
+            , MethodAstHeightMetric()
 
-            , MethodLoopNestingDepthFeature()
-            , MethodCyclomaticComplexityFeature()
-            , MethodDesignComplexityFeature()
+            , MethodLoopNestingDepthMetric()
+            , MethodCyclomaticComplexityMetric()
+            , MethodDesignComplexityMetric()
             // 7
 
-            , MethodNumTypeCastExpressionsFeature()
-            , MethodNumMethodCallsFeature()
-            , MethodNumStatementExpressionsFeature()
-            , MethodNumExpressionsFeature()
-            , MethodNumReturnPointsFeature()
-            , MethodNumValueParametersFeature()
-            , MethodNumLoopsFeature()
+            , MethodNumTypeCastExpressionsMetric()
+            , MethodNumMethodCallsMetric()
+            , MethodNumStatementExpressionsMetric()
+            , MethodNumExpressionsMetric()
+            , MethodNumReturnPointsMetric()
+            , MethodNumValueParametersMetric()
+            , MethodNumLoopsMetric()
             // 14
 
-            , MethodNumTypeParametersFeature()
-            , MethodMaxNumWhenEntriesFeature()
-            , MethodNumIfExpressionsFeature()
-            , MethodNumAssignStatementsFeature()
-            , MethodNumNestedFunctionsFeature()
-            , MethodNumNestedClassesFeature()
+            , MethodNumTypeParametersMetric()
+            , MethodMaxNumWhenEntriesMetric()
+            , MethodNumIfExpressionsMetric()
+            , MethodNumAssignStatementsMetric()
+            , MethodNumNestedFunctionsMetric()
+            , MethodNumNestedClassesMetric()
             // 20
 
-            , MethodNumDeclarationsFeature()
-            , MethodNumBlocksFeature()
-            , MethodNumTryExpressionsFeature()
-            , MethodNumCatchClausesFeature()
-            , MethodNumFinallySectionsFeature()
-            , MethodIsVoidFeature()
-            , MethodNumForceUnwrapsFeature()
+            , MethodNumDeclarationsMetric()
+            , MethodNumBlocksMetric()
+            , MethodNumTryExpressionsMetric()
+            , MethodNumCatchClausesMetric()
+            , MethodNumFinallySectionsMetric()
+            , MethodIsVoidMetric()
+            , MethodNumForceUnwrapsMetric()
             // 27
 
-            , MethodIsSuspendFeature()
-            , MethodNumLambdasFeature()
-            , MethodNumAnnotationsFeature()
-            , MethodTotalNumKeywordsFeature()
-            , MethodNumDistinctKeywordsFeature()
+            , MethodIsSuspendMetric()
+            , MethodNumLambdasMetric()
+            , MethodNumAnnotationsMetric()
+            , MethodTotalNumKeywordsMetric()
+            , MethodNumDistinctKeywordsMetric()
             // 32
     )
 

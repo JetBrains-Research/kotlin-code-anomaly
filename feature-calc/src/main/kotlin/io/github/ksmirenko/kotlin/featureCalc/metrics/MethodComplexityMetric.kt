@@ -1,4 +1,4 @@
-package io.github.ksmirenko.kotlin.featureCalc.features
+package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
@@ -19,8 +19,8 @@ import org.jetbrains.kotlin.psi.*
  * - &&'s and ||'s
  * and applies the implementation-defined filter to decide whether to count each element.
  */
-abstract class MethodComplexityFeature(id: FeatureRecord.Type, csvName: String, description: String)
-    : Feature(id, csvName, description) {
+abstract class MethodComplexityMetric(id: FeatureRecord.Type, csvName: String, description: String)
+    : Metric(id, csvName, description) {
 
     override val visitor: Visitor by lazy { Visitor() }
 
