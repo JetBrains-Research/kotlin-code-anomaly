@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodSlocMetric : Metric(
         csvName = "sloc",
-        description = "Source lines of code"
+        description = "Число строк кода"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

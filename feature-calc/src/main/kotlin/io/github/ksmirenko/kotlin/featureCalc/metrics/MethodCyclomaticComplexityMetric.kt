@@ -17,7 +17,7 @@ import com.intellij.psi.PsiElement
  */
 class MethodCyclomaticComplexityMetric : MethodComplexityMetric(
         csvName = "cyclomaticComplexity",
-        description = "Cyclomatic complexity"
+        description = "Цикломатическая сложность"
 ) {
 
     override fun isAccepted(element: PsiElement): Boolean {

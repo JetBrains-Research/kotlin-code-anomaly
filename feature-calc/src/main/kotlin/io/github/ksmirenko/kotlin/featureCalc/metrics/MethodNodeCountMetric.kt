@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.*
 
 class MethodNodeCountMetric : Metric(
         csvName = "nodeCount",
-        description = "AST node count"
+        description = "Число узлов CST"
 ) {
 
     override val visitor: Visitor by lazy { Visitor() }

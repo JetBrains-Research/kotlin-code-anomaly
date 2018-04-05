@@ -4,9 +4,9 @@ import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodAstHeightMetric : Metric(
-        csvName = "astHeight",
-        description = "AST maximum height"
+class MethodCstHeightMetric : Metric(
+        csvName = "cstHeight",
+        description = "Высота CST"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

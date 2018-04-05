@@ -3,38 +3,38 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 import org.jetbrains.kotlin.psi.*
 
 class MethodNumDeclarationsMetric : MethodSpecificNodeCountMetric<KtDeclaration>(
-        csvName = "numDeclarations", description = "Number of KtDeclaratioins",
+        csvName = "numDeclarations", description = "Число KtDeclaratioin",
         desiredNodeType = KtDeclaration::class.java
 )
 
 class MethodNumBlocksMetric : MethodSpecificNodeCountMetric<KtBlockExpression>(
-        csvName = "numBlocks", description = "Number of block expressions",
+        csvName = "numBlocks", description = "Число блоков",
         desiredNodeType = KtBlockExpression::class.java
 )
 
 class MethodNumTryExpressionsMetric : MethodSpecificNodeCountMetric<KtTryExpression>(
-        csvName = "numTry", description = "Number of try expressions",
+        csvName = "numTry", description = "Число try-выражений",
         desiredNodeType = KtTryExpression::class.java
 )
 
 class MethodNumCatchClausesMetric : MethodSpecificNodeCountMetric<KtCatchClause>(
-        csvName = "numCatch", description = "Number of catch clauses",
+        csvName = "numCatch", description = "Число catch-выражений",
         desiredNodeType = KtCatchClause::class.java
 )
 
 class MethodNumFinallySectionsMetric : MethodSpecificNodeCountMetric<KtFinallySection>(
-        csvName = "numFinally", description = "Number of finally sections",
+        csvName = "numFinally", description = "Число finally-секций",
         desiredNodeType = KtFinallySection::class.java
 )
 
 class MethodNumLambdasMetric : MethodSpecificNodeCountMetric<KtLambdaExpression>(
         csvName = "numLambdas",
-        description = "Number of lambda expressions",
+        description = "Число лямбда-выражений",
         desiredNodeType = KtLambdaExpression::class.java
 )
 
 class MethodNumNestedClassesMetric : MethodSpecificNodeCountMetric<KtClassOrObject>(
         csvName = "numNestedClasses",
-        description = "Number of nested classes, including indirectly nested (through a function too)",
+        description = "Число вложенных классов",
         desiredNodeType = KtClassOrObject::class.java
 )

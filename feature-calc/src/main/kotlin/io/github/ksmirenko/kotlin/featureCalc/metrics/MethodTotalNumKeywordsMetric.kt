@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodTotalNumKeywordsMetric : Metric(
         csvName = "numKeywords",
-        description = "Total number of keywords"
+        description = "Число использований ключевых слов"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

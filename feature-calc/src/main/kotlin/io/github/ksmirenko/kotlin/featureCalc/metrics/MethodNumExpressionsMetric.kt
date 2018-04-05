@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodNumExpressionsMetric : Metric(
         csvName = "numExpressions",
-        description = "Number of expressions"
+        description = "Число выражений"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

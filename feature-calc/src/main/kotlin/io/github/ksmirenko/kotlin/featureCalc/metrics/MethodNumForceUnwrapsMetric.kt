@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.*
 
 class MethodNumForceUnwrapsMetric : Metric(
         csvName = "numForceUnwraps",
-        description = "Number of force unwraps via the non-null assertion operator"
+        description = "Число использований оператора !!"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

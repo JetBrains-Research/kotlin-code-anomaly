@@ -10,7 +10,7 @@ import kotlin.math.max
 
 class MethodMaxNumWhenEntriesMetric : Metric(
         csvName = "maxNumWhenEntries",
-        description = "Max number of when-entries in a single when expression"
+        description = "Макс. число веток в одном when-выражении"
 ) {
     override val visitor by lazy { Visitor() }
 

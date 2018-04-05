@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.*
 
 class MethodNumAssignStatementsMetric : Metric(
         csvName = "numAssigns",
-        description = "Number of assign statements, including assignments in property declarations"
+        description = "Число операторов присваивания"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

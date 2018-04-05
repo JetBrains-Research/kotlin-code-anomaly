@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.*
 
 class MethodNumNestedFunctionsMetric : Metric(
         csvName = "numNestedFuns",
-        description = "Number of nested functions, including not indirectly nested, but excluding local classes"
+        description = "Число вложенных функций"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

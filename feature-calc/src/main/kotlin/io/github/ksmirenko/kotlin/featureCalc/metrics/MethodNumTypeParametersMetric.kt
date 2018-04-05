@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodNumTypeParametersMetric : Metric(
         csvName = "numTypeParameters",
-        description = "Number of type parameters"
+        description = "Число типовых параметров функции"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

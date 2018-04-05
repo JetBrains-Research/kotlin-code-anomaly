@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 
 class MethodNumReturnPointsMetric : Metric(
         csvName = "numReturns",
-        description = "Number of return points"
+        description = "Число операторов возврата"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

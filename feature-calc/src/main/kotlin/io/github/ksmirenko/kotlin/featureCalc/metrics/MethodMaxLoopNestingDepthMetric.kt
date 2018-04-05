@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodMaxLoopNestingDepthMetric : Metric(
         csvName = "maxLoopNestingDepth",
-        description = "Max loop nesting depth"
+        description = "Макс. глубина вложенности циклов"
 ) {
 
     override val visitor: Visitor by lazy { Visitor() }

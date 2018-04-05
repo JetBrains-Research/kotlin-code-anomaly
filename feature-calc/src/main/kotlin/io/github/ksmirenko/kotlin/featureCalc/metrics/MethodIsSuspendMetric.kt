@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodIsSuspendMetric : Metric(
         csvName = "isSuspend",
-        description = "Whether the function has suspend modifier"
+        description = "Наличие модификатора suspend"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodIsVoidMetric : Metric(
         csvName = "isVoid",
-        description = "Whether the function is of void type"
+        description = "Возвращает ли void"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodRelativeLocMetric : Metric(
         csvName = "relativeLoc",
-        description = "Relative lines of code"
+        description = "Относительное число строк кода"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

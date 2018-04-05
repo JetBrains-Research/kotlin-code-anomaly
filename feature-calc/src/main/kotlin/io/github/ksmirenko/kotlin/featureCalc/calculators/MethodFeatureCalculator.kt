@@ -9,14 +9,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileName) {
     private val features = listOf(
-            MethodNodeCountMetric()
-    )
-    private val features1 = listOf(
             MethodSlocMetric()
             , MethodRelativeLocMetric()
 
             , MethodNodeCountMetric()
-            , MethodAstHeightMetric()
+            , MethodCstHeightMetric()
 
             , MethodMaxLoopNestingDepthMetric()
             , MethodCyclomaticComplexityMetric()
@@ -61,10 +58,11 @@ class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileN
     private val baseVisitor = KtFunctionSeekingVisitor()
 
     override fun writeCsvHeader() {
-        features.joinToString(separator = csvDelimiter, prefix = "id${csvDelimiter}methodName$csvDelimiter",
-                postfix = "\n") {
-            it.csvName
-        }.let { writer.write(it) }
+        features
+                .joinToString(separator = csvDelimiter, prefix = "id${csvDelimiter}methodName$csvDelimiter",
+                        postfix = "\n") {
+                    it.csvName
+                }.let { writer.write(it) }
     }
 
     override fun calculate(psiFile: PsiFile, path: String?) {
@@ -73,7 +71,9 @@ class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileN
     }
 
     fun printFeatureDescriptions() {
-        features.forEach { println(it.description) }
+        features.sortedBy { it.csvName }
+                .joinToString(separator = "\\\\\n", transform = { "${it.csvName} & ${it.description}" })
+                .let { println(it) }
     }
 
     private inner class KtFunctionSeekingVisitor : JavaRecursiveElementVisitor() {

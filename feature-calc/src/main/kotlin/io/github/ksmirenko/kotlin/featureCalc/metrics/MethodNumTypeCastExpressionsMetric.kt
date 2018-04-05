@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 
 class MethodNumTypeCastExpressionsMetric : Metric(
         csvName = "numTypecastExpr",
-        description = "Number of typecast expressions"
+        description = "Число выражений преобразования типов"
 ) {
 
     override val visitor: Visitor by lazy { Visitor() }

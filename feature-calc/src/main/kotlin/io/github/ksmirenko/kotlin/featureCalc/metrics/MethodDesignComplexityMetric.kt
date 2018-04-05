@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  */
 class MethodDesignComplexityMetric : MethodComplexityMetric(
         csvName = "designComplexity",
-        description = "Design complexity"
+        description = "Проектировочная сложность"
 ) {
     private val callVisitor = CallVisitor()
 

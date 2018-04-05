@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.psi.KtStatementExpression
 
 class MethodNumStatementExpressionsMetric : Metric(
         csvName = "numStatementExpressions",
-        description = "Number of Kotlin StatementExpressions"
+        description = "Число операторных выражений"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

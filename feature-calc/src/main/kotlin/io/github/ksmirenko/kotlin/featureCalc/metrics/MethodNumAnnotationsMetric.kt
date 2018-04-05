@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodNumAnnotationsMetric : Metric(
         csvName = "numAnnotations",
-        description = "Number of annotations"
+        description = "Число аннотаций"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 

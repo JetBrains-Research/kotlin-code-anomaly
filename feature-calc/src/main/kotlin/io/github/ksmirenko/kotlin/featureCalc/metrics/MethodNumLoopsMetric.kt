@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.*
 
 class MethodNumLoopsMetric : Metric(
         csvName = "numLoopStatements",
-        description = "Number of loop statements"
+        description = "Число циклов"
 ) {
     override val visitor: Visitor by lazy { Visitor() }
 
