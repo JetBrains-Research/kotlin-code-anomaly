@@ -38,3 +38,63 @@ class MethodNumNestedClassesMetric : MethodSpecificNodeCountMetric<KtClassOrObje
         description = "Число вложенных классов",
         desiredNodeType = KtClassOrObject::class.java
 )
+
+class MethodNumConstants : MethodSpecificNodeCountMetric<KtConstantExpression>(
+        csvName = "numConstExpr",
+        description = "Число константных выражений",
+        desiredNodeType = KtConstantExpression::class.java
+)
+
+class MethodNumStringTemplates : MethodSpecificNodeCountMetric<KtStringTemplateEntry>(
+        csvName = "numStringTemplates",
+        description = "Число строковых шаблонов",
+        desiredNodeType = KtStringTemplateEntry::class.java
+)
+
+class MethodNumStringLiterals : MethodSpecificNodeCountMetric<KtLiteralStringTemplateEntry>(
+        csvName = "numStringLiterals",
+        description = "Число строковых литералов",
+        desiredNodeType = KtLiteralStringTemplateEntry::class.java
+)
+
+class MethodNumBlockStringTemplates : MethodSpecificNodeCountMetric<KtBlockStringTemplateEntry>(
+        csvName = "numBlockStringTemplates",
+        description = "Число блочных строковых шаблонов",
+        desiredNodeType = KtBlockStringTemplateEntry::class.java
+)
+
+class MethodNumReferences : MethodSpecificNodeCountMetric<KtReferenceExpression>(
+        csvName = "numReferences",
+        description = "Число ссылок",
+        desiredNodeType = KtReferenceExpression::class.java
+)
+
+class MethodNumOperations : MethodSpecificNodeCountMetric<KtOperationReferenceExpression>(
+        csvName = "numOperationReferences",
+        description = "Число операций",
+        desiredNodeType = KtOperationReferenceExpression::class.java
+)
+
+class MethodNumThrows : MethodSpecificNodeCountMetric<KtThrowExpression>(
+        csvName = "numThrows",
+        description = "Число throw-операторов",
+        desiredNodeType = KtThrowExpression::class.java
+)
+
+class MethodNumSafeQualifiedExpressions : MethodSpecificNodeCountMetric<KtSafeQualifiedExpression>(
+        csvName = "numSafeExpressions",
+        description = "Число null-безопасных обращений по ссылкам",
+        desiredNodeType = KtSafeQualifiedExpression::class.java
+)
+
+class MethodNumClassLiterals : MethodSpecificNodeCountMetric<KtClassLiteralExpression>(
+        csvName = "numClassLiterals",
+        description = "Число выражений-ссылок на классы",
+        desiredNodeType = KtClassLiteralExpression::class.java
+)
+
+class MethodNumCollectionLiterals : MethodSpecificNodeCountMetric<KtCollectionLiteralExpression>(
+        csvName = "numCollectionLiterals",
+        description = "Число коллекций-литералов",
+        desiredNodeType = KtCollectionLiteralExpression::class.java
+)
