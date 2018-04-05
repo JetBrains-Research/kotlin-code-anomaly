@@ -3,8 +3,8 @@ package io.github.ksmirenko.kotlin.featureCalc.calculators
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiWhiteSpace
 
-@Suppress("unused") // kept for testing purposes
 class PrettyPrinter : FeatureCalculator(null) {
     private val baseVisitor = PrettyPrintingVisitor()
 
@@ -20,8 +20,17 @@ class PrettyPrinter : FeatureCalculator(null) {
         private var level = 1
 
         override fun visitElement(element: PsiElement?) {
-            (1..level).forEach { print("\t") }
-            println(element)
+            if (element is PsiWhiteSpace) {
+                return
+            }
+
+            (1..level).forEach { print("  ") }
+            print(element)
+            println("\t\t${element?.text
+                    ?.replace("\n", "")
+                    ?.replace("\\s+".toRegex(), " ")
+                    ?.take(200)}"
+            )
 
             level += 1
             super.visitElement(element)

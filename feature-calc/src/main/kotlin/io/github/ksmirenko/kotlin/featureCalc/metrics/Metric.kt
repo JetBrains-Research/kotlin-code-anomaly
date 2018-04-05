@@ -9,18 +9,10 @@ abstract class Metric(
 ) {
     abstract val visitor: PsiElementVisitor
 
-    private val _records = ArrayList<FeatureRecord>()
-
-    val records: List<FeatureRecord>
-        get() = _records
-
     var lastRecord: FeatureRecord? = null
         private set
 
     fun appendRecord(record: FeatureRecord) {
-        synchronized(_records) {
-            _records.add(record)
-        }
         lastRecord = record
     }
 
