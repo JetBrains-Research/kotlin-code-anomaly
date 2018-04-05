@@ -15,7 +15,7 @@ class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileN
             , MethodNodeCountMetric()
             , MethodAstHeightMetric()
 
-            , MethodLoopNestingDepthMetric()
+            , MethodMaxLoopNestingDepthMetric()
             , MethodCyclomaticComplexityMetric()
             , MethodDesignComplexityMetric()
             // 7

@@ -6,10 +6,10 @@ import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodLoopNestingDepthMetric : Metric(
-        id = FeatureRecord.Type.MethodLoopNestingDepth,
-        csvName = "loopNestingDepth",
-        description = "Loop nesting depth"
+class MethodMaxLoopNestingDepthMetric : Metric(
+        id = FeatureRecord.Type.MethodMaxLoopNestingDepth,
+        csvName = "maxLoopNestingDepth",
+        description = "Max loop nesting depth"
 ) {
 
     override val visitor: Visitor by lazy { Visitor() }

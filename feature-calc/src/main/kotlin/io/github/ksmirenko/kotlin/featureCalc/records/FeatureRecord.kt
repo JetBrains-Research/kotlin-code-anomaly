@@ -27,7 +27,7 @@ data class FeatureRecord(
     enum class Type {
         FileLoC, FileSLoC, FileASTHeight, FileASTNodeCount,
         MethodLoC, MethodSLoC, MethodASTHeight, MethodASTNodeCount,
-        MethodLoopNestingDepth, MethodCyclomaticComplexity,
+        MethodMaxLoopNestingDepth, MethodCyclomaticComplexity,
         MethodRelativeLoc, MethodDesignComplexity, MethodNumTypeCastExpr, MethodNumMethodCalls,
         MethodNumStatementExpressions, MethodNumExpressions, MethodNumValueParameters, MethodNumReturns, MethodNumLoops,
         MethodNumTypeParameters, MethodMaxNumWhenEntries, MethodNumIfExpressions,
