@@ -6,10 +6,11 @@ package testSrc
 import org.jetbrains.annotations.NotNull
 
 fun f1() {
-    for (i in 1..10) {
-        println("Hello!")
-    }
-    while (2 > 3) {
+    println("")
+    println("")
+    println("")
+    println("0")
+    if ("3" == "1") {
     }
 }
 
@@ -21,4 +22,16 @@ suspend fun f2(arg: Int?) {
     arg!!.toString()
     val a = { x: Any -> { y: Any -> y.toString() } }
     val b = { y: Any -> y.toString() }
+}
+
+fun f3() {
+    String::class.java
+    val sb = StringBuilder()
+    sb
+            .append(1)
+            ?.append(2)!!
+            .toString()
+            .toIntOrNull()
+            ?.plus(42)
+    sb!!.append(4)!!.append(5)!!.toString()!!
 }

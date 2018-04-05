@@ -60,7 +60,7 @@ class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileN
 
             , MethodNumConstants()
             , MethodNumStringTemplates()
-            , MethodNumStringLiterals()
+            , MethodNumStringLiteralTemplates()
             , MethodNumBlockStringTemplates()
             , MethodNumReferences()
             , MethodNumOperations()
@@ -69,6 +69,13 @@ class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileN
             , MethodNumClassLiterals()
             , MethodNumCollectionLiterals()
             // 46
+
+            , MethodNumZeroConstants()
+            , MethodNumOneConstants()
+            , MethodNumEmptyStringLiterals()
+            , MethodNumPlusOperations()
+            , MethodAvgNumWhenEntriesMetric()
+            // 51
     )
 
     private val csvDelimiter = "\t"

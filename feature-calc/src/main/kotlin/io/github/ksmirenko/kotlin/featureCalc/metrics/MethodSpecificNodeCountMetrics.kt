@@ -45,15 +45,15 @@ class MethodNumConstants : MethodSpecificNodeCountMetric<KtConstantExpression>(
         desiredNodeType = KtConstantExpression::class.java
 )
 
-class MethodNumStringTemplates : MethodSpecificNodeCountMetric<KtStringTemplateEntry>(
+class MethodNumStringTemplates : MethodSpecificNodeCountMetric<KtStringTemplateExpression>(
         csvName = "numStringTemplates",
         description = "Число строковых шаблонов",
-        desiredNodeType = KtStringTemplateEntry::class.java
+        desiredNodeType = KtStringTemplateExpression::class.java
 )
 
-class MethodNumStringLiterals : MethodSpecificNodeCountMetric<KtLiteralStringTemplateEntry>(
-        csvName = "numStringLiterals",
-        description = "Число строковых литералов",
+class MethodNumStringLiteralTemplates : MethodSpecificNodeCountMetric<KtLiteralStringTemplateEntry>(
+        csvName = "numStringLiteralTemplates",
+        description = "Число строковых шаблонов-литералов",
         desiredNodeType = KtLiteralStringTemplateEntry::class.java
 )
 
