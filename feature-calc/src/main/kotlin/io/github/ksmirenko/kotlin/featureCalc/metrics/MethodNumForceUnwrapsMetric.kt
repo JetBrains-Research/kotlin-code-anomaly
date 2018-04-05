@@ -3,11 +3,9 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.*
 
 class MethodNumForceUnwrapsMetric : Metric(
-        id = FeatureRecord.Type.MethodNumForceUnwraps,
         csvName = "numForceUnwraps",
         description = "Number of force unwraps via the non-null assertion operator"
 ) {

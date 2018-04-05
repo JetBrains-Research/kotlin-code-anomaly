@@ -4,11 +4,9 @@ import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.sixrr.stockmetrics.utils.LineUtil
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodSlocMetric : Metric(
-        id = FeatureRecord.Type.MethodSLoC,
         csvName = "sloc",
         description = "Source lines of code"
 ) {

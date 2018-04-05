@@ -2,15 +2,13 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
-import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.KtNamedFunction
 
 open class MethodSpecificNodeCountMetric<T>(
-        id: FeatureRecord.Type,
         csvName: String,
         description: String,
         private val desiredNodeType: Class<T>
-) : Metric(id, csvName, description) {
+) : Metric(csvName, description) {
 
     override val visitor: Visitor by lazy { Visitor() }
 

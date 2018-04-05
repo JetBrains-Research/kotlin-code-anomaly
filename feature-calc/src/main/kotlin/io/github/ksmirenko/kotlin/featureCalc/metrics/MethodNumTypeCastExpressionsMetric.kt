@@ -2,12 +2,10 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 
 class MethodNumTypeCastExpressionsMetric : Metric(
-        id = FeatureRecord.Type.MethodNumTypeCastExpr,
         csvName = "numTypecastExpr",
         description = "Number of typecast expressions"
 ) {

@@ -2,7 +2,6 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 
@@ -15,7 +14,6 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  * Design complexity ranges from 1 to the cyclomatic complexity of the method.
  */
 class MethodDesignComplexityMetric : MethodComplexityMetric(
-        id = FeatureRecord.Type.MethodDesignComplexity,
         csvName = "designComplexity",
         description = "Design complexity"
 ) {

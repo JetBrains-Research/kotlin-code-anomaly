@@ -3,12 +3,10 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.lexer.KtKeywordToken
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodNumDistinctKeywordsMetric : Metric(
-        id = FeatureRecord.Type.MethodNumDistinctKeywords,
         csvName = "numDistinctKeywords",
         description = "Number of distinct keywords"
 ) {

@@ -1,7 +1,6 @@
 package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 
 /**
  * Calculates methods' cyclomatic complexity.
@@ -17,7 +16,6 @@ import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
  * in the method.
  */
 class MethodCyclomaticComplexityMetric : MethodComplexityMetric(
-        id = FeatureRecord.Type.MethodCyclomaticComplexity,
         csvName = "cyclomaticComplexity",
         description = "Cyclomatic complexity"
 ) {

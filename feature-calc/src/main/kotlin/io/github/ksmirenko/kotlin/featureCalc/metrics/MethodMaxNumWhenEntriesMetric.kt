@@ -2,7 +2,6 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.KtWhenExpression
@@ -10,7 +9,6 @@ import java.util.*
 import kotlin.math.max
 
 class MethodMaxNumWhenEntriesMetric : Metric(
-        id = FeatureRecord.Type.MethodMaxNumWhenEntries,
         csvName = "maxNumWhenEntries",
         description = "Max number of when-entries in a single when expression"
 ) {

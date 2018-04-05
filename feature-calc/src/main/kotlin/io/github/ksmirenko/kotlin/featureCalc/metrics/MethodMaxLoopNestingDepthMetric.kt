@@ -2,12 +2,10 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodMaxLoopNestingDepthMetric : Metric(
-        id = FeatureRecord.Type.MethodMaxLoopNestingDepth,
         csvName = "maxLoopNestingDepth",
         description = "Max loop nesting depth"
 ) {

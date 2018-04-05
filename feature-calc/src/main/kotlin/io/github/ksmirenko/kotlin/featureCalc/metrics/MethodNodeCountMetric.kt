@@ -2,11 +2,9 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
-import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.*
 
 class MethodNodeCountMetric : Metric(
-        id = FeatureRecord.Type.MethodASTNodeCount,
         csvName = "nodeCount",
         description = "AST node count"
 ) {

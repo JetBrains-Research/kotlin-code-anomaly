@@ -4,7 +4,6 @@ import com.intellij.psi.PsiElementVisitor
 import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 
 abstract class Metric(
-        protected val id: FeatureRecord.Type,
         val csvName: String,
         val description: String
 ) {
@@ -26,10 +25,10 @@ abstract class Metric(
     }
 
     fun appendRecord(entityIdentifier: String, value: Double) {
-        appendRecord(FeatureRecord(id, entityIdentifier, value))
+        appendRecord(FeatureRecord(entityIdentifier, value))
     }
 
     fun appendRecord(entityIdentifier: String, value: Int) {
-        appendRecord(FeatureRecord(id, entityIdentifier, value))
+        appendRecord(FeatureRecord(entityIdentifier, value))
     }
 }

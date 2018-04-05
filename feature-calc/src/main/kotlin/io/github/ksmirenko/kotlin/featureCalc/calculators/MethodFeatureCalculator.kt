@@ -9,6 +9,9 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileName) {
     private val features = listOf(
+            MethodNodeCountMetric()
+    )
+    private val features1 = listOf(
             MethodSlocMetric()
             , MethodRelativeLocMetric()
 

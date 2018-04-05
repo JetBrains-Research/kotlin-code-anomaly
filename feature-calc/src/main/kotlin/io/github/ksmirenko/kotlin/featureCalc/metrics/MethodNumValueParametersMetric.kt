@@ -2,11 +2,9 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodNumValueParametersMetric : Metric(
-        id = FeatureRecord.Type.MethodNumValueParameters,
         csvName = "numValueParameters",
         description = "Number of value parameters"
 ) {

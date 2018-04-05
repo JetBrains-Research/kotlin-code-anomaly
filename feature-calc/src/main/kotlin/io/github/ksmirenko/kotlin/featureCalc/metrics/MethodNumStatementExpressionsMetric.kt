@@ -2,13 +2,11 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtStatementExpression
 
 class MethodNumStatementExpressionsMetric : Metric(
-        id = FeatureRecord.Type.MethodNumStatementExpressions,
         csvName = "numStatementExpressions",
         description = "Number of Kotlin StatementExpressions"
 ) {

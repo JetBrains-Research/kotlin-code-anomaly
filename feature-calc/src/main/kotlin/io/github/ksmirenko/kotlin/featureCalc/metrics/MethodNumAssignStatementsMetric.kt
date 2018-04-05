@@ -2,12 +2,10 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.psi.*
 
 class MethodNumAssignStatementsMetric : Metric(
-        id = FeatureRecord.Type.MethodNumAssignStatements,
         csvName = "numAssigns",
         description = "Number of assign statements, including assignments in property declarations"
 ) {

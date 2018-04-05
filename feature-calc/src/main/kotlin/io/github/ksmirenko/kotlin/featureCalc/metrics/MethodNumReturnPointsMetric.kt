@@ -2,14 +2,12 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 
 class MethodNumReturnPointsMetric : Metric(
-        id = FeatureRecord.Type.MethodNumReturns,
         csvName = "numReturns",
         description = "Number of return points"
 ) {

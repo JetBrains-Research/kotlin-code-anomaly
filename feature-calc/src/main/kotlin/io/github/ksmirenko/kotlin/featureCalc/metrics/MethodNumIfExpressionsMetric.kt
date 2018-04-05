@@ -2,12 +2,10 @@ package io.github.ksmirenko.kotlin.featureCalc.metrics
 
 import com.intellij.psi.JavaRecursiveElementVisitor
 import com.intellij.psi.PsiElement
-import io.github.ksmirenko.kotlin.featureCalc.records.FeatureRecord
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 class MethodNumIfExpressionsMetric : Metric(
-        id = FeatureRecord.Type.MethodNumIfExpressions,
         csvName = "numIfExprs",
         description = "Number of if expressions"
 ) {
