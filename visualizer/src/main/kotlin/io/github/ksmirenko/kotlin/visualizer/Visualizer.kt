@@ -76,7 +76,7 @@ private class CommandLineArgs(parser: ArgParser) {
     val outFolder by parser.storing("--out", "-o", help = "path to output folder", argName = "OUT-FOLDER")
 
     val importantFeaturesPath by parser.storing("--important-only",
-            help = "path to CSV with 'important' features to filter the anomaly report",
+            help = "path to CSV with 'important' features to filter the anomaly report (for seek mode)",
             argName = "IMPORTANT-FEATURES-CSV")
             .default<String?>(null)
 

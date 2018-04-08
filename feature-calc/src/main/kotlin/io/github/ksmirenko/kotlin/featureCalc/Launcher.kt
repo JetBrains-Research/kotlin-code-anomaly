@@ -7,6 +7,7 @@ import io.github.ksmirenko.kotlin.featureCalc.calculators.MethodFeatureCalculato
 import io.github.ksmirenko.kotlin.featureCalc.calculators.FeatureCalculator
 import io.github.ksmirenko.kotlin.featureCalc.calculators.PrettyPrinter
 import io.github.ksmirenko.kotlin.featureCalc.utils.KotlinFileUtils
+import java.io.BufferedWriter
 import java.io.File
 
 fun main(args: Array<String>) = mainBody {
@@ -29,6 +30,9 @@ fun main(args: Array<String>) = mainBody {
     if (parsedArgs.shouldWriteCsvHeader) {
         calculators.forEach(FeatureCalculator::writeCsvHeader)
     }
+
+    val errorLogPath = parsedArgs.failLogFile
+    val errorLog = if (errorLogPath != null) BufferedWriter(File(errorLogPath).writer()) else null
 
     var processedFilesCount = 0
     var skippedFilesCount = 0
@@ -56,12 +60,14 @@ fun main(args: Array<String>) = mainBody {
             calculators.forEach { it.calculate(psiFile, path) }
         } catch (e: Exception) {
             println("\tSkipped, could not compile!")
+            errorLog?.write(path + "\n")
         }
         processedFilesCount += 1
     }
     println("Done. Processed $processedFilesCount files.")
 
     calculators.forEach(FeatureCalculator::dispose)
+    errorLog?.close()
 }
 
 private class CommandLineArgs(parser: ArgParser) {
@@ -73,6 +79,9 @@ private class CommandLineArgs(parser: ArgParser) {
             help = "path to input file or folder", argName = "INPUT")
     val methodOutputFile by parser.storing("-m",
             help = "path to output CSV file with method features", argName = "METHOD-OUTPUT")
+            .default<String?>(null)
+    val failLogFile by parser.storing("--error-log",
+            help = "path to output log with not compilable files", argName = "ERROR-LOG")
             .default<String?>(null)
     val shouldWriteCsvHeader by parser.flagging("--header",
             help = "write CSV headers")
