@@ -24,11 +24,13 @@ class MainWindow : View("Code anomaly visualizer GUI") {
         root += anomalyIdLabel.root
         root += anomalyContentView.root
         root += buttonRow.root
+
+        root.requestFocus()
     }
 }
 
 class SelectDatasetButton : View() {
-    override val root = button("Select dataset") {
+    override val root = button("SELECT DATASET") {
         vboxConstraints {
             marginTopBottom(R.MARGIN_SMALL)
             marginLeftRight(R.MARGIN_SMALL)
@@ -39,15 +41,17 @@ class SelectDatasetButton : View() {
                 Model.openDataset(repoRootDirectory)
             }
         }
+        isFocusTraversable = false
+        addClass("button")
     }
 }
 
 class AnomalyCategoryLabel : View() {
     override val root = label {
         vboxConstraints {
-            marginTopBottom(R.MARGIN_SMALL)
-            marginLeftRight(R.MARGIN_SMALL)
+            marginLeftRight(R.MARGIN_LEFT)
         }
+        addClass("card-title")
         bind(Model.categoryProperty)
     }
 }
@@ -55,8 +59,9 @@ class AnomalyCategoryLabel : View() {
 class AnomalyIdLabel : View() {
     override val root = label {
         vboxConstraints {
-            marginLeftRight(R.MARGIN_SMALL)
+            marginLeftRight(R.MARGIN_LEFT)
         }
+        addClass("card-subtitle")
         bind(Model.idProperty)
     }
 }
@@ -78,6 +83,7 @@ class AnomalySourceView : View() {
             marginLeftRight(R.MARGIN_SMALL)
         }
         contentDisplay = ContentDisplay.TOP
+        isFocusTraversable = false
         fitToParentHeight()
     }
 
@@ -90,17 +96,23 @@ class AnomalySourceView : View() {
 class LabelButtonRow : View() {
     override val root = hbox {
         vboxConstraints { marginTopBottom(R.MARGIN_SMALL) }
-        button("Want more") {
+        button("WANT MORE") {
             hboxConstraints { marginLeftRight(R.MARGIN_SMALL) }
             action { Model.processUserResponse(UserResponse.WANT_MORE) }
+            isFocusTraversable = false
+            addClass("button-raised")
         }
-        button("Enough") {
+        button("ENOUGH") {
             hboxConstraints { marginLeftRight(R.MARGIN_SMALL) }
             action { Model.processUserResponse(UserResponse.ENOUGH) }
+            isFocusTraversable = false
+            addClass("button-raised")
         }
-        button("Useless") {
+        button("USELESS") {
             hboxConstraints { marginLeftRight(R.MARGIN_SMALL) }
             action { Model.processUserResponse(UserResponse.USELESS) }
+            isFocusTraversable = false
+            addClass("button-raised")
         }
     }
 }
