@@ -100,9 +100,9 @@ class MethodFeatureCalculator(outFileName: String?) : FeatureCalculator(outFileN
                 .let { println(it) }
     }
 
-    private inner class KtFunctionSeekingVisitor : JavaRecursiveElementVisitor() {
+    private inner class KtFunctionSeekingVisitor(startId: Long = 1) : JavaRecursiveElementVisitor() {
         var currentFilePath: String? = null
-        private var funId = 1L
+        private var funId = startId
 
         override fun visitElement(element: PsiElement?) {
             when (element) {

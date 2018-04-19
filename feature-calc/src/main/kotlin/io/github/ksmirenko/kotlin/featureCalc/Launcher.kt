@@ -61,6 +61,7 @@ fun main(args: Array<String>) = mainBody {
         } catch (e: Exception) {
             println("\tSkipped, could not compile!")
             errorLog?.write(path + "\n")
+            errorLog?.flush()
         }
         processedFilesCount += 1
     }

@@ -17,6 +17,7 @@ fun main(args: Array<String>) = mainBody {
     val strategy: RecordProcessingStrategy = when (parsedArgs.mode) {
         CommandLineArgs.Mode.Seek -> SeekingStrategy(parsedArgs.inFolder, parsedArgs.outFolder,
                 parsedArgs.importantFeaturesPath)
+        CommandLineArgs.Mode.Copy -> CopyingStrategy(parsedArgs.inFolder, parsedArgs.outFolder)
         CommandLineArgs.Mode.BinaryMark -> BinaryMarkStrategy(parsedArgs.inFolder, parsedArgs.outFolder)
         CommandLineArgs.Mode.TernaryMark -> TODO()
     }
@@ -61,9 +62,11 @@ fun main(args: Array<String>) = mainBody {
 private class CommandLineArgs(parser: ArgParser) {
     val mode by parser.mapping(
             "--seek" to Mode.Seek,
+            "--copy" to Mode.Copy,
             "--binary-mark" to Mode.BinaryMark,
             "--ternary-mark" to Mode.TernaryMark,
             help = """mode: 'seek' - just seek Kotlin functions in the repo and print into separate files
+                |'copy' - just copy files with ID-based names from inFolder to outFolder
                 |'binary-mark' - mark useless/useful
                 |'ternary-mark' - mark useless/enough/want more (not implemented yet)
             """.trimMargin())
@@ -83,5 +86,5 @@ private class CommandLineArgs(parser: ArgParser) {
     val inputCsvPaths by parser.positionalList("CSV", sizeRange = 1..Int.MAX_VALUE,
             help = "CSV files or folders with anomaly reports")
 
-    enum class Mode { Seek, BinaryMark, TernaryMark }
+    enum class Mode { Seek, Copy, BinaryMark, TernaryMark, }
 }
