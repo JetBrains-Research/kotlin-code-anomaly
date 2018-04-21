@@ -30,7 +30,7 @@ compileTestKotlin {
 }
 
 jar {
-    archiveName = "visualizer.jar"
+    archiveName = "visualizer-cli.jar"
     manifest {
         attributes "Main-Class": "io.github.ksmirenko.kotlin.visualizer.VisualizerKt"
     }

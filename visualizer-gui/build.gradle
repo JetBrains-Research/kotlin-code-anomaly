@@ -8,7 +8,7 @@ buildscript {
 }
 
 group 'io.github.ksmirenko.kotlin'
-version 'unspecified'
+version '0.1-SNAPSHOT'
 
 apply plugin: 'kotlin'
 
@@ -32,5 +32,16 @@ compileTestKotlin {
 kotlin {
     experimental {
         coroutines "enable"
+    }
+}
+
+jar {
+    archiveName = "visualizer-gui.jar"
+    manifest {
+        attributes "Main-Class": "io.github.ksmirenko.kotlin.visualizerGui.MainKt"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
