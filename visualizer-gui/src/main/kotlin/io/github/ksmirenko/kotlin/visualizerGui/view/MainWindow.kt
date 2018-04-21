@@ -2,8 +2,6 @@ package io.github.ksmirenko.kotlin.visualizerGui.view
 
 import io.github.ksmirenko.kotlin.visualizerGui.model.Model
 import io.github.ksmirenko.kotlin.visualizerGui.model.UserResponse
-import javafx.scene.control.ContentDisplay
-import javafx.scene.control.ScrollPane
 import javafx.scene.layout.VBox
 import tornadofx.*
 
@@ -63,33 +61,6 @@ class AnomalyIdLabel : View() {
         }
         addClass("card-subtitle")
         bind(Model.idProperty)
-    }
-}
-
-class AnomalySourceView : View() {
-    override val root = scrollpane(fitToWidth = true, fitToHeight = true) {
-        vboxConstraints {
-            marginTopBottom(R.MARGIN_SMALL)
-            marginLeftRight(R.MARGIN_SMALL)
-        }
-        vbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
-        hbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
-        minHeight = 200.0
-    }
-
-    private val contentLabel = label("Anomaly source code will be here") {
-        vboxConstraints {
-            marginTopBottom(20.0)
-            marginLeftRight(R.MARGIN_SMALL)
-        }
-        contentDisplay = ContentDisplay.TOP
-        isFocusTraversable = false
-        fitToParentHeight()
-    }
-
-    init {
-        root += contentLabel
-        contentLabel.bind(Model.sourceCodeProperty)
     }
 }
 
