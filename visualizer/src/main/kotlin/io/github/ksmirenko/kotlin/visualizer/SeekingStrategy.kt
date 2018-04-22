@@ -64,7 +64,7 @@ class SeekingStrategy(inFolder: String, outFolder: String, importantFeaturesPath
         }
 
         // write output: a file with extracted function and a CSV record
-        File(outFolder, "$id.kt").writeText("$signature$featuresString\n\n$foundFunction")
+        File(outFolder, "$id.kt").writeText(foundFunction.toString())
         outCsv.printRecord(record)
         outCsv.flush()
 

@@ -13,7 +13,7 @@ class BinaryMarkStrategy(inFolder: String, outFolder: String) : RecordProcessing
     override fun process(record: CSVRecord): Boolean {
         val id = record.get(0)
         val signature = record.get(1)
-        println("\n$id\n$signature")
+        println("\n\n\n$id\n$signature\n\n\n")
 
         val filename = "$id.kt"
         val funText: String
