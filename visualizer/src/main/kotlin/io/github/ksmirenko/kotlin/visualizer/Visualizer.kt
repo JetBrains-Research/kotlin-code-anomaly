@@ -17,9 +17,9 @@ fun main(args: Array<String>) = mainBody {
     val strategy: RecordProcessingStrategy = when (parsedArgs.mode) {
         CommandLineArgs.Mode.Seek -> SeekingStrategy(parsedArgs.inFolder, parsedArgs.outFolder,
                 parsedArgs.importantFeaturesPath)
-        CommandLineArgs.Mode.Copy -> CopyingStrategy(parsedArgs.inFolder, parsedArgs.outFolder)
         CommandLineArgs.Mode.BinaryMark -> BinaryMarkStrategy(parsedArgs.inFolder, parsedArgs.outFolder)
-        CommandLineArgs.Mode.TernaryMark -> TODO()
+        CommandLineArgs.Mode.Copy -> CopyingStrategy(parsedArgs.inFolder, parsedArgs.outFolder)
+        CommandLineArgs.Mode.CategoryCopy -> CategoryCopyingStrategy(parsedArgs.inFolder, parsedArgs.outFolder)
     }
 
     var counter = 0
@@ -31,6 +31,7 @@ fun main(args: Array<String>) = mainBody {
                 if (csvFile.isDirectory || csvFile.extension != "csv") {
                     continue
                 }
+                println(csvFile.path)
 
                 val reader = FileReader(csvFile)
                 val parser = CSVFormat.EXCEL.parse(reader)
@@ -62,13 +63,13 @@ fun main(args: Array<String>) = mainBody {
 private class CommandLineArgs(parser: ArgParser) {
     val mode by parser.mapping(
             "--seek" to Mode.Seek,
-            "--copy" to Mode.Copy,
             "--binary-mark" to Mode.BinaryMark,
-            "--ternary-mark" to Mode.TernaryMark,
+            "--copy" to Mode.Copy,
+            "--categ-copy" to Mode.CategoryCopy,
             help = """mode: 'seek' - just seek Kotlin functions in the repo and print into separate files
-                |'copy' - just copy files with ID-based names from inFolder to outFolder
                 |'binary-mark' - mark useless/useful
-                |'ternary-mark' - mark useless/enough/want more (not implemented yet)
+                |'copy' - just copy files with ID-based names from inFolder to outFolder
+                |'categ-copy' - copy files from inFolder to outFolder/<categId>/<id>.kt (last CSV value is categId)
             """.trimMargin())
 
     val numRecordsPicked by parser.storing("--pick",
@@ -86,5 +87,5 @@ private class CommandLineArgs(parser: ArgParser) {
     val inputCsvPaths by parser.positionalList("CSV", sizeRange = 1..Int.MAX_VALUE,
             help = "CSV files or folders with anomaly reports")
 
-    enum class Mode { Seek, Copy, BinaryMark, TernaryMark, }
+    enum class Mode { Seek, Copy, CategoryCopy, BinaryMark }
 }
