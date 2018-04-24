@@ -8,7 +8,7 @@ import tornadofx.*
 class MainWindow : View("Code anomaly visualizer GUI") {
     override val root = VBox()
 
-    private val selectDatasetButton: SelectDatasetButton by inject()
+    //    private val selectDatasetButton: SelectDatasetButton by inject()
     private val anomalyCategoryLabel: AnomalyCategoryLabel by inject()
     private val anomalyIdLabel: AnomalyIdLabel by inject()
     private val anomalyContentView: AnomalySourceView by inject()
@@ -17,7 +17,7 @@ class MainWindow : View("Code anomaly visualizer GUI") {
     init {
         root.prefWidth = 800.0
 
-        root += selectDatasetButton.root
+//        root += selectDatasetButton.root
         root += anomalyCategoryLabel.root
         root += anomalyIdLabel.root
         root += anomalyContentView.root
@@ -29,31 +29,37 @@ class MainWindow : View("Code anomaly visualizer GUI") {
     }
 }
 
-class SelectDatasetButton : View() {
-    override val root = button("CHANGE DATASET") {
-        vboxConstraints {
-            marginTopBottom(R.MARGIN_SMALL)
-            marginLeftRight(R.MARGIN_SMALL)
-        }
-        action {
-            val repoRootDirectory = chooseDirectory("Select root folder of the dataset")
-            if (repoRootDirectory != null) {
-                Model.openDataset(repoRootDirectory)
-            }
-        }
-        isFocusTraversable = false
-        addClass("button")
-    }
-}
+//class SelectDatasetButton : View() {
+//    override val root =
+//}
 
 class AnomalyCategoryLabel : View() {
-    override val root = label {
-        vboxConstraints {
-            marginLeftRight(R.MARGIN_LEFT)
+    override val root = borderpane {
+        left = label {
+            borderpaneConstraints {
+                marginTopBottom(R.MARGIN_SMALL)
+                marginLeftRight(R.MARGIN_LEFT)
+            }
+            addClass("card-title")
+            bind(Model.categoryProperty)
         }
-        addClass("card-title")
-        bind(Model.categoryProperty)
+
+        right = button("Change dataset") {
+            borderpaneConstraints {
+                marginTopBottom(R.MARGIN_SMALL)
+                marginLeftRight(R.MARGIN_LEFT)
+            }
+            action {
+                val repoRootDirectory = chooseDirectory("Select root folder of the dataset")
+                if (repoRootDirectory != null) {
+                    Model.openDataset(repoRootDirectory)
+                }
+            }
+            isFocusTraversable = false
+            addClass("button-raised")
+        }
     }
+
 }
 
 class AnomalyIdLabel : View() {
@@ -68,20 +74,23 @@ class AnomalyIdLabel : View() {
 
 class LabelButtonRow : View() {
     override val root = hbox {
-        vboxConstraints { marginTopBottom(R.MARGIN_SMALL) }
-        button("WANT MORE") {
+        vboxConstraints {
+            marginTopBottom(R.MARGIN_SMALL)
+            marginLeft = R.MARGIN_SMALL
+        }
+        button("Want more") {
             hboxConstraints { marginLeftRight(R.MARGIN_SMALL) }
             action { Model.processUserResponse(UserResponse.WANT_MORE) }
             isFocusTraversable = false
             addClass("button-raised")
         }
-        button("ENOUGH") {
+        button("Enough, next class") {
             hboxConstraints { marginLeftRight(R.MARGIN_SMALL) }
             action { Model.processUserResponse(UserResponse.ENOUGH) }
             isFocusTraversable = false
             addClass("button-raised")
         }
-        button("USELESS") {
+        button("Useless, next class") {
             hboxConstraints { marginLeftRight(R.MARGIN_SMALL) }
             action { Model.processUserResponse(UserResponse.USELESS) }
             isFocusTraversable = false
