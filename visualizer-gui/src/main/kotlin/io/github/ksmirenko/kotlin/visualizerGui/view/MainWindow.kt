@@ -24,11 +24,13 @@ class MainWindow : View("Code anomaly visualizer GUI") {
         root += buttonRow.root
 
         root.requestFocus()
+
+        Model.openDefaultDataset()
     }
 }
 
 class SelectDatasetButton : View() {
-    override val root = button("SELECT DATASET") {
+    override val root = button("CHANGE DATASET") {
         vboxConstraints {
             marginTopBottom(R.MARGIN_SMALL)
             marginLeftRight(R.MARGIN_SMALL)

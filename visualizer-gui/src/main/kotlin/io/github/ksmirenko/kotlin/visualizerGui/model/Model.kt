@@ -17,11 +17,15 @@ object Model {
 
     private var anomalyIterator: Iterator<Anomaly>? = null
     private var curAnomaly: Anomaly? = null
-    private var outFileName: String? = null
+    private var outFile: File? = null
     private var outCsv: CSVPrinter? = null
 
+    fun openDefaultDataset() {
+        openDataset(File("anomalies_grouped"))
+    }
+
     fun openDataset(repoRoot: File) {
-        val dirs = repoRoot.listFiles() ?: return
+        val dirs = repoRoot.listFiles()?.sorted() ?: return
 
         val anomalySequence = buildSequence {
             for (dir in dirs) {
@@ -30,7 +34,7 @@ object Model {
                 }
 
                 val categoryName = dir.name
-                for (file in dir.listFiles()) {
+                for (file in dir.listFiles().sorted()) {
                     if (file.extension != "kt") {
                         continue
                     }
@@ -52,8 +56,8 @@ object Model {
 
         outCsv?.close()
         val timestamp = SimpleDateFormat("MM-dd-HH-mm").format(Date())
-        outFileName = "marked_$timestamp.csv"
-        outCsv = CSVFormat.EXCEL.print(File(outFileName), Charsets.UTF_8)
+        outFile = File("marked_$timestamp.csv")
+        outCsv = CSVFormat.EXCEL.print(outFile, Charsets.UTF_8)
     }
 
     fun processUserResponse(response: UserResponse) {
@@ -117,11 +121,12 @@ object Model {
         outCsv!!.close()
 
         information("Finished dataset!",
-                "You are done! Please send $outFileName to the code anomaly researchers.")
+                "You are done! Please send the file \"${outFile!!.path}\"" +
+                        " (in current working directory) to the code anomaly researchers.")
 
         anomalyIterator = null
         curAnomaly = null
-        outFileName = null
+        outFile = null
         outCsv = null
     }
 
