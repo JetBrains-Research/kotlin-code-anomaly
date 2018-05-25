@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+version '0.1-SNAPSHOT'
+
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+mainClassName = "io.github.ksmirenko.kotlin.visualizer.VisualizerKt"
+
+sourceCompatibility = 1.8
+
+dependencies {
+    compile project(':feature-calc')
+    compile "org.apache.commons:commons-csv:1.5"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+jar {
+    archiveName = "visualizer-cli.jar"
+    manifest {
+        attributes "Main-Class": "io.github.ksmirenko.kotlin.visualizer.VisualizerKt"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}

@@ -4,6 +4,7 @@
 data/
 out-data/
 plots/
+post-analysis/
 
 repos/
 repo-fetching/repos.json
@@ -16,3 +17,14 @@ repo-fetching/repos.json
 
 *~
 **/.DS_Store
+
+*.jar
+!**/gradle/wrapper/gradle-wrapper.jar
+
+**/.ipynb_checkpoints/
+analyzer/sandbox.ipynb
+
+# Local helper scripts
+seek.sh
+mark.sh
+categ.sh

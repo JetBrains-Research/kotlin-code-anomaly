@@ -1,5 +1,26 @@
-group 'io.github.ksmirenko.kotlin'
-version '0.1-SNAPSHOT'
+buildscript {
+    ext {
+        kotlin_version = '1.2.40'
+    }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
 
-// This Gradle project is just for convenient work with the project in IntelliJ IDEA.
-// This way data/, repos/ etc. are present in the project tree.
+group 'io.github.ksmirenko.kotlin'
+
+apply plugin: 'kotlin'
+
+allprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.1'
+}
