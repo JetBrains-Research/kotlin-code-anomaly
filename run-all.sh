@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 if [ "$#" -ne 1 ]; then
-    echo "Usage: ./run-all.sh dataset-name"
+    echo "Usage: ./run-all.sh dataset-path"
 fi
 
-dataset=$1
+data_path=$1
 part_size=100000
 
 echo "========== BUILDING ==========="
-./build.sh || exit 1
+./build.sh --no-visualizer || exit 1
 
 echo "========== EXTRACTING FACTORS ==========="
 for i in `seq 1 10`; do
@@ -16,8 +16,8 @@ for i in `seq 1 10`; do
     echo "Part $i"
     echo "Skipping $skip..."
     ./calc-features \
-        -i repos/ \
-        -m data/${dataset}_part${i}.csv \
+        -i ${data_path}/ \
+        -m data/metrics_part${i}.csv \
         --file-limit ${part_size} \
         --skip-files ${skip} || exit 1 \
         --error-log data/part${i}_errors.log
@@ -25,13 +25,11 @@ for i in `seq 1 10`; do
 done
 
 echo "========== CONCATENATING CSV ==========="
-cd data/
-python3 concat_csv.py ${dataset} || exit 1
-cd ..
+python3 concat_csv.py metrics || exit 1
 
 echo "========== RUNNING ANALYZER ==========="
 cd analyzer/
-#python3 methods.py ${dataset} || exit 1
+python3 methods.py metrics || exit 1
 cd ..
 
 echo "Done all!"
