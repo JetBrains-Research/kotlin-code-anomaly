@@ -1,0 +1,53 @@
+buildscript {
+    ext.kotlin_version = '1.2.30'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+group 'org.jetbrains.bytecodeparser'
+version '0.1'
+
+apply plugin: 'kotlin'
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.jetbrains.bytecodeparser.MainKt'
+    }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    exclude ('META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA')
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "com.google.code.gson:gson:2.8.0"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.0"
+    compile "org.apache.bcel:bcel:6.2"
+    compile "com.xenomachina:kotlin-argparser:2.0.4"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}

@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-java -Xms512m -Xmx10240m -jar features.jar "$@"

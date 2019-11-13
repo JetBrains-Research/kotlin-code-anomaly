@@ -1,5 +1,11 @@
 include ':feature-calc'
+project(':feature-calc').projectDir = new File('feature_extraction/metrics/feature-calc')
 include ':visualizer'
 include ':visualizer-gui'
+
+include ':bytecode-parser'
+project(':bytecode-parser').projectDir = new File('feature_extraction/ngram/bytecode-parser')
+include ':ngram-generator'
+project(':ngram-generator').projectDir = new File('feature_extraction/ngram/ngram-generator')
 
 rootProject.name = "kotlin-code-anomaly"
