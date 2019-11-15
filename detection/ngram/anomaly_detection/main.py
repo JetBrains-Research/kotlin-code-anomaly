@@ -18,6 +18,7 @@ parser.add_argument('--encoding_dim_percent', nargs=1, type=float,
                     help='encoding dim percent (towards features number)')
 parser.add_argument('--differences_output_file', nargs=1, type=str,
                     help='path to file with input-decoded difference')
+parser.add_argument('--binary', action=store_true)
 
 # Anomaly selection stage params
 parser.add_argument('--differences_file', nargs=1, type=str,
@@ -58,8 +59,9 @@ else:
     files_map_file = args.files_map_file[0]
     anomalies_output_file = args.anomalies_output_file[0]
     use_dbscan = args.use_dbscan
+    binary = args.binary
 
-    differences = autoencoding(dataset_file, split_percent, encoding_dim_percent, full_differences=use_dbscan)
+    differences = autoencoding(dataset_file, split_percent, encoding_dim_percent, full_differences=use_dbscan, binary=binary)
     differences = [ind for ind, _ in differences], [diff for _, diff in differences]
     anomalies_number = anomaly_selection(files_map_file, anomalies_output_file, use_dbscan, differences=differences)
 

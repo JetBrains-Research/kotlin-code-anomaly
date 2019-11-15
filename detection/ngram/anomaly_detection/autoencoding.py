@@ -6,6 +6,8 @@ import numpy as np
 
 from lib.Autoencoder import Autoencoder
 from lib.DatasetLoader import DatasetLoader
+from lib.DatasetLoaderToDisk import DatasetLoaderToDisk
+from lib.DatasetLoaderFromDisk import DatasetLoaderFromDisk
 from lib.helpers.TimeLogger import TimeLogger
 # imports updated for new project structure
 
@@ -34,11 +36,23 @@ def ascii_write(differences, output_file):
         f.write(json.dumps(differences))
 
 
-def autoencoding(dataset_file, split_percent, encoding_dim_percent, output_file=None, full_differences=None):
+def csv_shape(file_path):
+    with open(file_path, 'rt') as file:
+        line_len = len(file.readline().split(','))
+        lines = 1 + sum(1 for _ in file)
+    return lines, line_len
+
+
+def autoencoding(dataset_file, split_percent, encoding_dim_percent, output_file=None, full_differences=None, binary=False):
     total_time_logger = TimeLogger(task_name='Autoencoder its work')
 
     time_logger = TimeLogger(task_name='Dataset loading')
-    data = DatasetLoader(dataset_file).load(split_percent=split_percent)
+    if binary:
+        shape = csv_shape(dataset_file)
+        DatasetLoaderToDisk(dataset_file, shape=shape).load(split_percent=split_percent)
+        data = DatasetLoaderFromDisk(dataset_file, shape=shape).load(split_percent=split_percent)
+    else:
+        data = DatasetLoader(dataset_file).load(split_percent=split_percent)
     (_, _, features_number) = data
     encoding_dim = math.ceil(features_number * encoding_dim_percent)
     time_logger.finish()

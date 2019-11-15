@@ -28,6 +28,7 @@ echo "========== EXTRACTING N-GRAM FACTORS ==========="
 java -jar feature_extraction/ngram/bytecode-parser-0.1.jar -i ${data_path} --parsing
 java -jar feature_extraction/ngram/bytecode-parser-0.1.jar -i ${data_path} --grouping
 java -jar feature_extraction/ngram/ngram-generator-0.1.2.jar -i `realpath ${data_path}/../classes_grouped/packages` -o data/bytecode_vectors --list
+mv all_ngrams.json data/bytecode_vectors/all_features.json
 python3 feature_extraction/ngram/extract_features.py $data_path || exit 1
 
 echo "========== CONCATENATING CSV ==========="

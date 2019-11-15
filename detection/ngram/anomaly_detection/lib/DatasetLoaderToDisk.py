@@ -4,14 +4,14 @@ import numpy
 
 
 class DatasetLoaderToDisk:
-    def __init__(self, file, delimiter=','):
+    def __init__(self, file, delimiter=',', shape=(940928, 11091)):
         self.csv = file
         self.csv_delimiter = delimiter
+        self.shape = shape
 
     def load(self, split_percent=0.1):
-        test_sample_number = 940928
+        test_sample_number, features_number = self.shape
         train_sample_number = math.ceil(test_sample_number * split_percent)
-        features_number = 11091
 
         dataset_test = numpy.memmap(
             'dataset_test.mymemmap', dtype='int', mode='w+', shape=(test_sample_number, features_number))
