@@ -18,7 +18,7 @@ parser.add_argument('--encoding_dim_percent', nargs=1, type=float,
                     help='encoding dim percent (towards features number)')
 parser.add_argument('--differences_output_file', nargs=1, type=str,
                     help='path to file with input-decoded difference')
-parser.add_argument('--binary', action=store_true)
+parser.add_argument('--binary', action='store_true')
 
 # Anomaly selection stage params
 parser.add_argument('--differences_file', nargs=1, type=str,

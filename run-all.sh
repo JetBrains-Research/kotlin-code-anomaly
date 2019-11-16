@@ -28,6 +28,7 @@ echo "========== EXTRACTING N-GRAM FACTORS ==========="
 java -jar feature_extraction/ngram/bytecode-parser-0.1.jar -i ${data_path} --parsing
 java -jar feature_extraction/ngram/bytecode-parser-0.1.jar -i ${data_path} --grouping
 java -jar feature_extraction/ngram/ngram-generator-0.1.2.jar -i `realpath ${data_path}/../classes_grouped/packages` -o data/bytecode_vectors --list
+rm -rf ../classes_grouped
 mv all_ngrams.json data/bytecode_vectors/all_features.json
 python3 feature_extraction/ngram/extract_features.py $data_path || exit 1
 
@@ -38,11 +39,11 @@ echo "========== RUNNING ANALYZERS WITH METRICS ==========="
 python3 detection/metrics/analyzer/methods.py metrics || exit 1
 
 echo "========== RUNNING AUTOENCODER ANALYZER WITH N-GRAMS ==========="
-python3 detection/ngram/anomaly_detection/main.py -f data/dataset.csv --split_percent 0.9 \
-    --encoding_dim_percent 0.8 --files_map_file data/files_map.json \
+python3 detection/ngram/anomaly_detection/main.py -f data/dataset.csv --split_percent 0.1 \
+    --encoding_dim_percent 0.1 --files_map_file data/files_map.json \
     -o n-gram_anomalies.txt
-python3 detection/ngram/anomaly_detection/main.py -f data/dataset_bytesode.csv --split_percent 0.9 \
-    --encoding_dim_percent 0.8 --files_map_file data/files_map.json \
-    -o n-gram_bytecode_anomalies.txt
+python3 detection/ngram/anomaly_detection/main.py -f data/dataset_bytesode.csv --split_percent 0.1 \
+    --encoding_dim_percent 0.1 --files_map_file data/files_map.json \
+    -o n-gram_bytecode_anomalies.txt --binary
 
 echo "Done all!"

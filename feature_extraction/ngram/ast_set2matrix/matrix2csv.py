@@ -5,6 +5,9 @@ import csv
 from .lib.helpers.TimeLogger import TimeLogger
 
 
+READ_STEP = 4 * 2 ** 20
+
+
 def matrix2csv(input_file, output_file):
     time_logger = TimeLogger(task_name='Matrix to CSV transformation')
 
@@ -26,13 +29,19 @@ def matrix2csv_streaming(input_path, output_path):
         buff = buff[1:]
         output_writer = csv.writer(output_file)
         done = False
+        rows_written = 0
         while not done:
-            while buff.find(']') == -1:
+            end_pos = buff.find(']') + 1
+            while not end_pos:
                 buff = buff + input_file.read(READ_STEP)
-            end_pos = buff.index(']') + 1
+                end_pos = buff.find(']') + 1
             part = json.loads(buff[0:end_pos])
             output_writer.writerow(part)
-            buff = buff[end_pos:] + input_file.read(READ_STEP)
+            rows_written += 1
+            print(f'{rows_written} rows written to csv')
+            buff = buff[end_pos:]
+            if not buff:
+                buff = input_file.read(READ_STEP)
             if buff[0] == ']':
                 done = True
             else:
