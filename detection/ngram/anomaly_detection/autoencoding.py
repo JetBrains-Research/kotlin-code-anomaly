@@ -63,9 +63,9 @@ def autoencoding(dataset_file, split_percent, encoding_dim_percent, output_file=
     autoencoder.fit()
     time_logger.finish()
 
-    time_logger = TimeLogger(task_name='Autoencoder predict')
-    autoencoder.predict()
-    time_logger.finish()
+    # time_logger = TimeLogger(task_name='Autoencoder predict')
+    # autoencoder.predict()
+    # time_logger.finish()
 
     time_logger = TimeLogger(task_name='Calculate differences')
     differences = autoencoder.calc_differences(full_differences)

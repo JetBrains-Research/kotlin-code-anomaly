@@ -14,8 +14,9 @@ from ast_set2matrix.matrix2csv import matrix2csv, matrix2csv_streaming
 
 FEATURES_FOLDER = pathlib.Path('data')
 PATH_ASTS = FEATURES_FOLDER / 'ast'
+# PATH_VECTORS = FEATURES_FOLDER / 'ast_vectors_reduced'
 PATH_VECTORS = FEATURES_FOLDER / 'ast_vectors'
-PATH_BC_VECTORS = FEATURES_FOLDER / 'bytecode_vectors'
+PATH_BC_VECTORS = FEATURES_FOLDER / 'bytecode_vectors_reduced'
 PATH_ALL_FEATURES = PATH_VECTORS / 'all_features.json'
 PATH_BC_ALL_FEATURES = PATH_BC_VECTORS / 'all_features.json'
 PATH_SPARSE_VECTORS = FEATURES_FOLDER / 'ast_sparsed_vectors'
@@ -51,20 +52,20 @@ def extract_features(input_folder):
 
     folder_to_psi(input_folder, PATH_ASTS)
     trees2vectors(str(PATH_ASTS), str(PATH_VECTORS), str(PATH_FEATURES_CONFIG))
-    shutil.rmtree(str(PATH_ASTS))
-    select_bc_features()
+    # shutil.rmtree(str(PATH_ASTS))
+    # select_bc_features()
     sparse_transform(str(PATH_VECTORS), str(PATH_SPARSE_VECTORS), str(PATH_ALL_FEATURES), 'list')
-    shutil.rmtree(str(PATH_VECTORS))
+    # shutil.rmtree(str(PATH_VECTORS))
     sparse_transform(str(PATH_BC_VECTORS), str(PATH_BC_SPARSE_VECTORS), str(PATH_BC_ALL_FEATURES), 'list')
-    shutil.rmtree(str(PATH_BC_VECTORS))
+    # shutil.rmtree(str(PATH_BC_VECTORS))
     vectors2matrix(str(PATH_SPARSE_VECTORS), str(PATH_DATASET_JSON))
-    shutil.rmtree(str(PATH_SPARSE_VECTORS))
+    # shutil.rmtree(str(PATH_SPARSE_VECTORS))
     vectors2matrix(str(PATH_BC_SPARSE_VECTORS), str(PATH_BC_DATASET_JSON))
-    shutil.rmtree(str(PATH_BC_SPARSE_VECTORS))
+    # shutil.rmtree(str(PATH_BC_SPARSE_VECTORS))
     matrix2csv(str(PATH_DATASET_JSON), str(PATH_DATASET_CSV))
-    os.remove(str(PATH_DATASET_JSON))
+    # os.remove(str(PATH_DATASET_JSON))
     matrix2csv_streaming(str(PATH_BC_DATASET_JSON), str(PATH_BC_DATASET_CSV))
-    os.remove(str(PATH_BC_DATASET_JSON))
+    # os.remove(str(PATH_BC_DATASET_JSON))
 
 
 if __name__ == '__main__':

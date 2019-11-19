@@ -58,19 +58,29 @@ class Autoencoder:
                                          batch_size=1024,
                                          validation_data=(self.all_data, self.all_data))
 
-    def predict(self):
-        self.predicted = self.model.get_autoencoder().predict(self.all_data)
+    def predict(self, data=None):
+        self.predicted = self.model.get_autoencoder().predict(self.all_data if data is None else data)
 
     def calc_differences(self, full_differences):
         difference = []
         item_index = 0
         samples_number = len(self.all_data)
-        for item in self.predicted:
-            if full_differences:
-                difference_element = np.divide(np.power(item - self.all_data[item_index], 2), samples_number)
-            else:
-                difference_element = distance.euclidean(item, self.all_data[item_index]) / len(self.all_data[item_index])
-            difference.append(difference_element)
-            item_index += 1
+        # for item in self.predicted:
+            # if full_differences:
+                # difference_element = np.divide(np.power(item - self.all_data[item_index], 2), samples_number)
+            # else:
+                # difference_element = distance.euclidean(item, self.all_data[item_index]) / len(self.all_data[item_index])
+            # difference.append(difference_element)
+            # item_index += 1
+        BATCH_SIZE = 10000
+        for batch_start in range(0, samples_number, BATCH_SIZE):
+            batch = self.all_data[batch_start:batch_start + BATCH_SIZE]
+            self.predict(batch)
+            for real_item, predicted_item in zip(batch, self.predicted):
+                if full_differences:
+                    difference_element = np.divide(np.power(predicted_item - real_item, 2), samples_number)
+                else:
+                    difference_element = distance.euclidean(predicted_item, real_item) / len(real_item)
+                difference.append(difference_element)
 
         return np.array(difference)

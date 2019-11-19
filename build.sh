@@ -12,6 +12,10 @@ echo "Created or replaced bytecode-parser-0.1.jar"
 mv feature_extraction/ngram/ngram-generator/build/libs/ngram-generator-0.1.2.jar feature_extraction/ngram/ngram-generator-0.1.2.jar
 echo "Created or replaced ngram-generator-0.1.2.jar"
 
+./gradlew :ngram-selector:build
+mv feature_extraction/ngram/ngram-selector/build/libs/ngram-selector-0.1.jar feature_extraction/ngram/ngram-selector-0.1.jar
+echo "Created or replaced ngram-selector-0.1.jar"
+
 if [[ $# != 1 ]] || [[ $1 != '--no-visualizer' ]] ; then
     ./gradlew :visualizer:jar || exit 1
     mv visualizer/build/libs/visualizer-cli.jar visualizer-cli.jar || exit 1
@@ -23,4 +27,3 @@ if [[ $# != 1 ]] || [[ $1 != '--no-visualizer' ]] ; then
 fi
 
 echo "Done."
-echo "To launch metric extraction, run: ./calc-features"

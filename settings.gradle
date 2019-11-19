@@ -7,5 +7,7 @@ include ':bytecode-parser'
 project(':bytecode-parser').projectDir = new File('feature_extraction/ngram/bytecode-parser')
 include ':ngram-generator'
 project(':ngram-generator').projectDir = new File('feature_extraction/ngram/ngram-generator')
+include(':ngram-selector')
+project(':ngram-selector').projectDir = new File('feature_extraction/ngram/ngram-selector')
 
 rootProject.name = "kotlin-code-anomaly"
