@@ -6,6 +6,9 @@ from tensorflow.keras.models import Model
 from scipy.spatial import distance
 
 
+BATCH_SIZE = 10000
+
+
 class AutoencoderModel:
     def __init__(self, features_number, encoding_dim):
         self.features_number = features_number
@@ -72,7 +75,6 @@ class Autoencoder:
                 # difference_element = distance.euclidean(item, self.all_data[item_index]) / len(self.all_data[item_index])
             # difference.append(difference_element)
             # item_index += 1
-        BATCH_SIZE = 10000
         for batch_start in range(0, samples_number, BATCH_SIZE):
             batch = self.all_data[batch_start:batch_start + BATCH_SIZE]
             self.predict(batch)

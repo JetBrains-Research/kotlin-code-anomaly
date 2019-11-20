@@ -2,6 +2,7 @@
 
 if [ "$#" -ne 1 ]; then
     echo "Usage: ./run-all.sh dataset-path"
+    exit 1
 fi
 
 data_path=$1
@@ -10,6 +11,7 @@ part_size=100000
 echo "========== BUILDING ==========="
 ./build.sh --no-visualizer || exit 1
 
+mkdir -p data
 echo "========== EXTRACTING METRIC FACTORS ==========="
 for i in `seq 1 10`; do
     let skip=$(( (${i} - 1) * ${part_size} ))
@@ -27,8 +29,9 @@ done
 echo "========== EXTRACTING N-GRAM FACTORS ==========="
 java -jar feature_extraction/ngram/bytecode-parser-0.1.jar -i ${data_path} --parsing
 java -jar feature_extraction/ngram/bytecode-parser-0.1.jar -i ${data_path} --grouping
-java -jar feature_extraction/ngram/ngram-generator-0.1.2.jar -i `realpath ${data_path}/../classes_grouped/packages` -o data/bytecode_vectors --list
-# rm -rf ../classes_grouped
+grouped_bytecode_path=`realpath ${data_path}/../classes_grouped`
+java -jar feature_extraction/ngram/ngram-generator-0.1.2.jar -i ${grouped_bytecode_path}/packages -o data/bytecode_vectors --list
+rm -rf ${grouped_bytecode_path}
 mv all_ngrams.json data/bytecode_vectors/all_features.json
 # java -jar feature_extraction/ngram/ngram-generator-0.1.2.jar -i data/ast -o data/ast_vectors --tree
 # mv all_ngrams.json data/ast_vectors/all_features.json
