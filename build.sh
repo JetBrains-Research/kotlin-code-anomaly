@@ -16,6 +16,14 @@ echo "Created or replaced ngram-generator-0.1.2.jar"
 mv feature_extraction/ngram/ngram-selector/build/libs/ngram-selector-0.1.jar feature_extraction/ngram/ngram-selector-0.1.jar
 echo "Created or replaced ngram-selector-0.1.jar"
 
+./gradlew :bytecode-to-source-mapper:build
+mv code_mapping/bytecode-to-source-mapper/build/libs/bytecode-to-source-mapper-0.1.jar code_mapping
+echo "Created or replaced bytecode-to-source-mapper-0.1.jar"
+
+./gradlew :bytecode-anomalies-source-finder:build
+mv code_mapping/bytecode-anomalies-source-finder/build/libs/bytecode-anomalies-source-finder-0.1.jar code_mapping
+echo "Created or replaced bytecode-anomalies-source-finder-0.1.jar"
+
 if [[ $# != 1 ]] || [[ $1 != '--no-visualizer' ]] ; then
     ./gradlew :visualizer:jar || exit 1
     mv visualizer/build/libs/visualizer-cli.jar visualizer-cli.jar || exit 1

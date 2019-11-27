@@ -10,4 +10,9 @@ project(':ngram-generator').projectDir = new File('feature_extraction/ngram/ngra
 include(':ngram-selector')
 project(':ngram-selector').projectDir = new File('feature_extraction/ngram/ngram-selector')
 
+include ':bytecode-to-source-mapper'
+project(':bytecode-to-source-mapper').projectDir = new File('code_mapping/bytecode-to-source-mapper')
+include ':bytecode-anomalies-source-finder'
+project(':bytecode-anomalies-source-finder').projectDir = new File('code_mapping/bytecode-anomalies-source-finder')
+
 rootProject.name = "kotlin-code-anomaly"

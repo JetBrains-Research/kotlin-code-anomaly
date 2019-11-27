@@ -1,7 +1,8 @@
 import argparse
 import os
+import json
 
-from autoencoding import autoencoding
+from autoencoding import autoencoding, ascii_write
 from anomaly_selection import anomaly_selection
 
 
@@ -57,11 +58,13 @@ else:
     split_percent = args.split_percent[0]
     encoding_dim_percent = args.encoding_dim_percent[0]
     files_map_file = args.files_map_file[0]
+    differences_output_file = args.differences_output_file[0]
     anomalies_output_file = args.anomalies_output_file[0]
     use_dbscan = args.use_dbscan
     binary = args.binary
 
-    differences = autoencoding(dataset_file, split_percent, encoding_dim_percent, full_differences=use_dbscan, binary=binary)
+    differences = \
+        autoencoding(dataset_file, split_percent, encoding_dim_percent, full_differences=use_dbscan, binary=binary, output_file=differences_output_file)
     differences = [ind for ind, _ in differences], [diff for _, diff in differences]
     anomalies_number = anomaly_selection(files_map_file, anomalies_output_file, use_dbscan, differences=differences)
 

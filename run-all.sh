@@ -28,10 +28,7 @@ done
 
 echo "========== EXTRACTING N-GRAM FACTORS ==========="
 java -jar feature_extraction/ngram/bytecode-parser-0.1.jar -i ${data_path} --parsing
-java -jar feature_extraction/ngram/bytecode-parser-0.1.jar -i ${data_path} --grouping
-grouped_bytecode_path=`realpath ${data_path}/../classes_grouped`
-java -jar feature_extraction/ngram/ngram-generator-0.1.2.jar -i ${grouped_bytecode_path}/packages -o data/bytecode_vectors --list
-rm -rf ${grouped_bytecode_path}
+java -jar feature_extraction/ngram/ngram-generator-0.1.2.jar -i `realpath ${data_path}` -o data/bytecode_vectors --list
 mv all_ngrams.json data/bytecode_vectors/all_features.json
 # java -jar feature_extraction/ngram/ngram-generator-0.1.2.jar -i data/ast -o data/ast_vectors --tree
 # mv all_ngrams.json data/ast_vectors/all_features.json
@@ -53,6 +50,10 @@ python3 detection/ngram/anomaly_detection/main.py -f data/dataset.csv --split_pe
     -o n-gram_anomalies.txt
 python3 detection/ngram/anomaly_detection/main.py -f data/dataset_bytesode.csv --split_percent 0.1 \
    --encoding_dim_percent 0.25 --files_map_file data/files_map.json \
-   -o n-gram_bytecode_anomalies.txt --binary
+   -o n-gram_bytecode_anomalies.txt --binary --differences_output_file bytecode_differences.json
+
+echo "========== MATCHING BYTECODE AND SOURCE CODE ==========="
+java -jar code_mapping/bytecode-to-source-mapper-0.1.jar -d `realpath ${data_path}`
+java -jar code_mapping/bytecode-anomalies-source-finder-0.1.jar -a n-gram_anomalies.txt -d bytecode_differences.json -f data/files_map.json -r `realpath ${data_path}` -o matches.txt
 
 echo "Done all!"

@@ -25,7 +25,7 @@ object Runner {
         val allNgramsList = NgramSelector.statisticToSortedList(allNgrams)
 
         val headSelector = EndsSelectors(side = EndsSelectorSide.HEAD, type = EndsSelectorTypes.VALUE, bound = 100000)
-        val tailSelector = EndsSelectors(side = EndsSelectorSide.TAIL, type = EndsSelectorTypes.VALUE, bound = 250)
+        val tailSelector = EndsSelectors(side = EndsSelectorSide.TAIL, type = EndsSelectorTypes.VALUE, bound = 5000)
         val derivativeBoundsSelector = DerivativeBoundsSelector(point = Math.tan(Math.PI / 4) - 0.1, deviation = 2.0)
 
         val ngramsSelected = NgramSelector.run(allNgramsList, listOf(derivativeBoundsSelector, headSelector, tailSelector))

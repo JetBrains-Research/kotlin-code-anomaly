@@ -32,3 +32,9 @@ The following parts contain external code:
 - feature_extraction/ngram/ngram-generator
     - License: Apache 2
     - origin: https://github.com/PetukhovVictor/ngram-generator/
+- code_mapping/bytecode-to-source-mapper
+    - License: Apache 2
+    - origin: https://github.com/PetukhovVictor/bytecode-to-source-mapper
+- code_mapping/bytecode-anomalies-source-finder
+    - License: Apache 2
+    - origin: https://github.com/PetukhovVictor/bytecode-anomalies-source-finder
