@@ -11,13 +11,13 @@ from . import parse_psi
 PATH_COMPILER = pathlib.Path('feature_extraction/ngram/code2tree/kotlin')
 PATH_TEST_DIR = PATH_COMPILER / 'compiler' / 'testData' / 'psi' / 'anom'
 COMMAND_GRADLE = str((PATH_COMPILER / 'gradlew').resolve())
-ARGUMENT_GRADLE_ASSEMBLE = 'assemble'
+ARGUMENT_GRADLE_ASSEMBLE = ':compiler:assemble'
 ARGUMENT_GRADLE_GENERATE = ':compiler:generateTests'
 ARGUMENT_GRADLE_RUN_TESTS = ':compiler:test'
 ARGUMENT_GRADLE_STOP = '--stop'
 COMMAND_GIT = 'git'
-ARGUMENTS_GIT_CLONE_KOTLIN = [COMMAND_GIT, 'clone', 'https://github.com/PetukhovVictor/kotlin']
-ARGUMENTS_GIT_CHECKOUT_COMMIT = [COMMAND_GIT, 'checkout', '45c8f0c24b6655580acbdc4e967bbe0cd5763ac0']
+ARGUMENTS_GIT_CLONE_KOTLIN = [COMMAND_GIT, 'clone', 'https://github.com/JetBrains/kotlin']
+ARGUMENTS_GIT_CHECKOUT_COMMIT = [COMMAND_GIT, 'checkout', 'e321c9e4e7beb71be34bcaa55bc090fd5a94f857']
 PACKAGE_PATTERN = re.compile('^\\s*package\\s+\\w+(\\.\\w+)*\\s*$')
 BATCH_SIZE = 100000
 
@@ -53,7 +53,7 @@ def group_iter(it, n):
             yield next_step
 
 
-def folder_to_psi(input_dir, output_dir):
+def folder_to_psi(input_dir, output_dir, parse_trees=False):
     if not PATH_COMPILER.is_dir():
         subprocess.run(ARGUMENTS_GIT_CLONE_KOTLIN, cwd=PATH_COMPILER.parent)
         subprocess.run(ARGUMENTS_GIT_CHECKOUT_COMMIT, cwd=PATH_COMPILER)
@@ -75,11 +75,15 @@ def folder_to_psi(input_dir, output_dir):
 
         for psi_file in PATH_TEST_DIR.glob('**/*.txt'):
             rel_path = psi_file.relative_to(PATH_TEST_DIR)
-            unmasked_steps = unmask_words(rel_path.with_suffix('.kt.json').parts)
-            json_path = output_dir.joinpath(*unmasked_steps)
-            json_path.parent.mkdir(parents=True, exist_ok=True)
-            with json_path.open(mode='wt') as out_file:
-                json.dump(parse_psi.psi_to_json(psi_file), out_file)
+            unmasked_steps = unmask_words(rel_path.parts)
+            out_path = output_dir.joinpath(*unmasked_steps)
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            if parse_trees:
+                out_path = out_path.with_suffix('.kt.json')
+                with out_path.open(mode='wt') as out_file:
+                    json.dump(parse_psi.psi_to_json(psi_file), out_file)
+            else:
+                shutil.copy(str(psi_file), str(out_path))
         shutil.rmtree(PATH_TEST_DIR)
         processed_files += len(step)
         print(f'Processed {processed_files} files')

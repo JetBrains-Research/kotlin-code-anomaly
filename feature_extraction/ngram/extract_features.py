@@ -50,7 +50,7 @@ def select_bc_features():
 def extract_features(input_folder):
     FEATURES_FOLDER.mkdir(exist_ok=True)
 
-    folder_to_psi(input_folder, PATH_ASTS)
+    folder_to_psi(input_folder, PATH_ASTS, parse_trees=True)
     trees2vectors(str(PATH_ASTS), str(PATH_VECTORS), str(PATH_FEATURES_CONFIG))
     # shutil.rmtree(str(PATH_ASTS))
     # select_bc_features()
