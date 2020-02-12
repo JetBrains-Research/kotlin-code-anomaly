@@ -1,6 +1,7 @@
 import numpy as np
 import struct
 import json
+import csv
 
 from sklearn.cluster import DBSCAN
 
@@ -102,10 +103,14 @@ def anomaly_selection(files_map_file, anomalies_output_file, use_dbscan, differe
                 anomaly_files.append(files_map[anomaly_index])
         else:
             for anomaly_index, anomaly_value in anomalies:
-                anomaly_files.append((files_map[anomaly_index], anomaly_value))
+                anomaly_files.append((anomaly_index, files_map[anomaly_index], anomaly_value))
 
+        # with open(anomalies_output_file, 'w') as anomalies_output_file_descriptor:
+        #     anomalies_output_file_descriptor.write(json.dumps(anomaly_files))
         with open(anomalies_output_file, 'w') as anomalies_output_file_descriptor:
-            anomalies_output_file_descriptor.write(json.dumps(anomaly_files))
+            anomalies_writer = csv.writer(anomalies_output_file_descriptor)
+            for anomaly_file in anomaly_files:
+                anomalies_writer.writerow(anomaly_file)
 
     anomalies_write_time_logger.finish()
 

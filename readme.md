@@ -6,6 +6,7 @@
 
 - java 8
   + java fx for visualizer.
+- JDK 1.6, 1.7 for PSI extraction
 - python 3 with packages listed in requiremets.txt
 
 #### Usage:

@@ -34,7 +34,7 @@ class FunctionFinder(
 
     private fun visitKtFunction(function: KtNamedFunction) {
         val actualSignature = function.buildFileBasedSignature(currentFilePath)
-        if (expectedSignature == actualSignature) {
+        if (actualSignature.startsWith(expectedSignature)) {
             foundFunction = function.text
             if (shouldPrintToConsole) {
                 println()
