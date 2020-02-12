@@ -17,7 +17,7 @@ def calculate_differences(model, x):
     return torch.pow(x_predicted - x, 2).sum(dim=1) / data_dim
 
 
-def calc_mean_std(model: AutoencoderModel, data_sources: Iterable[data_read.DataSource], batch_size: int):
+def calc_mean_std(model: AutoencoderModel, data_sources: Iterable[data_read.DataSourceNamed], batch_size: int):
     data = data_read.read_torch_batches(data_sources, batch_size)
     differences = torch.cat([model.calculate_differences(vectors) for vectors, _ in data]).numpy()
     return differences.mean(), differences.std()
@@ -48,7 +48,7 @@ def search_anomalies_by_threshold(model: AutoencoderModel, data_sources, thresho
         indices_start += len(vectors)
 
 
-def search_anomalies(model: AutoencoderModel, data_sources: List[data_read.DataSource], threshold_deviations: float,
+def search_anomalies(model: AutoencoderModel, data_sources: List[data_read.DataSourceNamed], threshold_deviations: float,
                      save_path: Path, batch_size: int):
     mean, std = calc_mean_std(model, data_sources, batch_size)
     print(f'Found mean error {mean} and standard deviation {std}')

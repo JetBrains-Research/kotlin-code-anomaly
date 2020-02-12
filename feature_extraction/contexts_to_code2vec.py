@@ -38,8 +38,8 @@ def read_contexts_dirs(context_dirs):
             contexts_file_name = contexts_file_path.with_suffix('').name
             part_number = int(contexts_file_name[contexts_file_name.rfind('_') + 1:])
             method_paths_file_path = data_dir / f'full_method_paths_{part_number}.csv'
-            with contexts_file_path.open('rt', buffering=BUFSIZE) as contexts_file, \
-                    method_paths_file_path.open('rt', buffering=BUFSIZE) as method_paths_file:
+            with contexts_file_path.open('rt', buffering=BUFSIZE, encoding='utf8') as contexts_file, \
+                    method_paths_file_path.open('rt', buffering=BUFSIZE, encoding='utf8') as method_paths_file:
                 yield from zip(contexts_file, method_paths_file)
 
 
@@ -51,8 +51,8 @@ class ContextsWriter:
         self.names_file = None
 
     def __enter__(self):
-        self.data_file = self.data_path.open('wt', buffering=BUFSIZE)
-        self.names_file = self.names_path.open('wt', buffering=BUFSIZE)
+        self.data_file = self.data_path.open('wt', buffering=BUFSIZE, encoding='utf8')
+        self.names_file = self.names_path.open('wt', buffering=BUFSIZE, encoding='utf8')
         return self
 
     def __exit__(self, exp_type, exp_value, exp_tr):
@@ -109,7 +109,7 @@ def tts_projects(args):
     test_projects = set(itertools.islice(projects_iter, args.test_size))
     print(f'{len(train_projects)} train, {len(val_projects)} validation and {len(test_projects)} test '
           f'projects selected')
-    exit(0)
+    
     out_dir = args.out_dir
     dataset_name = args.dataset_name
     with ContextsWriter(out_dir / f'{dataset_name}.train.raw.txt', out_dir / f'{dataset_name}.train.raw.names.txt') \

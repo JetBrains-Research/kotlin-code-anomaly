@@ -8,6 +8,9 @@ import csv
 import data_read
 
 
+DEFAULT_LEARNING_RATE = 0.01
+
+
 class AutoencoderModel(nn.Module):
     def __init__(self, features_number, encoded_dim):
         super(AutoencoderModel, self).__init__()
@@ -35,13 +38,14 @@ class AutoencoderModel(nn.Module):
 
 
 def train(model: AutoencoderModel, data_set: data_read.TrainValDataSet, n_epochs: int, save_path_prefix: str,
-          epochs_passed: int):
-    optimizer = torch.optim.Adam(model.parameters())
+          epochs_passed: int, learning_rate: float):
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
     for epoch in range(epochs_passed + 1, epochs_passed + n_epochs + 1):
         print(f'Training epoch {epoch}')
         start_time = time()
         train_losses = []
-        for vectors, names in data_set.get_train():
+        train_data, val_data = data_set.get_train_val()
+        for vectors in train_data:
             optimizer.zero_grad()
             processed_vectors = model(vectors)
             loss = nn.functional.mse_loss(processed_vectors, vectors)
@@ -49,7 +53,7 @@ def train(model: AutoencoderModel, data_set: data_read.TrainValDataSet, n_epochs
             optimizer.step()
             train_losses.append(loss.detach().cpu().numpy())
         val_losses = []
-        for vectors, _ in data_set.get_val():
+        for vectors in val_data:
             processed_vectors = model(vectors)
             loss = nn.functional.mse_loss(processed_vectors, vectors)
             val_losses.append(loss.detach().cpu().numpy())
